@@ -5,6 +5,7 @@ Window {
     width: 1440;
     height: 900;
     visible: true
+
     Login{
         id: login
         width: 1440;

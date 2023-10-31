@@ -31,7 +31,7 @@ Rectangle {
         anchors.top: root.top
         anchors.topMargin: 253;
         color: "#ffffff"
-        radius: 3
+        radius: 5
         border.color: Qt.rgba(255, 255, 255, 1)
         layer.enabled: true  // 设置layer为enable
         layer.effect: DropShadow {

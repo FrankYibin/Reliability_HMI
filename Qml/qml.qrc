@@ -4,5 +4,6 @@
         <file>Login.qml</file>
         <file>Production1.qml</file>
         <file>CustomBtn.qml</file>
+        <file>Configuration.qml</file>
     </qresource>
 </RCC>
