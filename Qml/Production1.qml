@@ -3,107 +3,13 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4 as SwitchGroup
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.15
-//import QtQuick.Controls 1.0 as CheckStyle
 Rectangle {
     id:root
     signal signalBackLogin()
     Text {
-        id: production1name
+        id: machineselected
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.topMargin: 6
-        text: qsTr("Reliability Testing System")
-        color: "#3D7AB3"
-        font.pixelSize:26
-    }
-    RoundButton{
-        id:logoutBtn
-        width: 80
-        height: 30
-        text: "Logout"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.topMargin: 10
-        anchors.rightMargin: 28
-        background: Rectangle{
-            color: logoutBtn.pressed ?"#215476" :"#3D7AB3";
-            radius: 5
-        }
-        contentItem: Text {
-            text: parent.text
-            color: "#FFFFFF"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            anchors.fill: parent
-            font.pixelSize: 14
-        }
-        onClicked: {
-            signalBackLogin()
-        }
-    }
-    Rectangle{
-        id:centerSwitch
-        width: 1440
-        height: 48
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        color: "#EFEFEF"
-        Item {
-            id: buttonRow
-            anchors.left: parent.left
-            SwitchGroup.ExclusiveGroup { id: buttonGroup } //提供一个组给按钮绑定
-            CustomBtn{
-                id:dashboard
-                width: 144
-                height: 48
-                anchors.left: parent.left
-                iconSrc:"qrc:/images/user.png"
-                iconText: "Dashboard"
-                exclusiveGroup: buttonGroup //绑定到组
-            }
-            CustomBtn{
-                id:production
-                width: 154
-                height: 48
-                anchors.left: dashboard.right
-                iconSrc:"qrc:/images/user.png"
-                iconText: "Production"
-                exclusiveGroup: buttonGroup //绑定到组
-            }
-            CustomBtn{
-                id:datalog
-                width: 144
-                height: 48
-                anchors.left: production.right
-                iconSrc:"qrc:/images/user.png"
-                iconText: "Data Log"
-                exclusiveGroup: buttonGroup //绑定到组
-            }
-            CustomBtn{
-                id:report
-                width: 124
-                height: 48
-                anchors.left: datalog.right
-                iconSrc:"qrc:/images/user.png"
-                iconText: "Report"
-                exclusiveGroup: buttonGroup //绑定到组
-            }
-            CustomBtn{
-                id:configuration
-                width: 164
-                height: 48
-                anchors.left: report.right
-                iconSrc:"qrc:/images/user.png"
-                iconText: "Configuration"
-                exclusiveGroup: buttonGroup //绑定到组
-            }
-        }
-    }
-    Text {
-        id: machineselected
-        anchors.top: centerSwitch.bottom
-        anchors.left: centerSwitch.left
         anchors.topMargin: 37
         anchors.leftMargin: 60
         text: qsTr("Machine Selected")
@@ -115,13 +21,14 @@ Rectangle {
         width: 120
         height: 32
         x:259
-        y:133
+        y:35
 
         model: ListModel {
             id: model
-            ListElement { text: "Banana" }
-            ListElement { text: "Apple" }
-            ListElement { text: "Coconut" }
+            ListElement { text: "1#" }
+            ListElement { text: "2#" }
+            ListElement { text: "3#" }
+            ListElement { text: "4#" }
         }
         background: Rectangle {
             border.color: "#BBBBBB"
@@ -138,7 +45,7 @@ Rectangle {
         id: manual
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 220
+        anchors.topMargin: 122
         anchors.leftMargin: 53
         text: " Manual"
         font.pixelSize:20
@@ -214,7 +121,7 @@ Rectangle {
         id:alarmlock
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 283
+        anchors.topMargin: 185
         anchors.leftMargin: 53
         text: " Alarm Lock"
         font.pixelSize: 20
@@ -248,7 +155,7 @@ Rectangle {
         font.pixelSize: 20
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.topMargin: 345
+        anchors.topMargin: 250
         anchors.leftMargin: 60
     }
     Rectangle{
@@ -258,7 +165,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: batchsize.right
         anchors.leftMargin: 20
-        anchors.topMargin: 343
+        anchors.topMargin: 245
         border.color: "#DCDCDC"
         radius: 3
         TextInput {
@@ -280,7 +187,7 @@ Rectangle {
         text: "Save"
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 345
+        anchors.topMargin: 247
         anchors.leftMargin: 299
         background: Rectangle{
             color: savebtn.pressed ?"#215476" :"#3D7AB3";
@@ -581,7 +488,7 @@ Rectangle {
         width: 80
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 135
+        anchors.topMargin: 37
         anchors.rightMargin: 138
         text: "E-Stop"
         background: Rectangle{
@@ -597,6 +504,16 @@ Rectangle {
             anchors.fill: parent
             font.pixelSize: 16
         }
+        onPressed: {
+            if(text === "E-Stop"){
+                text = "E-Stop Reset"
+                width = 120
+            }
+            else{
+                text = "E-Stop"
+                width = 80
+            }
+        }
     }
     RoundButton{
         id:back
@@ -605,7 +522,7 @@ Rectangle {
         width: 80
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 135
+        anchors.topMargin: 37
         anchors.rightMargin: 28
         text: "Back"
         background: Rectangle{
@@ -628,7 +545,7 @@ Rectangle {
         font.pixelSize: 20
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 212
+        anchors.topMargin: 114
         anchors.rightMargin: 337
     }
     SwitchGroup.TableView {
@@ -637,7 +554,7 @@ Rectangle {
         height: 120
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 255
+        anchors.topMargin: 157
         anchors.rightMargin: 58
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏水平滚动条
         verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
@@ -756,7 +673,7 @@ Rectangle {
         text: qsTr("Machine Data")
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 402
+        anchors.topMargin: 304
         anchors.rightMargin: 315
         font.pixelSize: 20
     }
@@ -766,7 +683,7 @@ Rectangle {
         height: 330
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 445
+        anchors.topMargin: 347
         anchors.rightMargin: 43
         horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏水平滚动条
         verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏竖直滚动条

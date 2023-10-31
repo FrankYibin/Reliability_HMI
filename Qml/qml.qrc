@@ -5,5 +5,7 @@
         <file>Production1.qml</file>
         <file>CustomBtn.qml</file>
         <file>Configuration.qml</file>
+        <file>CustomMachine.qml</file>
+        <file>ReliabilityTestingSystem.qml</file>
     </qresource>
 </RCC>

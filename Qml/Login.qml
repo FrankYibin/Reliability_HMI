@@ -8,9 +8,14 @@ Rectangle {
     color: "#ffffff"
     property alias username: useredit
     property alias userpass: passedit
-    signal signalLogin(string name,string pass)
+    signal signalLogin(var id)
     function authenticationFailed(){//认证失败
-        failed.visible = true
+        if(useredit.text === "Branson" && passedit.text == "Branson123"){
+            signalLogin(reliabilityTestingSystem)
+        }
+        else{
+            failed.visible = true
+        }
         username.text = ""
         userpass.text = ""
     }
@@ -18,6 +23,8 @@ Rectangle {
         id: logpng
         anchors.left: parent.left
         anchors.top: parent.top
+        width: 800
+        height: 450
         anchors.leftMargin: 80
         anchors.topMargin: 225
         source: "qrc:/images/login.png"
@@ -82,12 +89,6 @@ Rectangle {
                 focus: true
                 clip: true
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    useredit.focus = true
-                }
-            }
         }
         Rectangle{
             id: pass
@@ -122,12 +123,6 @@ Rectangle {
                 echoMode: TextInput.Password
                 autoScroll:true
             }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    passedit.focus = true
-                }
-            }
         }
         RoundButton {
             id:btn
@@ -152,7 +147,6 @@ Rectangle {
             }
             onClicked: {
                 authenticationFailed()
-                signalLogin(username.text,userpass.text)
             }
         }
         Text {
