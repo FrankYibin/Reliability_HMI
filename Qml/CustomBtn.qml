@@ -2,12 +2,12 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 Rectangle {
     id: custombtn
-    height: 50;
+    height: 50
     width: parent.width
     signal iconClicked(string text)
     property alias iconSrc: icon.source
     property alias iconText: iconLabel.text
-
+    property alias iconid:iconLabel
     property bool checked: false
     property ExclusiveGroup exclusiveGroup: null //对外开放一个ExclusiveGroup接口，用于绑定同个组
 

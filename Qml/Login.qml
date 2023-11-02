@@ -9,6 +9,11 @@ Rectangle {
     property alias username: useredit
     property alias userpass: passedit
     signal signalLogin(var id)
+    AutoResize {
+        fixedAspectRatio: false
+        accordingToX: true
+    }
+
     function authenticationFailed(){//认证失败
         if(useredit.text === "Branson" && passedit.text == "Branson123"){
             signalLogin(reliabilityTestingSystem)

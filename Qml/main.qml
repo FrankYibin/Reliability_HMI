@@ -1,15 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
+import QtQuick.Layouts 1.15
 Window {
     id: hmain
     width: 1440;
     height: 900;
     visible: true
+
     Loader{
         id:loader
         anchors.fill: parent
+        asynchronous:true
         Component.onCompleted: {
-            loader.sourceComponent = login
+            loader.sourceComponent = reliabilityTestingSystem
         }
         Connections{
             target: loader.item
@@ -36,27 +39,27 @@ Window {
 
 
 
-//    Login{
-//        width: 1440;
-//        height: 900;
-//    }
-//    Production1{
-//        id:production1
-//        width: 1440;
-//        height: 900;
-//    }
-//    Configuration{
-//        id:configuration
-//        width: 1440;
-//        height: 802;
-//    }
+    //    Login{
+    //        width: 1440;
+    //        height: 900;
+    //    }
+    //    Production1{
+    //        id:production1
+    //        width: 1440;
+    //        height: 900;
+    //    }
+    //    Configuration{
+    //        id:configuration
+    //        width: 1440;
+    //        height: 802;
+    //    }
 
 
-//    Connections{
-//        target: production1
-//        function onSignalBackLogin(){
-////            login.visible = true
-////            production1.visible = false
-//        }
-//    }
+    //    Connections{
+    //        target: production1
+    //        function onSignalBackLogin(){
+    ////            login.visible = true
+    ////            production1.visible = false
+    //        }
+    //    }
 }

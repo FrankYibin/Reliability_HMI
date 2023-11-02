@@ -7,5 +7,6 @@
         <file>Configuration.qml</file>
         <file>CustomMachine.qml</file>
         <file>ReliabilityTestingSystem.qml</file>
+        <file>AutoResize.qml</file>
     </qresource>
 </RCC>
