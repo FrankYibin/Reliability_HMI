@@ -4,6 +4,34 @@ import QtQuick.Controls 2.15
 
 Rectangle{
     id: root
+    Connections{
+        target:ConfigurationQml
+        function onConfig(list){
+            if(list[0] === 1){
+                m1.updata(list[2],list[6],list[7])
+            }
+            else if(list[0] === 2){
+                m2.updata(list[2],list[6],list[7])
+            }
+            else if(list[0] === 3){
+                m3.updata(list[2],list[6],list[7])
+            }
+            else if(list[0] === 4){
+                m4.updata(list[2],list[6],list[7])
+            }
+        }
+    }
+    function isEmpty(){
+        if(m1.nameedit.length === 0 || m1.ip.length === 0 || m1.port.length === 0 ||
+                m2.nameedit.length === 0 || m2.ip.length === 0 || m2.port.length === 0 ||
+                m3.nameedit.length === 0 || m3.ip.length === 0 || m3.port.length === 0 ||
+                m4.nameedit.length === 0 || m4.ip.length === 0 || m4.port.length === 0){
+            return true
+        }
+        else{
+            return false
+        }
+    }
     AutoResize {
         fixedAspectRatio: false
         accordingToX: true
@@ -122,12 +150,10 @@ Rectangle{
         width: 100
         height: 38
         text: "SAVE"
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.bottomMargin: 132
-        anchors.leftMargin: 60
+        x:60
+        y:632
         background: Rectangle{
-            color: btn.pressed ?"#215476" :"#3D7AB3";
+            color: topbtn.pressed ?"#215476" :"#3D7AB3";
             radius: 5
         }
         contentItem: Text {
@@ -138,5 +164,29 @@ Rectangle{
             anchors.fill: parent
             font.pixelSize: 20
         }
+        onClicked: {
+            if(isEmpty()){
+                warn.visible = true
+            }
+            else{
+                warn.visible = false
+                ConfigurationQml.updateConfiguration(1,m1.nameedit,m1.ip,m1.port)
+                ConfigurationQml.updateConfiguration(2,m2.nameedit,m2.ip,m2.port)
+                ConfigurationQml.updateConfiguration(3,m3.nameedit,m3.ip,m3.port)
+                ConfigurationQml.updateConfiguration(4,m4.nameedit,m4.ip,m4.port)
+            }
+
+
+        }
+    }
+    Text {
+        id: warn
+        text: qsTr("Machine Name/ip/port is not empty")
+        anchors.top: topbtn.bottom
+        anchors.left: topbtn.left
+        anchors.topMargin: 15
+        color: "#BD3124"
+        font.pixelSize: 14
+        visible: false
     }
 }

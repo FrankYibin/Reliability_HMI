@@ -3,8 +3,10 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls 1.4 as SwitchGroup
 import QtQuick.Controls.Styles 1.4
 import QtGraphicalEffects 1.15
+
 Rectangle {
     id:root
+
     AutoResize {
         fixedAspectRatio: false
         accordingToX: true
@@ -156,6 +158,9 @@ Rectangle {
         height: 33
         text: " Alarm Lock"
         font.pixelSize: 20
+        onClicked: {
+
+        }
     }
     CheckBox{
         id:dataprocessing
@@ -206,11 +211,12 @@ Rectangle {
         border.color: "#DCDCDC"
         radius: 3
         TextInput {
-            anchors.left: parent.left
             width: 80
             height: 32
             anchors.leftMargin: 3
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.pointSize: 20
             focus: true
             clip: true

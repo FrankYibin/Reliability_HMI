@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 1.4 as SwitchGroup
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+
 Rectangle {
     AutoResize {
         fixedAspectRatio: false
@@ -10,6 +11,7 @@ Rectangle {
     Component.onCompleted: {
         production.checked = true
     }
+
     signal signalLogin(var id)
     Rectangle{
         id: top
@@ -61,6 +63,7 @@ Rectangle {
             }
             onClicked: {
                 signalLogin(login)
+                ConfigurationQml.selectConfiguration()
             }
         }
     }
@@ -161,13 +164,14 @@ Rectangle {
                     iconid.font.pixelSize = 16
                 }
             }
+
         }
     }
-
     Connections{
         target: configuration
         function onIconClicked(text){
             myLoader.sourceComponent = configuration1
+            ConfigurationQml.selectConfiguration()
         }
     }
     Connections{
@@ -190,6 +194,7 @@ Rectangle {
     Component{
         id:production1;
         Production1{
+            id:p1
             width: 1440;
             height: 802;
         }
@@ -197,6 +202,7 @@ Rectangle {
     Component{
         id:configuration1
         Configuration {
+            id: c1
             width: 1440;
             height: 802;
         }

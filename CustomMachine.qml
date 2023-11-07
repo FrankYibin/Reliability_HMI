@@ -2,6 +2,15 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 Rectangle {
     property string plcName: ""
+    property string nameedit: machtext.text
+    property string ip: ipdata.text
+    property string port: portdata.text
+    function updata(name,ip,port){
+        ipdata.text = ip
+        machtext.text = name
+        portdata.text = port
+    }
+
     AutoResize {
         fixedAspectRatio: false
         accordingToX: true
@@ -33,15 +42,15 @@ Rectangle {
         border.color: "#BBBBBB"
         radius: 5
         TextInput {
-            anchors.left: parent.left
-            width: 190
-            height: 30
+            id: machtext
+            anchors.fill: parent
             anchors.leftMargin: 3
-            anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 18
             focus: true
             clip: true
             autoScroll:true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             color: "#101010"
         }
     }
@@ -73,11 +82,13 @@ Rectangle {
         border.color: "#BBBBBB"
         radius: 5
         TextInput {
-            anchors.left: parent.left
+            id: ipdata
             width: 190
             height: 30
             anchors.leftMargin: 3
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.pixelSize: 18
             focus: true
             clip: true
@@ -97,11 +108,13 @@ Rectangle {
         y:45
         radius: 5
         TextInput {
-            anchors.left: parent.left
+            id: portdata
             width: 190
             height: 30
             anchors.leftMargin: 3
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             font.pixelSize: 18
             focus: true
             clip: true

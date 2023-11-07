@@ -32,7 +32,7 @@ Rectangle {
         height: 450
         anchors.leftMargin: 80
         anchors.topMargin: 225
-        source: "qrc:/images/login.png"
+        source: "login.png"
     }
     Rectangle{
         id: login
@@ -81,7 +81,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.topMargin: 10
-                source: "qrc:/images/user.png"
+                source: "user.png"
             }
             TextInput {
                 id:useredit
@@ -113,7 +113,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.topMargin: 10
-                source: "qrc:/images/pass.png"
+                source: "pass.png"
             }
             TextInput {
                 id:passedit

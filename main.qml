@@ -1,11 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
+// import ConfigurationQml 1.0
 Window {
     id: hmain
     width: 1440;
     height: 900;
     visible: true
+    // ConfigurationQml{
+    //     id:cconfigurationQml
+    // }
 
     Loader{
         id:loader
@@ -24,7 +28,6 @@ Window {
     Component{
         id:login
         Login{
-            id: aaa
             width: 1440;
             height: 900;
         }
