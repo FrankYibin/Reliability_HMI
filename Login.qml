@@ -9,10 +9,6 @@ Rectangle {
     property alias username: useredit
     property alias userpass: passedit
     signal signalLogin(var id)
-    AutoResize {
-        fixedAspectRatio: false
-        accordingToX: true
-    }
 
     function authenticationFailed(){//认证失败
         if(useredit.text === "Branson" && passedit.text == "Branson123"){
@@ -28,20 +24,20 @@ Rectangle {
         id: logpng
         anchors.left: parent.left
         anchors.top: parent.top
-        width: 800
-        height: 450
-        anchors.leftMargin: 80
-        anchors.topMargin: 225
+        width: multipleWidth* 800
+        height: multipleHeight* 450
+        anchors.leftMargin: multipleWidth* 80
+        anchors.topMargin: multipleWidth* 225
         source: "login.png"
     }
     Rectangle{
         id: login
-        width: 360;
-        height: 395;
+        width: multipleWidth* 360
+        height: multipleHeight* 395
         anchors.right: root.right
-        anchors.rightMargin: 142;
+        anchors.rightMargin: multipleWidth* 142
         anchors.top: root.top
-        anchors.topMargin: 253;
+        anchors.topMargin: multipleWidth* 253
         color: "#ffffff"
         radius: 5
         border.color: Qt.rgba(255, 255, 255, 1)
@@ -56,41 +52,43 @@ Rectangle {
         Text {
             id: name
             anchors.top:parent.top
-            anchors.topMargin: 55
+            anchors.topMargin: multipleWidth* 55
             anchors.left: parent.left
-            anchors.leftMargin: 28
+            anchors.leftMargin: multipleWidth* 28
             text: qsTr("Reliability Testing System")
             color: "#101010"
-            font.pixelSize: 24;
+            font.pixelSize: multipleWidth* 24;
         }
         Rectangle{
             id: user
             anchors.top: login.top
             anchors.left: login.left
-            anchors.topMargin: 140
-            anchors.leftMargin: 38
-            width: 284
-            height: 45
+            anchors.topMargin: multipleWidth* 140
+            anchors.leftMargin: multipleWidth* 38
+            width: multipleWidth* 284
+            height: multipleHeight* 45
             radius: 5
             border.color: "#DCDCDC"
             Image {
                 id: userpng
-                width: 25
-                height: 25
+                width: multipleWidth* 25
+                height: multipleHeight* 25
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.topMargin: 10
+                anchors.leftMargin: multipleWidth* 10
+                anchors.topMargin: multipleWidth* 10
                 source: "user.png"
             }
             TextInput {
                 id:useredit
-                width: 240
-                anchors.top: userpng.top
+                width: multipleWidth* 240
+                height: multipleHeight* 45
+                anchors.top: parent.top
                 anchors.left: userpng.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: multipleWidth* 5
                 anchors.margins: 2
-                font.pointSize: 15
+                font.pixelSize: multipleWidth* 15
+                verticalAlignment: Text.AlignVCenter
                 focus: true
                 clip: true
             }
@@ -99,30 +97,31 @@ Rectangle {
             id: pass
             anchors.top: login.top
             anchors.left: login.left
-            anchors.topMargin: 210
-            anchors.leftMargin: 38
-            width: 284
-            height: 45
+            anchors.topMargin: multipleWidth* 210
+            anchors.leftMargin: multipleWidth* 38
+            width: multipleWidth* 284
+            height: multipleHeight* 45
             radius: 5
             border.color: "#DCDCDC"
             Image {
                 id: passpng
-                width: 25
-                height: 25
+                width: multipleWidth* 25
+                height: multipleHeight* 25
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.topMargin: 10
+                anchors.leftMargin: multipleWidth* 10
+                anchors.topMargin: multipleWidth* 10
                 source: "pass.png"
             }
             TextInput {
                 id:passedit
-                width: 240
-                anchors.top: passpng.top
+                width: multipleWidth* 240
+                height: multipleHeight* 45
+                anchors.top: parent.top
                 anchors.left: passpng.right
-                anchors.leftMargin: 5
-                anchors.margins: 2
-                font.pointSize: 15
+                anchors.leftMargin: multipleWidth* 5
+                font.pixelSize: multipleWidth* 15
+                verticalAlignment: Text.AlignVCenter
                 focus: true
                 clip: true
                 echoMode: TextInput.Password
@@ -131,13 +130,13 @@ Rectangle {
         }
         RoundButton {
             id:btn
-            width: 284
-            height: 45
+            width: multipleWidth* 284
+            height: multipleHeight* 45
             text: "Login"
             anchors.top: login.top
             anchors.left: login.left
-            anchors.topMargin: 288
-            anchors.leftMargin: 38
+            anchors.topMargin: multipleWidth* 288
+            anchors.leftMargin: multipleWidth* 38
             background: Rectangle{
                 color: btn.pressed ?"#215476" :"#3D7AB3";
                 radius: 5
@@ -148,7 +147,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
             onClicked: {
                 authenticationFailed()
@@ -159,9 +158,9 @@ Rectangle {
             text: qsTr("Incorrect username or password")
             anchors.top: btn.bottom
             anchors.left: btn.left
-            anchors.topMargin: 20
+            anchors.topMargin: multipleWidth* 20
             color: "#BD3124"
-            font.pixelSize: 14
+            font.pixelSize: multipleWidth* 14
             visible: false
         }
     }

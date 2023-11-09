@@ -7,37 +7,26 @@ import QtGraphicalEffects 1.15
 Rectangle {
     id:root
 
-    AutoResize {
-        fixedAspectRatio: false
-        accordingToX: true
-    }
     signal signalBackLogin()
     property double plcTableHei: 120
     property double machinedataTableHei: 330
     Text {
         id: machineselected
-        x:60
-        y:37
-        width: 164
-        height: 28
+        x: multipleWidth*60
+        y: multipleHeight*37
+        width: multipleWidth* 164
+        height: multipleHeight* 28
         text: qsTr("Machine Selected")
         color: "#000000"
-        font.pixelSize: 20
-        onWidthChanged: {
-            if(width > 164){
-                font.pixelSize = font.pixelSize * (width / 164)
-            }
-            else{
-                font.pixelSize = 20
-            }
-        }
+        font.pixelSize: multipleWidth* 20
     }
     ComboBox{
         id: machinename
-        width: 120
-        height: 32
-        x:259
-        y:35
+        width: multipleWidth* 120
+        height: multipleHeight* 32
+        x: multipleWidth*259
+        y: multipleHeight*35
+        font.pixelSize: multipleWidth*20
         model: ListModel {
             id: model
             ListElement { text: "1#" }
@@ -49,51 +38,40 @@ Rectangle {
             border.color: "#BBBBBB"
         }
         indicator: Image {
-            x: machinename.width - width - machinename.rightPadding
-            y: machinename.topPadding + (machinename.availableHeight - height) / 2
-            width: 16
-            height: 16
+            x: multipleWidth* machinename.width - width - machinename.rightPadding
+            y: multipleHeight* machinename.topPadding + (machinename.availableHeight - height) / 2
+            width: multipleWidth* 16
+            height: multipleHeight* 16
             source: "qrc:/images/user.png"
-        }
-        onWidthChanged: {
-            if(width > 120){
-                font.pixelSize = font.pixelSize * (width / 120)
-            }
-            else{
-                font.pixelSize = 20
-            }
         }
     }
     Rectangle{
         id:switchradio
-        x:55
-        y:122
-        width: 389
-        height: 33
-        AutoResize {
-            fixedAspectRatio: false
-            accordingToX: true
-        }
+        x: multipleWidth*55
+        y: multipleHeight*122
+        width: multipleWidth* 389
+        height: multipleHeight* 33
+
         RadioButton{
             id: manual
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             text: " Manual"
-            font.pixelSize:20
+            font.pixelSize: multipleWidth*20
             indicator: Rectangle {
-                width: 26
-                height: 26
-                x: manual.x
+                width: multipleWidth* 26
+                height: multipleHeight* 26
+                x: multipleWidth* manual.x
                 y: parent.height / 2 - height / 2
-                radius: 13
+                radius: multipleWidth* 13
                 border.color: manual.checked ? "#3D7AB3" : "#9A9A9A"
                 Rectangle {
                     color: "#3D7AB3"
-                    width: 18
-                    height: 18
-                    x: 4
-                    y: 4
-                    radius: 9
+                    width: multipleWidth* 18
+                    height: multipleHeight* 18
+                    x: multipleWidth* 4
+                    y: multipleHeight* 4
+                    radius: multipleWidth* 9
                     visible: manual.checked
                 }
             }
@@ -104,21 +82,21 @@ Rectangle {
             anchors.left: manual.right
             anchors.leftMargin: 35
             text: " Auto"
-            font.pixelSize:20
+            font.pixelSize: multipleWidth*20
             indicator: Rectangle {
-                implicitWidth: 26
-                implicitHeight: 26
-                x: auto.leftPadding
+                implicitWidth: multipleWidth* 26
+                implicitHeight: multipleHeight* 26
+                x: multipleWidth* auto.leftPadding
                 y: parent.height / 2 - height / 2
-                radius: 13
+                radius: multipleWidth* 13
                 border.color: auto.checked ? "#3D7AB3" : "#9A9A9A"
                 Rectangle {
                     color: "#3D7AB3"
-                    width: 18
-                    height: 18
-                    x: 4
-                    y: 4
-                    radius: 9
+                    width: multipleWidth* 18
+                    height: multipleHeight* 18
+                    x: multipleWidth* 4
+                    y: multipleHeight* 4
+                    radius: multipleWidth* 9
                     visible: auto.checked
                 }
             }
@@ -129,21 +107,21 @@ Rectangle {
             anchors.left: auto.right
             anchors.leftMargin: 70
             text: " Merecycle"
-            font.pixelSize:20
+            font.pixelSize: multipleWidth*20
             indicator: Rectangle {
-                implicitWidth: 26
-                implicitHeight: 26
-                x: merecycle.leftPadding
+                implicitWidth: multipleWidth* 26
+                implicitHeight: multipleHeight* 26
+                x: multipleWidth* merecycle.leftPadding
                 y: parent.height / 2 - height / 2
-                radius: 13
+                radius: multipleWidth* 13
                 border.color: merecycle.checked ? "#3D7AB3" : "#9A9A9A"
                 Rectangle {
                     color: "#3D7AB3"
-                    width: 18
-                    height: 18
-                    x: 4
-                    y: 4
-                    radius: 9
+                    width: multipleWidth* 18
+                    height: multipleHeight* 18
+                    x: multipleWidth* 4
+                    y: multipleHeight* 4
+                    radius: multipleWidth* 9
                     visible: merecycle.checked
                 }
             }
@@ -152,12 +130,12 @@ Rectangle {
 
     CheckBox{
         id:alarmlock
-        x:55
-        y:185
-        width: 185
-        height: 33
+        x: multipleWidth*55
+        y: multipleHeight*185
+        width: multipleWidth* 185
+        height: multipleHeight* 33
         text: " Alarm Lock"
-        font.pixelSize: 20
+        font.pixelSize: multipleWidth* 20
         onClicked: {
 
         }
@@ -165,22 +143,22 @@ Rectangle {
     CheckBox{
         id:dataprocessing
         text: " Data Processing"
-        x:270
-        y:185
-        width: 210
-        height: 33
-        font.pixelSize: 20
+        x: multipleWidth*270
+        y: multipleHeight*185
+        width: multipleWidth* 210
+        height: multipleHeight* 33
+        font.pixelSize: multipleWidth* 20
         //        indicator: Rectangle {
-        //            implicitWidth: 30
-        //            implicitHeight: 30
-        //            radius: 3
+        //            implicitwidth: multipleWidth* 30
+        //            implicitheight: multipleHeight* 30
+        //            radius: multipleWidth* 3
         //            border.color: dataprocessing.activeFocus ? "darkblue" : "gray"
-        //            border.width: 1
+        //            border.width: multipleWidth* 1
         //            Rectangle {
         //                visible: control.checked
         //                color: "#555"
         //                border.color: "#333"
-        //                radius: 1
+        //                radius: multipleWidth* 1
         //                anchors.margins: 4
         //                anchors.fill: parent
         //            }
@@ -188,31 +166,23 @@ Rectangle {
     }
     Text {
         id: batchsize
-        width: 101
-        x:60
-        y:247
+        width: multipleWidth* 101
+        x: multipleWidth*60
+        y: multipleHeight*247
         text: qsTr("Batch Size:")
-        font.pixelSize: 20
-        onWidthChanged: {
-            if(width > 101){
-                batchsize.font.pixelSize = batchsize.font.pixelSize * (width / 101)
-            }
-            else{
-                batchsize.font.pixelSize = 20
-            }
-        }
+        font.pixelSize: multipleWidth* 20
     }
     Rectangle{
         id:batchsizeedit
-        width: 88
-        height: 32
-        x:181
-        y:245
+        width: multipleWidth* 88
+        height: multipleHeight* 32
+        x: multipleWidth*181
+        y: multipleHeight*245
         border.color: "#DCDCDC"
-        radius: 3
+        radius: multipleWidth* 3
         TextInput {
-            width: 80
-            height: 32
+            width: multipleWidth* 80
+            height: multipleHeight* 32
             anchors.leftMargin: 3
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
@@ -225,14 +195,14 @@ Rectangle {
     }
     RoundButton{
         id: savebtn
-        width:80
-        height: 30
+        width: multipleWidth*80
+        height: multipleHeight* 30
         text: "Save"
-        x:299
-        y:247
+        x: multipleWidth*299
+        y: multipleHeight*247
         background: Rectangle{
             color: savebtn.pressed ?"#215476" :"#3D7AB3";
-            radius: 5
+            radius: multipleWidth* 5
         }
         contentItem: Text {
             text: parent.text
@@ -240,144 +210,139 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
-            font.pixelSize: 14
+            font.pixelSize: multipleWidth* 14
         }
     }
     Rectangle{
         id: machine
-        width: 620
-        height: 360
-        radius: 5
-        x:60
-        y:337
+        width: multipleWidth* 620
+        height: multipleHeight* 360
+        radius: multipleWidth* 5
+        x: multipleWidth*60
+        y: multipleHeight*337
         border.color: "#BBBBBB"
-        AutoResize {
-            fixedAspectRatio: false
-            accordingToX: true
-        }
-
         Text {
             id: machineinfor
-            x:31
-            y:27
-            width: 157
-            height: 28
+            x: multipleWidth*31
+            y: multipleHeight*27
+            width: multipleWidth* 157
+            height: multipleHeight* 28
             text: qsTr("3# MW-XA-3 [EP]")
             color: "#3D7AB3"
-            font.pixelSize: 20
+            font.pixelSize: multipleWidth* 20
         }
 
 
         Rectangle{
             id: readyrect
-            width: 86
-            height: 20
-            x:36
-            y:109
-            radius: 10
+            width: multipleWidth* 86
+            height: multipleHeight* 20
+            x: multipleWidth*36
+            y: multipleHeight*109
+            radius: multipleWidth* 10
             color: "#9A9A9A"
         }
 
         Text {
             id: readyrectname
-            width: 52
-            height: 25
-            x:52
-            y:139
+            width: multipleWidth* 52
+            height: multipleHeight* 25
+            x: multipleWidth*52
+            y: multipleHeight*139
             text: qsTr("Ready")
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
         }
 
 
         Rectangle{
             id: datareadyrect
-            width: 86
-            height: 20
-            x:152
-            y:109
-            radius: 10
+            width: multipleWidth* 86
+            height: multipleHeight* 20
+            x: multipleWidth*152
+            y: multipleHeight*109
+            radius: multipleWidth* 10
             color: "#9A9A9A"
         }
 
         Text {
             id: datareadyrectname
-            x:147
-            y:139
-            width: 96
-            height: 25
+            x: multipleWidth*147
+            y: multipleHeight*139
+            width: multipleWidth* 96
+            height: multipleHeight* 25
             text: qsTr("Data Ready")
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
         }
 
 
         Rectangle{
             id: sonicsrect
-            width: 86
-            height: 20
-            x:36
-            y:184
-            radius: 10
+            width: multipleWidth* 86
+            height: multipleHeight* 20
+            x: multipleWidth*36
+            y: multipleHeight*184
+            radius: multipleWidth* 10
             color: "#9A9A9A"
         }
         Text {
             id: sonicsrectname
-            x:53
-            y:214
-            width: 54
-            height: 25
+            x: multipleWidth*53
+            y: multipleHeight*214
+            width: multipleWidth* 54
+            height: multipleHeight* 25
             text: qsTr("Sonics")
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
         }
 
         Rectangle{
             id: dataalarmrect
-            width: 86
-            height: 20
-            x:152
-            y:184
-            radius: 10
+            width: multipleWidth* 86
+            height: multipleHeight* 20
+            x: multipleWidth*152
+            y: multipleHeight*184
+            radius: multipleWidth* 10
             color: "#9A9A9A"
         }
         Text {
             id: dataalarmrectname
-            x:148
-            y:214
-            width: 95
-            height: 25
+            x: multipleWidth*148
+            y: multipleHeight*214
+            width: multipleWidth* 95
+            height: multipleHeight* 25
             text: qsTr("Data Alarm")
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
         }
 
 
         Rectangle{
             id: alarmrect
-            width: 86
-            height: 20
-            x:36
-            y:259
-            radius: 10
+            width: multipleWidth* 86
+            height: multipleHeight* 20
+            x: multipleWidth*36
+            y: multipleHeight*259
+            radius: multipleWidth* 10
             color: "#9A9A9A"
         }
         Text {
             id: alarmrectname
-            x:54
-            y:289
-            width: 51
-            height: 25
+            x: multipleWidth*54
+            y: multipleHeight*289
+            width: multipleWidth* 51
+            height: multipleHeight* 25
             text: qsTr("Alarm")
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
         }
 
         RoundButton{
             id: resetbtn
-            width: 80
-            height: 30
+            width: multipleWidth* 80
+            height: multipleHeight* 30
             text: "Reset"
-            x:400
-            y:27
+            x: multipleWidth*400
+            y: multipleHeight*27
             background: Rectangle{
                 color: resetbtn.pressed ?"#215476" :"#3D7AB3";
-                radius: 5
+                radius: multipleWidth* 5
             }
             contentItem: Text {
                 text: parent.text
@@ -385,19 +350,19 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
-                font.pixelSize: 14
+                font.pixelSize: multipleWidth* 14
             }
         }
         RoundButton{
             id: stopbtn
-            width: 80
-            height: 30
+            width: multipleWidth* 80
+            height: multipleHeight* 30
             text: "Stop"
-            x:510
-            y:27
+            x: multipleWidth*510
+            y: multipleHeight*27
             background: Rectangle{
                 color: stopbtn.pressed ?"#215476" :"#3D7AB3";
-                radius: 5
+                radius: multipleWidth* 5
             }
             contentItem: Text {
                 text: parent.text
@@ -405,153 +370,149 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
-                font.pixelSize: 14
+                font.pixelSize: multipleWidth* 14
             }
         }
         Rectangle{
             id: machinedetails
-            width: 302
-            height: 221
-            x:288
-            y:94
-            radius: 5
+            width: multipleWidth* 302
+            height: multipleHeight* 221
+            x: multipleWidth*288
+            y: multipleHeight*94
+            radius: multipleWidth* 5
             border.color: "#BBBBBB"
-            AutoResize {
-                fixedAspectRatio: false
-                accordingToX: true
-            }
             Text {
                 id: starttime
-                x:14
-                y:10
-                width: 86
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*10
+                width: multipleWidth* 86
+                height: multipleHeight* 25
                 text: qsTr("Start Time")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
 
             Text {
                 id: endtime
-                x:14
-                y:45
-                width: 79
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*45
+                width: multipleWidth* 79
+                height: multipleHeight* 25
                 text: qsTr("End Time")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
 
             Text {
                 id: alreadyrun
-                x:14
-                y:80
-                width: 102
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*80
+                width: multipleWidth* 102
+                height: multipleHeight* 25
                 text: qsTr("Already Run")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
 
             Text {
                 id: mode
-                x:14
-                y:115
-                width: 49
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*115
+                width: multipleWidth* 49
+                height: multipleHeight* 25
                 text: qsTr("Mode")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
 
             Text {
                 id: ppm
-                x:14
-                y:150
-                width: 38
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*150
+                width: multipleWidth* 38
+                height: multipleHeight* 25
                 text: qsTr("PPM")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
             Text {
                 id: alarmnum
-                x:14
-                y:185
-                width: 125
-                height: 25
+                x: multipleWidth*14
+                y: multipleHeight*185
+                width: multipleWidth* 125
+                height: multipleHeight* 25
                 text: qsTr("Alarm Number")
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
             }
 
             Text {
                 id: stime
-                x:148
-                y:11
-                width: 141
-                height: 23
+                x: multipleWidth*148
+                y: multipleHeight*11
+                width: multipleWidth* 141
+                height: multipleHeight* 23
                 text: qsTr("2023.9.22 13:03:59")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
 
             Text {
                 id: etime
-                x:148
-                y:46
-                width: 141
-                height: 23
+                x: multipleWidth*148
+                y: multipleHeight*46
+                width: multipleWidth* 141
+                height: multipleHeight* 23
                 text: qsTr("2023.9.22 13:03:59")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
 
             Text {
                 id: arun
-                x:234
-                y:81
-                width: 55
-                height: 23
+                x: multipleWidth*234
+                y: multipleHeight*81
+                width: multipleWidth* 55
+                height: multipleHeight* 23
                 text: qsTr("152333")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
             Text {
                 id: moder
-                x:253
-                y:116
-                width: 36
-                height: 23
+                x: multipleWidth*253
+                y: multipleHeight*116
+                width: multipleWidth* 36
+                height: multipleHeight* 23
                 text: qsTr("Auto")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
 
             Text {
                 id: ppmnum
-                x:270
-                y:151
-                width: 19
-                height: 23
+                x: multipleWidth*270
+                y: multipleHeight*151
+                width: multipleWidth* 19
+                height: multipleHeight* 23
                 text: qsTr("21")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
 
             Text {
                 id: anum
-                x:261
-                y:185
-                width: 28
-                height: 23
+                x: multipleWidth*261
+                y: multipleHeight*185
+                width: multipleWidth* 28
+                height: multipleHeight* 23
                 text: qsTr("150")
-                font.pixelSize: 16
+                font.pixelSize: multipleWidth* 16
             }
 
         }
     }
     RoundButton{
         id:estop
-        radius: 5
-        height: 30
-        width: 80
-        x:1222
-        y:37
+        radius: multipleWidth* 5
+        height: multipleHeight* 30
+        width: multipleWidth* 80
+        x: multipleWidth*1222
+        y: multipleHeight*37
         text: "E-Stop"
         background: Rectangle{
             border.color: "#BD3124"
             color: estop.pressed ?"#000000" :"#FFF81D";
-            radius: 5
+            radius: multipleWidth* 5
         }
         contentItem: Text {
             text: parent.text
@@ -559,7 +520,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
-            font.pixelSize: 20
+            font.pixelSize: multipleWidth* 20
         }
         onPressed: {
             if(text === "E-Stop"){
@@ -576,15 +537,15 @@ Rectangle {
     }
     RoundButton{
         id:back
-        radius: 5
-        height: 30
-        width: 80
-        x:1332
-        y:37
+        radius: multipleWidth* 5
+        height: multipleHeight* 30
+        width: multipleWidth* 80
+        x: multipleWidth*1332
+        y: multipleHeight*37
         text: "Back"
         background: Rectangle{
             color: back.pressed ?"#215476" :"#3D7AB3";
-            radius: 5
+            radius: multipleWidth* 5
         }
         contentItem: Text {
             text: parent.text
@@ -592,146 +553,104 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
-            font.pixelSize: 14
+            font.pixelSize: multipleWidth* 14
         }
     }
     Text {
         id: plc
-        width: 85
-        height: 28
-        x:1018
-        y:114
+        width: multipleWidth* 85
+        height: multipleHeight* 28
+        x: multipleWidth*1018
+        y: multipleHeight*114
         text: qsTr("PLC Data")
-        font.pixelSize: 20
-        onWidthChanged: {
-            if(width > 85){
-                plc.font.pixelSize = plc.font.pixelSize * (width / 85)
-            }
-            else{
-                plc.font.pixelSize = 20
-            }
-        }
+        font.pixelSize: multipleWidth* 20
     }
     SwitchGroup.TableView {
         id: plcTable
-        width: 660
-        height: 120
-        x:738
-        y:157
+        width: multipleWidth* 660
+        height: multipleHeight* 120
+        x: multipleWidth*738
+        y: multipleHeight*157
         property var wid: plcTable.width
         property var hei: plcTable.height
-        AutoResize {
-            fixedAspectRatio: false
-            accordingToX: true
-        }
-        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏水平滚动条
-        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
+        horizontalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏水平滚动条
+        verticalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
         frameVisible: false
-        onWidthChanged: {
-            p1.width = p1.width * (plcTable.width / wid)
-            p2.width = p2.width * (plcTable.width / wid)
-            p3.width = p3.width * (plcTable.width / wid)
-            p4.width = p4.width * (plcTable.width / wid)
-            p5.width = p5.width * (plcTable.width / wid)
-            p6.width = p6.width * (plcTable.width / wid)
-            p7.width = p7.width * (plcTable.width / wid)
-            p8.width = p8.width * (plcTable.width / wid)
-        }
         SwitchGroup.TableViewColumn {
             id: p1
             role: "name"
             title: ""
-            width: 125
+            width: multipleWidth* 125
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p2
             role: "fmin"
             title: "Min"
-            width: 65
+            width: multipleWidth* 65
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p3
             role: "fcurrent"
             title: "Current"
-            width: 67
+            width: multipleWidth* 67
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p4
             role: "fmax"
             title: "Max"
-            width: 65
+            width: multipleWidth* 65
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p5
             role: "mname"
             title: ""
-            width: 125
+            width: multipleWidth* 125
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p6
             role: "mmin"
             title: "Min"
-            width: 65
+            width: multipleWidth* 65
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p7
             role: "mcurrent"
             title: "Current"
-            width: 67
+            width: multipleWidth* 67
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id: p8
             role: "mmax"
             title: "Max"
-            width: 65
+            width: multipleWidth* 65
             resizable:false
         }
         headerDelegate: Rectangle{
             id: header
-            height: 30
+            height: multipleHeight* 30
             color: "#F2F2F2"
             property double wid: plcTable.width
             Text {
                 id: headerName
                 text: styleData.value
-                font.pixelSize: 18
+                font.pixelSize: multipleWidth* 18
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
             }
-            onWidthChanged: {
-                if(plcTable.width >= 660 && headerName.font.pixelSize !==18){
-                    headerName.font.pixelSize = 18
-                    header.height = 30
-                }
-                else if(plcTable.width > 660){
-                    headerName.font.pixelSize = headerName.font.pixelSize * (plcTable.width / wid)
-                    header.height = header.height * (plcTable.width / wid)
-                }
-            }
         }
         rowDelegate: Rectangle{
             id:rowRectangle
             color:styleData.row % 2 == 0 ? "#FFFFFF" : "#F2F2F2"
-            height: 30
-
-            onWidthChanged: {
-
-                if(plcTable.width >= 660 && rowRectangle.height!==30){
-                    rowRectangle.height = 30
-                }
-                else if(plcTable.width >= 660){
-                    rowRectangle.height = rowRectangle.height * (plcTable.height / plcTableHei)
-                }
-            }
+            height: multipleHeight* 30
         }
         // 设置每个单元格的字体样式
         itemDelegate: Text {
@@ -740,16 +659,8 @@ Rectangle {
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
             property double wid: plcTable.width
-            onWidthChanged: {
-                if(plcTable.width >= 660 && font.pixelSize !==18){
-                    font.pixelSize = 18
-                }
-                else if(plcTable.width >= 660){
-                    font.pixelSize = font.pixelSize * (plcTable.width / wid)
-                }
-            }
         }
         model: ListModel {
             id: plcModel
@@ -757,117 +668,91 @@ Rectangle {
                 name: "Power"
                 fmin: ""
                 fcurrent: ""
-                fmax:""
+                fmax: ""
                 mname:"Tune"
                 mmin: ""
                 mcurrent: ""
-                mmax:""
+                mmax: ""
             }
             ListElement {
                 name: "Freq-offset"
                 fmin: ""
                 fcurrent: ""
-                fmax:""
+                fmax: ""
                 mname:"Amplitude"
                 mmin: ""
                 mcurrent: ""
-                mmax:""
+                mmax: ""
             }
             ListElement {
                 name: "Counter"
                 fmin: ""
                 fcurrent: ""
-                fmax:""
+                fmax: ""
                 mname:""
                 mmin: ""
                 mcurrent: ""
-                mmax:""
+                mmax: ""
             }
         }
         focus: true
     }
     Text {
         id: machinedata
-        x:996
-        y:304
-        width: 129
-        height: 28
+        x: multipleWidth*996
+        y: multipleHeight*304
+        width: multipleWidth* 129
+        height: multipleHeight* 28
         text: qsTr("Machine Data")
-        font.pixelSize: 20
-        onWidthChanged: {
-            if(width > 129){
-                font.pixelSize = font.pixelSize * (width / 129)
-            }
-            else{
-                font.pixelSize = 20
-            }
-        }
+        font.pixelSize: multipleWidth* 20
     }
 
     SwitchGroup.TableView {
         id: machinedataTable
-        width: 690
-        height: 330
-        x:725
-        y:347
+        width: multipleWidth* 690
+        height: multipleHeight* 330
+        x: multipleWidth*725
+        y: multipleHeight*347
         property var wid: machinedataTable.width
         property var hei: machinedataTable.height
-        horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏水平滚动条
-        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
+        horizontalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏水平滚动条
+        verticalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
         frameVisible: false
-        onWidthChanged: {
-            a1.width = a1.width * (machinedataTable.width / wid)
-            a2.width = a2.width * (machinedataTable.width / wid)
-            a3.width = a3.width * (machinedataTable.width / wid)
-            a4.width = a4.width * (machinedataTable.width / wid)
-        }
-        AutoResize {
-            fixedAspectRatio: false
-            accordingToX: true
-        }
         SwitchGroup.TableViewColumn {
             id:a1
             role: "name1"
             title: ""
-            width: 225
+            width: multipleWidth* 225
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id:a2
             role: "name2"
             title: ""
-            width: 115
+            width: multipleWidth* 115
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id:a3
             role: "name3"
             title: ""
-            width: 220
+            width: multipleWidth* 220
             resizable:false
         }
         SwitchGroup.TableViewColumn {
             id:a4
             role: "name4"
             title: ""
-            width: 115
+            width: multipleWidth* 115
             resizable:false
         }
         headerDelegate: Rectangle{
-            height:0
+            height: multipleHeight*0
         }
         rowDelegate: Rectangle{
             id:rowRectangle1
             color:styleData.row % 2 == 0 ? "#F2F2F2" : "#FFFFFF"
-            height: 30
-            onWidthChanged: {
-                if(machinedataTable.width >= 690 && rowRectangle1.height!==30){
-                    rowRectangle1.height = 30
-                }
-                else if(machinedataTable.width >= 690){
-                    rowRectangle1.height = rowRectangle1.height * (machinedataTable.height / 330)
-                }
-            }
+            height: multipleHeight* 30
         }
         // 设置每个单元格的字体样式
         itemDelegate: Text {
@@ -876,16 +761,8 @@ Rectangle {
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 18
+            font.pixelSize: multipleWidth* 18
             property double wid: machinedataTable.width
-            onWidthChanged: {
-                if(machinedataTable.width >= 690 && font.pixelSize !==18){
-                    font.pixelSize = 18
-                }
-                else if(machinedataTable.width >= 690){
-                    font.pixelSize = font.pixelSize * (machinedataTable.width / wid)
-                }
-            }
         }
         model: ListModel {
             id: machinedataModel

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 
 Rectangle{
     id: root
+    property int index:multipleWidth* -1
     Connections{
         target:ConfigurationQml
         function onConfig(list){
@@ -21,6 +22,19 @@ Rectangle{
             }
         }
     }
+    Connections{
+        target: Client
+        function onConnectStatus(status){
+            console.log(status)
+            if(status === 0){
+
+            }
+            else if(status === 1){
+
+            }
+        }
+    }
+
     function isEmpty(){
         if(m1.nameedit.length === 0 || m1.ip.length === 0 || m1.port.length === 0 ||
                 m2.nameedit.length === 0 || m2.ip.length === 0 || m2.port.length === 0 ||
@@ -32,65 +46,61 @@ Rectangle{
             return false
         }
     }
-    AutoResize {
-        fixedAspectRatio: false
-        accordingToX: true
-    }
     Text {
         id: ip
         text: qsTr("IP Address")
-        width: 99
-        height: 28
-        x:60
-        y:57
+        width: multipleWidth* 99
+        height: multipleHeight* 28
+        x:multipleWidth*60
+        y:multipleHeight*57
         color: "#3D7AB3"
-        font.pixelSize: 20
+        font.pixelSize: multipleWidth* 20
     }
     Rectangle{
-        width: 300
-        height: 1
+        width: multipleWidth* 300
+        height: multipleHeight* 1
         color: "#BBBBBB"
-        x:60
-        y:85
+        x:multipleWidth*60
+        y:multipleHeight*85
     }
     Text {
         id: plc
         text: qsTr("PLC:")
         color: "#101010"
-        font.pixelSize: 18
-        x:60
-        y:127
-        width: 37
-        height: 25
+        font.pixelSize: multipleWidth* 18
+        x:multipleWidth*60
+        y:multipleHeight*127
+        width: multipleWidth* 37
+        height: multipleHeight* 25
     }
     Text {
         id: ipaddress
         text: qsTr("IP Address   192.168.0.10")
         color: "#101010"
-        font.pixelSize: 18
-        width: 195
-        height: 25
-        x:200
-        y:130
+        font.pixelSize: multipleWidth* 18
+        width: multipleWidth* 195
+        height: multipleHeight* 25
+        x:multipleWidth*200
+        y:multipleHeight*130
     }
     Text {
         id: port
         text: qsTr("Port         4840")
         color: "#101010"
-        font.pixelSize: 18
-        width: 150
-        height: 25
-        x:200
-        y:175
+        font.pixelSize: multipleWidth* 18
+        width: multipleWidth* 150
+        height: multipleHeight* 25
+        x:multipleWidth*200
+        y:multipleHeight*175
     }
 
     RoundButton {
         id:btn
-        width: 80
-        height: 30
+        width: multipleWidth* 80
+        height: multipleHeight* 30
         text: "Test"
-        x:922
-        y:132
+        x:multipleWidth*922
+        y:multipleHeight*132
         background: Rectangle{
             color: btn.pressed ?"#215476" :"#3D7AB3";
             radius: 5
@@ -101,57 +111,73 @@ Rectangle{
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
-            font.pixelSize: 14
+            font.pixelSize: multipleWidth* 14
         }
     }
     Rectangle{
         id: toptest
-        width: 86
-        height: 20
-        x:1042
-        y:137
+        width: multipleWidth* 86
+        height: multipleHeight* 20
+        x:multipleWidth*1042
+        y:multipleHeight*137
         radius: 10
         color: "#9A9A9A"
     }
     CustomMachine{
         id: m1
-        width: 1068
-        height: 30
-        x:60
-        y:232
+        width: multipleWidth* 1068
+        height: multipleHeight* 30
+        x:multipleWidth*60
+        y:multipleHeight*232
         plcName:"Machine 1:"
+        onSigConnectTest: {
+            index = 1
+            Client.connectionTest(ip,port)
+        }
     }
     CustomMachine{
         id: m2
-        width: 1068
-        height: 30
-        x:60
-        y:332
+        width: multipleWidth* 1068
+        height: multipleHeight* 30
+        x:multipleWidth*60
+        y:multipleHeight*332
         plcName:"Machine 2:"
+        onSigConnectTest: {
+            index = 2
+            Client.connectTcpsocket(ip,port)
+        }
     }
     CustomMachine{
         id: m3
-        width: 1068
-        height: 30
-        x:60
-        y:432
+        width: multipleWidth* 1068
+        height: multipleHeight* 30
+        x:multipleWidth*60
+        y:multipleHeight*432
         plcName:"Machine 3:"
+        onSigConnectTest: {
+            index = 3
+            Client.connectTcpsocket(ip,port)
+        }
     }
     CustomMachine{
         id: m4
-        width: 1068
-        height: 30
-        x:60
-        y:532
+        width: multipleWidth* 1068
+        height: multipleHeight* 30
+        x:multipleWidth*60
+        y:multipleHeight*532
         plcName:"Machine 4:"
+        onSigConnectTest: {
+            index = 4
+            Client.connectTcpsocket(ip,port)
+        }
     }
     RoundButton {
         id:topbtn
-        width: 100
-        height: 38
+        width: multipleWidth* 100
+        height: multipleHeight* 38
         text: "SAVE"
-        x:60
-        y:632
+        x:multipleWidth*60
+        y:multipleHeight*632
         background: Rectangle{
             color: topbtn.pressed ?"#215476" :"#3D7AB3";
             radius: 5
@@ -162,7 +188,7 @@ Rectangle{
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
-            font.pixelSize: 20
+            font.pixelSize: multipleWidth* 20
         }
         onClicked: {
             if(isEmpty()){
@@ -186,7 +212,7 @@ Rectangle{
         anchors.left: topbtn.left
         anchors.topMargin: 15
         color: "#BD3124"
-        font.pixelSize: 14
+        font.pixelSize: multipleWidth* 14
         visible: false
     }
 }

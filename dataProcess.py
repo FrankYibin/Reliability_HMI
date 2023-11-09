@@ -2,6 +2,7 @@
 import random
 
 from PyQt5.QtCore import QVariant
+from PySide2 import QtSql, QtNetwork
 from PySide2.QtSql import QSqlQuery
 from PySide2.QtCore import Property, QObject, QUrl, Signal, Slot
 from PySide2.QtGui import QGuiApplication
@@ -11,7 +12,10 @@ from typing import List, Any
 from PySide2.QtCore import QObject, Qt,Signal, Slot, QUrl, QStringListModel, QCoreApplication
 import dataBaseDefine
 
-upConfig='update Configuration set "Machine Name"="{}","IP Address"="{}","Port"="{}" where "Index" = "{}";'
+from PySide2.QtNetwork import QTcpSocket, QHostAddress
+from opcua import Client, ua
+from PyQt5.QtWidgets import QApplication, QWidget
+upConfig = 'update Configuration set "Machine Name"="{}","IP Address"="{}","Port"="{}" where "Index" = "{}";'
 
 
 class ConfigurationQml(QObject):
@@ -78,3 +82,50 @@ class WeldResultQml(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.name = "WeldResult"
+
+
+class OpcuaClient(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+        self.name = "OpcuaClient"
+        url = "opc.tcp://192.168.0.10:4840"  # OPC UA服务器的URL
+        client = Client(url)
+        client.connect()
+
+
+class Client(QObject):
+    def __init__(self):
+        QObject.__init__(self)
+        self.name = "Client"
+        self.socket = QTcpSocket()
+        self.socket.setObjectName("socket")
+
+    connectStatus = Signal(int, arguments=['status'])
+
+    @Slot(str, str)
+    def connectTcpsocket(self, ip, port):
+        if self.socket.state() == QTcpSocket.ConnectedState:
+            self.socket.abort()
+        elif self.socket.state() == QTcpSocket.UnconnectedState:
+            dip = QHostAddress(ip)
+            self.socket.connectToHost(dip, port)
+            self.socket.readyRead.connect(self.readMessage)
+        else:
+            print("error")
+
+    @Slot()
+    def readMessage(self):
+        if self.socket.bytesAvailable() <= 0:
+            return
+        print("1")
+        # print(self.socket.readAll().count())
+
+    @Slot(str, str)
+    def connectionTest(self, ip , port):
+        self.socket.abort()
+        dip = QHostAddress(ip)
+        self.socket.connectToHost(dip, port)
+        if self.socket.state() == QTcpSocket.ConnectedState:
+            self.connectStatus.emit(1)
+        else:
+            self.connectStatus.emit(0)

@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 Rectangle {
     id: custombtn
-    height: 50
+    height: multipleHeight* 50
     width: parent.width
     signal iconClicked(string text)
     property alias iconSrc: icon.source
@@ -31,9 +31,9 @@ Rectangle {
     Text {
         id: iconLabel
         color: "#3D7AB3"
-        font.pixelSize: 16
+        font.pixelSize: multipleWidth* 16
         elide: Text.ElideRight
-        width: parent.width-icon.width +60
+        width: multipleWidth* parent.width-icon.width +60
         anchors.left: icon.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
@@ -41,7 +41,7 @@ Rectangle {
     Rectangle{
         id:bottomline
         width: parent.width
-        height: 2
+        height: multipleHeight* 2
         anchors.bottom: parent.bottom
         color: "#3D7AB3"
         visible: false
