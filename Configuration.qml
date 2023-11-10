@@ -5,6 +5,7 @@ import QtQuick.Controls 2.15
 Rectangle{
     id: root
     property int index:multipleWidth* -1
+    property int plcStatus: -1
     Connections{
         target:ConfigurationQml
         function onConfig(list){
@@ -23,15 +24,26 @@ Rectangle{
         }
     }
     Connections{
-        target: Client
+        target: Tcplient
         function onConnectStatus(status){
-            console.log(status)
-            if(status === 0){
-
+            if(index === 1){
+                m1.status = status
             }
-            else if(status === 1){
-
+            else if(index === 2){
+                m2.status = status
             }
+            else if(index === 3){
+                m3.status = status
+            }
+            else if(index === 4){
+                m4.status = status
+            }
+        }
+    }
+    Connections{
+        target: opcua
+        function onSigOpcStatus(status){
+            plcStatus = status
         }
     }
 
@@ -113,6 +125,9 @@ Rectangle{
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
         }
+        onClicked: {
+            opcua.connectOPCUA()
+        }
     }
     Rectangle{
         id: toptest
@@ -121,7 +136,7 @@ Rectangle{
         x:multipleWidth*1042
         y:multipleHeight*137
         radius: 10
-        color: "#9A9A9A"
+        color: plcStatus === -1 ? "#9A9A9A" : plcStatus === 1 ? "#BD3124" : "#58A55C"
     }
     CustomMachine{
         id: m1
@@ -132,7 +147,7 @@ Rectangle{
         plcName:"Machine 1:"
         onSigConnectTest: {
             index = 1
-            Client.connectionTest(ip,port)
+            Tcplient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -144,7 +159,7 @@ Rectangle{
         plcName:"Machine 2:"
         onSigConnectTest: {
             index = 2
-            Client.connectTcpsocket(ip,port)
+            Tcplient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -156,7 +171,7 @@ Rectangle{
         plcName:"Machine 3:"
         onSigConnectTest: {
             index = 3
-            Client.connectTcpsocket(ip,port)
+            Tcplient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -168,7 +183,7 @@ Rectangle{
         plcName:"Machine 4:"
         onSigConnectTest: {
             index = 4
-            Client.connectTcpsocket(ip,port)
+            Tcplient.connectTcp(ip,port)
         }
     }
     RoundButton {

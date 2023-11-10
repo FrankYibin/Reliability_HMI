@@ -25,12 +25,12 @@ Window {
         anchors.fill: parent
         asynchronous:true
         Component.onCompleted: {
-//            console.log(opcua.start1())
             multipleWidth = (Screen.desktopAvailableWidth / 1440)
             multipleHeight = (Screen.desktopAvailableHeight / 900)
             multipleWidth = multipleWidth.toFixed(2) - 0.01
             multipleHeight = multipleHeight.toFixed(2) - 0.01
             loader.sourceComponent = reliabilityTestingSystem
+            opcua.connectOPCUA()
         }
         Connections{
             target: loader.item

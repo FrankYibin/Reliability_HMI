@@ -6,7 +6,6 @@ import QtQuick.Layouts 1.15
 Rectangle {
     Component.onCompleted: {
         production.checked = true
-        console.log(opcua.maxNumber)
     }
 
     signal signalLogin(var id)

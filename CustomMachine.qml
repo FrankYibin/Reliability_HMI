@@ -5,6 +5,7 @@ Rectangle {
     property string nameedit: machtext.text
     property string ip: ipdata.text
     property string port: portdata.text
+    property int status: -1
     signal sigConnectTest(string ip,string port)
     function updata(name,ip,port){
         ipdata.text = ip
@@ -69,7 +70,7 @@ Rectangle {
         width: multipleWidth* 36
         height: multipleHeight* 25
         x: multipleWidth*515
-        y:45
+        y: multipleHeight*45
     }
     Rectangle{
         id:ipedit
@@ -102,7 +103,7 @@ Rectangle {
         anchors.topMargin: 15
         border.color: "#BBBBBB"
         x: multipleWidth*622
-        y:45
+        y: multipleHeight*45
         radius: 5
         TextInput {
             id: portdata
@@ -146,8 +147,8 @@ Rectangle {
         width: multipleWidth* 86
         height: multipleHeight* 20
         x: multipleWidth*982
-        y:5
+        y: multipleHeight*5
         radius: 10
-        color: "#9A9A9A"
+        color: status === -1 ? "#9A9A9A" : status === 1 ? "#BD3124" : "#58A55C"
     }
 }

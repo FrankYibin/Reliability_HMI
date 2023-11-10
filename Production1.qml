@@ -525,13 +525,13 @@ Rectangle {
         onPressed: {
             if(text === "E-Stop"){
                 text = "E-Stop Reset"
-                width = 120 * (root.width/1440)
-                x -= 40
+                width = 120 * multipleWidth
+                x -= 40 * multipleWidth
             }
             else{
                 text = "E-Stop"
-                width = 80* (root.width/1440)
-                x += 40
+                width = 80* multipleWidth
+                x += 40* multipleWidth
             }
         }
     }
