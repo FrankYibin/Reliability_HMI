@@ -10,6 +10,12 @@ Rectangle {
     signal signalBackLogin()
     property double plcTableHei: 120
     property double machinedataTableHei: 330
+    Connections{
+        target:ConfigurationQml
+        function onSigMachName(name){
+            machineinfor.text = name
+        }
+    }
     Text {
         id: machineselected
         x: multipleWidth*60
@@ -22,7 +28,7 @@ Rectangle {
     }
     ComboBox{
         id: machinename
-        width: multipleWidth* 120
+        width: multipleWidth* 100
         height: multipleHeight* 32
         x: multipleWidth*259
         y: multipleHeight*35
@@ -43,6 +49,9 @@ Rectangle {
             width: multipleWidth* 16
             height: multipleHeight* 16
             source: "qrc:/images/user.png"
+        }
+        onActivated: {
+            ConfigurationQml.selectMachName(currentIndex+1)
         }
     }
     Rectangle{
@@ -75,10 +84,13 @@ Rectangle {
                     visible: manual.checked
                 }
             }
+            onClicked: {
+                dataprocessing.checked = false
+            }
         }
         RadioButton{
             id: auto
-            anchors.top: manual.top
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: manual.right
             anchors.leftMargin: 35
             text: " Auto"
@@ -100,10 +112,13 @@ Rectangle {
                     visible: auto.checked
                 }
             }
+            onClicked: {
+                dataprocessing.checked = false
+            }
         }
         RadioButton{
             id: merecycle
-            anchors.top: auto.top
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: auto.right
             anchors.leftMargin: 70
             text: " Merecycle"
@@ -125,6 +140,9 @@ Rectangle {
                     visible: merecycle.checked
                 }
             }
+            onClicked: {
+                dataprocessing.checked = false
+            }
         }
     }
 
@@ -136,9 +154,7 @@ Rectangle {
         height: multipleHeight* 33
         text: " Alarm Lock"
         font.pixelSize: multipleWidth* 20
-        onClicked: {
-
-        }
+        enabled: auto.checked ? true : false
     }
     CheckBox{
         id:dataprocessing
@@ -148,21 +164,7 @@ Rectangle {
         width: multipleWidth* 210
         height: multipleHeight* 33
         font.pixelSize: multipleWidth* 20
-        //        indicator: Rectangle {
-        //            implicitwidth: multipleWidth* 30
-        //            implicitheight: multipleHeight* 30
-        //            radius: multipleWidth* 3
-        //            border.color: dataprocessing.activeFocus ? "darkblue" : "gray"
-        //            border.width: multipleWidth* 1
-        //            Rectangle {
-        //                visible: control.checked
-        //                color: "#555"
-        //                border.color: "#333"
-        //                radius: multipleWidth* 1
-        //                anchors.margins: 4
-        //                anchors.fill: parent
-        //            }
-        //        }
+        enabled: merecycle.checked === true ? false : true
     }
     Text {
         id: batchsize
@@ -230,6 +232,9 @@ Rectangle {
             text: qsTr("3# MW-XA-3 [EP]")
             color: "#3D7AB3"
             font.pixelSize: multipleWidth* 20
+            Component.onCompleted: {
+                ConfigurationQml.selectMachName(machinename.currentIndex+1)
+            }
         }
 
 
@@ -442,8 +447,10 @@ Rectangle {
 
             Text {
                 id: stime
-                x: multipleWidth*148
-                y: multipleHeight*11
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: multipleWidth*11
+                anchors.rightMargin: multipleWidth*13
                 width: multipleWidth* 141
                 height: multipleHeight* 23
                 text: qsTr("2023.9.22 13:03:59")
@@ -452,8 +459,9 @@ Rectangle {
 
             Text {
                 id: etime
-                x: multipleWidth*148
-                y: multipleHeight*46
+                anchors.right: stime.right
+                anchors.top: stime.bottom
+                anchors.topMargin: multipleWidth*12
                 width: multipleWidth* 141
                 height: multipleHeight* 23
                 text: qsTr("2023.9.22 13:03:59")
@@ -462,18 +470,18 @@ Rectangle {
 
             Text {
                 id: arun
-                x: multipleWidth*234
-                y: multipleHeight*81
-                width: multipleWidth* 55
+                anchors.right: stime.right
+                anchors.top: etime.bottom
+                anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("152333")
+                text: qsTr("12345")
                 font.pixelSize: multipleWidth* 16
             }
             Text {
                 id: moder
-                x: multipleWidth*253
-                y: multipleHeight*116
-                width: multipleWidth* 36
+                anchors.right: stime.right
+                anchors.top: arun.bottom
+                anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
                 text: qsTr("Auto")
                 font.pixelSize: multipleWidth* 16
@@ -481,9 +489,9 @@ Rectangle {
 
             Text {
                 id: ppmnum
-                x: multipleWidth*270
-                y: multipleHeight*151
-                width: multipleWidth* 19
+                anchors.right: stime.right
+                anchors.top: moder.bottom
+                anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
                 text: qsTr("21")
                 font.pixelSize: multipleWidth* 16
@@ -491,11 +499,11 @@ Rectangle {
 
             Text {
                 id: anum
-                x: multipleWidth*261
-                y: multipleHeight*185
-                width: multipleWidth* 28
+                anchors.right: ppmnum.right
+                anchors.top: ppmnum.bottom
+                anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("150")
+                text: qsTr("15111110")
                 font.pixelSize: multipleWidth* 16
             }
 

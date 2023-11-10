@@ -47,7 +47,6 @@ Rectangle {
             }
             onClicked: {
                 signalLogin(login)
-                ConfigurationQml.selectConfiguration()
             }
         }
     }

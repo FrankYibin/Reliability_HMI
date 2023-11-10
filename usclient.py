@@ -16,7 +16,7 @@ class opcClient(QObject):
         port = 4840
         endpoint = "opc.tcp://{}:{}".format(url, port)
         # Assign endpoint url on the OPC UA client  address space
-        self.myclient = Client(endpoint)
+        self.myclient = Client(endpoint,1)
         try:
             self.myclient.connect()
         except:

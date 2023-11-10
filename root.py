@@ -23,7 +23,6 @@ def loadFont():
 
 
 if __name__ == '__main__':
-
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
     config = dataProcess.ConfigurationQml()

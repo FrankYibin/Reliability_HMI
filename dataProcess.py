@@ -23,6 +23,7 @@ class ConfigurationQml(QObject):
         self.name = "Configuration"
 
     config = Signal(list, arguments=['list'])
+    sigMachName = Signal(str, arguments=['name'])
 
     @Slot(result="QVariantList")
     def giveNumber(self):
@@ -57,6 +58,18 @@ class ConfigurationQml(QObject):
                 mlist.append(q.value(Batch_Size))
                 self.config.emit(mlist)
                 mlist.clear()
+
+    @Slot(int)
+    def selectMachName(self, num):
+        q = QSqlQuery()
+        sql_code = 'select "Machine Name" from Configuration where "Index" = "{}";'
+        sql_code = sql_code.format(num)
+        if q.exec_(sql_code):
+            Machine_Name = q.record().indexOf('Machine Name')
+            while q.next():
+                print(q.value(Machine_Name))
+                self.sigMachName.emit(q.value(Machine_Name))
+
 
     @Slot(str, str, str, str)
     def updateConfiguration(self,id,name,ip,port):
