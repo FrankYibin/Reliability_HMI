@@ -67,8 +67,11 @@ class tcpClient(QObject):
 
     @Slot()
     def dis_connect(self):
-        self.Stop()
-        self.conn.close()
+        try:
+            self.Stop()
+            self.conn.close()
+        except:
+            print("tcp连接异常")
 
     def Stop(self):
         self.thread_dec.terminate()  # 终止线程

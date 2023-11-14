@@ -28,6 +28,8 @@ if __name__ == '__main__':
     config = dataProcess.ConfigurationQml()
     opcua = usclient.opcClient()
     tcp = tcpclient.tcpClient()
+    opcuaCache = dataProcess.OpcuaCache()
+    runInfo = dataProcess.RunningInfoQml()
     # qmlRegisterType(dataProcess.ConfigurationQml, 'ConfigurationQml', 1, 0, 'ConfigurationQml')
     # qmlRegisterType(dataProcess.RunningInfoQml, 'RunningInfoQml', 1, 0, 'RunningInfoQml')
     # qmlRegisterType(dataProcess.AlarmLogQml, 'AlarmLogQml', 1, 0, 'AlarmLogQml')
@@ -36,6 +38,8 @@ if __name__ == '__main__':
     engine.rootContext().setContextProperty("ConfigurationQml", config)
     engine.rootContext().setContextProperty("opcua", opcua)
     engine.rootContext().setContextProperty("Tcplient", tcp)
+    engine.rootContext().setContextProperty("opcuaCache", opcuaCache)
+    engine.rootContext().setContextProperty("runInfo", runInfo)
     import os
     path = os.path.dirname(__file__) + os.sep + 'main.qml'
     engine.load(path)

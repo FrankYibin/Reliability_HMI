@@ -7,6 +7,7 @@ Window {
     width: 1440 * multipleWidth
     height: 900 * multipleHeight
     visible: true
+    property int productionIndex: 1
     property double multipleHeight: 1
     property double multipleWidth: 1
 //    property FontLoader bold: FontLoader {
@@ -25,10 +26,10 @@ Window {
         anchors.fill: parent
         asynchronous:true
         Component.onCompleted: {
-            // multipleWidth = (Screen.desktopAvailableWidth / 1440)
-            // multipleHeight = (Screen.desktopAvailableHeight / 900)
-            // multipleWidth = multipleWidth.toFixed(2) - 0.01
-            // multipleHeight = multipleHeight.toFixed(2) - 0.01
+             multipleWidth = (Screen.desktopAvailableWidth / 1440)
+             multipleHeight = (Screen.desktopAvailableHeight / 900)
+             multipleWidth = multipleWidth.toFixed(2) - 0.01
+             multipleHeight = multipleHeight.toFixed(2) - 0.01
             loader.sourceComponent = reliabilityTestingSystem
         }
         Connections{

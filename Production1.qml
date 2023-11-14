@@ -6,14 +6,142 @@ import QtGraphicalEffects 1.15
 
 Rectangle {
     id:root
-
     signal signalBackLogin()
     property double plcTableHei: 120
     property double machinedataTableHei: 330
+    property string currentIp: ""
+    property string currentPort: ""
+    property int currentMode: 1
+    property bool batchSizeChange: false
+    property int currentPower: {
+        if(machinename.currentIndex === 0){
+            return opcua.mCurrentPower1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mCurrentPower2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mCurrentPower3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mCurrentPower4
+        }
+    }
+
+    property int currentTune: {
+        if(machinename.currentIndex === 0){
+            return opcua.mCurrentTune1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mCurrentTune2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mCurrentTune3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mCurrentTune4
+        }
+        else{
+            return ""
+        }
+    }
+    property int currentFre: {
+        if(machinename.currentIndex === 0){
+            return opcua.mCurrentFre1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mCurrentFre2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mCurrentFre3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mCurrentFre4
+        }
+    }
+    property int currentAmp: {
+        if(machinename.currentIndex === 0){
+            return opcua.mCurrentAmp1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mCurrentAmp2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mCurrentAmp3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mCurrentAmp4
+        }
+    }
+    property int cycleCounter: {
+        if(machinename.currentIndex === 0){
+            return opcua.mCycleCounter1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mCycleCounter2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mCycleCounter3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mCycleCounter4
+        }
+    }
+    Component.onCompleted: {
+        if(productionIndex === 1){
+            batchsizedata.text = opcua.batchSize1()
+        }
+        else if(productionIndex === 2){
+            batchsizedata.text = opcua.batchSize2()
+        }
+        else if(productionIndex === 3){
+            batchsizedata.text = opcua.batchSize3()
+        }
+        else if(productionIndex === 4){
+            batchsizedata.text = opcua.batchSize4()
+        }
+        batchSizeChange = true
+    }
+
     Connections{
         target:ConfigurationQml
-        function onSigMachName(name){
-            machineinfor.text = name
+        function onSigMachName(list){
+            machineinfor.text = list[0]
+            currentIp = list[1]
+            currentPort = list[2]
+        }
+    }
+    Connections{
+        target:opcuaCache
+        function onCache(list){
+            if(list[0] === 0){
+                manual.checked = true
+                currentMode = 0
+            }
+            else if(list[0] === 1){
+                auto.checked = true
+                currentMode = 1
+            }
+            else if(list[0] === 2){
+                merecycle.checked = true
+                currentMode = 2
+            }
+            batchsizedata.text = list[1]
+            if(list[2] === 0){
+                alarmlock.checked = false
+            }
+            else{
+                alarmlock.checked = true
+            }
+        }
+    }
+    Timer{
+        id: timer
+        interval: 100//100ms
+        //        running: true//开启
+        onTriggered:{
+            opcua.updateStart(machinename.currentIndex,0)
+            etime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
         }
     }
     Text {
@@ -51,7 +179,26 @@ Rectangle {
             source: "qrc:/images/user.png"
         }
         onActivated: {
+            productionIndex = currentIndex + 1
             ConfigurationQml.selectMachName(currentIndex+1)
+            opcuaCache.initProduction(productionIndex)
+            if(productionIndex === 1){
+                batchsizedata.text = opcua.batchSize1()
+            }
+            else if(productionIndex === 2){
+                batchsizedata.text = opcua.batchSize2()
+            }
+            else if(productionIndex === 3){
+                batchsizedata.text = opcua.batchSize3()
+            }
+            else if(productionIndex === 4){
+                batchsizedata.text = opcua.batchSize4()
+            }
+            savebtn.checked = false
+            plcTable.upDate()
+        }
+        Component.onCompleted: {
+            currentIndex = productionIndex - 1
         }
     }
     Rectangle{
@@ -60,12 +207,16 @@ Rectangle {
         y: multipleHeight*122
         width: multipleWidth* 389
         height: multipleHeight* 33
+        Component.onCompleted: {
+            opcuaCache.initProduction(productionIndex)
+        }
 
         RadioButton{
             id: manual
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            text: " Manual"
+            text: "Manual"
+            spacing: 10
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 width: multipleWidth* 26
@@ -84,8 +235,17 @@ Rectangle {
                     visible: manual.checked
                 }
             }
-            onClicked: {
+            onPressed: {
+                alarmlock.checked = false
                 dataprocessing.checked = false
+                opcua.updateDataReady(machinename.currentIndex,1)
+            }
+            onReleased: {
+                opcua.updateAlarmLock(machinename.currentIndex,0)
+                opcua.updateMode(machinename.currentIndex, 0)
+                opcuaCache.updateMode(productionIndex, 0)
+                opcuaCache.updateAlarmLock(productionIndex, 0)
+                currentMode = 0
             }
         }
         RadioButton{
@@ -93,7 +253,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: manual.right
             anchors.leftMargin: 35
-            text: " Auto"
+            text: "Auto"
+            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
@@ -112,8 +273,16 @@ Rectangle {
                     visible: auto.checked
                 }
             }
-            onClicked: {
+            onPressed: {
+                alarmlock.checked = false
                 dataprocessing.checked = false
+                opcua.updateDataReady(machinename.currentIndex,1)
+            }
+            onReleased: {
+                opcua.updateMode(machinename.currentIndex, 1)
+                opcuaCache.updateMode(productionIndex, 1)
+                opcuaCache.updateAlarmLock(productionIndex, 0)
+                currentMode = 1
             }
         }
         RadioButton{
@@ -121,7 +290,8 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: auto.right
             anchors.leftMargin: 70
-            text: " Merecycle"
+            text: "Merecycle"
+            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
@@ -140,8 +310,17 @@ Rectangle {
                     visible: merecycle.checked
                 }
             }
-            onClicked: {
+            onPressed: {
+                alarmlock.checked = false
                 dataprocessing.checked = false
+                opcua.updateDataReady(machinename.currentIndex,1)
+            }
+            onReleased: {
+                opcua.updateAlarmLock(machinename.currentIndex,0)
+                opcua.updateMode(machinename.currentIndex, 2)
+                opcuaCache.updateMode(productionIndex, 2)
+                opcuaCache.updateAlarmLock(productionIndex, 0)
+                currentMode = 2
             }
         }
     }
@@ -155,6 +334,16 @@ Rectangle {
         text: " Alarm Lock"
         font.pixelSize: multipleWidth* 20
         enabled: auto.checked ? true : false
+        onClicked: {
+            if(checked === true){
+                opcuaCache.updateAlarmLock(productionIndex,1)
+                opcua.updateAlarmLock(machinename.currentIndex,1)
+            }
+            else{
+                opcuaCache.updateAlarmLock(productionIndex,0)
+                opcua.updateAlarmLock(machinename.currentIndex,0)
+            }
+        }
     }
     CheckBox{
         id:dataprocessing
@@ -165,6 +354,11 @@ Rectangle {
         height: multipleHeight* 33
         font.pixelSize: multipleWidth* 20
         enabled: merecycle.checked === true ? false : true
+        onReleased: {
+            if(checked === false){
+                opcua.updateDataReady(machinename.currentIndex,1)
+            }
+        }
     }
     Text {
         id: batchsize
@@ -183,18 +377,54 @@ Rectangle {
         border.color: "#DCDCDC"
         radius: multipleWidth* 3
         TextInput {
+            id: batchsizedata
             width: multipleWidth* 80
             height: multipleHeight* 32
-            anchors.leftMargin: 3
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pointSize: 20
+            font.pointSize: multipleWidth*20
             focus: true
             clip: true
             autoScroll:true
+            text: machinename.currentIndex === 0 ? opcua.mBatchSize1 : machinename.currentIndex === 1 ? opcua.mBatchSize2
+                                                                                                      : machinename.currentIndex === 2 ? opcua.mBatchSize3 : opcua.mBatchSize4
+            validator: RegExpValidator{
+                regExp:/^[1-9]\d{0,5}/
+            }
+            Component.onCompleted: {
+                savebtn.enabled = false
+            }
+            onTextChanged: {
+                if(batchSizeChange){
+                    batchSizeStatus()
+                }
+            }
         }
     }
+    function batchSizeStatus(){
+        if(machinename.currentIndex === 0){
+            if(batchsizedata.text !== opcua.batchSize1()){
+                savebtn.enabled = true
+            }
+        }
+        else if(machinename.currentIndex === 1){
+            if(batchsizedata.text !== opcua.batchSize2()){
+                savebtn.enabled = true
+            }
+        }
+        else if(machinename.currentIndex === 2){
+            if(batchsizedata.text !== opcua.batchSize3()){
+                savebtn.enabled = true
+            }
+        }
+        else if(machinename.currentIndex === 3){
+            if(batchsizedata.text !== opcua.batchSize4()){
+                savebtn.enabled = true
+            }
+        }
+    }
+
     RoundButton{
         id: savebtn
         width: multipleWidth*80
@@ -203,7 +433,7 @@ Rectangle {
         x: multipleWidth*299
         y: multipleHeight*247
         background: Rectangle{
-            color: savebtn.pressed ?"#215476" :"#3D7AB3";
+            color: savebtn.enabled === true ? savebtn.pressed ?"#215476" :"#3D7AB3" : "#9A9A9A"
             radius: multipleWidth* 5
         }
         contentItem: Text {
@@ -214,7 +444,27 @@ Rectangle {
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
         }
+        enabled: false
+        onClicked: {
+            enabled = false
+            if(machinename.currentIndex === 0){
+                opcua.setBatchSize1(text)
+            }
+            else if(machinename.currentIndex === 1){
+                opcua.setBatchSize2(text)
+            }
+            else if(machinename.currentIndex === 2){
+                opcua.setBatchSize3(text)
+            }
+            else if(machinename.currentIndex === 3){
+                opcua.setBatchSize4(text)
+            }
+            opcua.updateBatchSize(machinename.currentIndex, batchsizedata.text)
+            opcuaCache.updateBatchSize(productionIndex,batchsizedata.text)
+        }
     }
+
+
     Rectangle{
         id: machine
         width: multipleWidth* 620
@@ -223,6 +473,7 @@ Rectangle {
         x: multipleWidth*60
         y: multipleHeight*337
         border.color: "#BBBBBB"
+        enabled: pop.visible === true ? false : true
         Text {
             id: machineinfor
             x: multipleWidth*31
@@ -245,7 +496,41 @@ Rectangle {
             x: multipleWidth*36
             y: multipleHeight*109
             radius: multipleWidth* 10
-            color: "#9A9A9A"
+            color: {
+                if(machinename.currentIndex === 0){
+                    if(opcua.mReady1 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mReady2 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mReady3 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mReady4 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+            }
+
         }
 
         Text {
@@ -266,7 +551,40 @@ Rectangle {
             x: multipleWidth*152
             y: multipleHeight*109
             radius: multipleWidth* 10
-            color: "#9A9A9A"
+            color:{
+                if(machinename.currentIndex === 0){
+                    if(opcua.mDataReady1 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mDataReady2 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mDataReady3 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mDataReady4 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+            }
         }
 
         Text {
@@ -287,7 +605,40 @@ Rectangle {
             x: multipleWidth*36
             y: multipleHeight*184
             radius: multipleWidth* 10
-            color: "#9A9A9A"
+            color:{
+                if(machinename.currentIndex === 0){
+                    if(opcua.mSonics1 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mSonics2 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mSonics3 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mSonics4 === false){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#58A55C"
+                    }
+                }
+            }
         }
         Text {
             id: sonicsrectname
@@ -326,7 +677,41 @@ Rectangle {
             x: multipleWidth*36
             y: multipleHeight*259
             radius: multipleWidth* 10
-            color: "#9A9A9A"
+            color:{
+                if(machinename.currentIndex === 0){
+                    if(opcua.mAlarm1 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#BD3124"
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mAlarm2 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#BD3124"
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mAlarm3 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#BD3124"
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mAlarm4 === 0){
+                        return "#9A9A9A"
+                    }
+                    else{
+                        return "#BD3124"
+                    }
+                }
+
+            }
         }
         Text {
             id: alarmrectname
@@ -337,7 +722,6 @@ Rectangle {
             text: qsTr("Alarm")
             font.pixelSize: multipleWidth* 18
         }
-
         RoundButton{
             id: resetbtn
             width: multipleWidth* 80
@@ -357,12 +741,86 @@ Rectangle {
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 14
             }
+            onClicked: {
+                opcua.updateReset(machinename.currentIndex, 1)
+            }
+            visible: {
+                if(machinename.currentIndex === 0){
+                    if(opcua.mAlarm1 === 0){
+                        return false
+                    }
+                    else{
+                        return true
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mAlarm2 === 0){
+                        return false
+                    }
+                    else{
+                        return true
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mAlarm3 === 0){
+                        return false
+                    }
+                    else{
+                        return true
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mAlarm4 === 0){
+                        return false
+                    }
+                    else{
+                        return true
+                    }
+                }
+            }
         }
+
         RoundButton{
             id: stopbtn
             width: multipleWidth* 80
             height: multipleHeight* 30
-            text: "Stop"
+            text:{
+                if(machinename.currentIndex === 0){
+                    if(opcua.mStart1 === true){
+                        return "Stop"
+                    }
+                    else{
+                        return "Start"
+                    }
+                }
+                else if(machinename.currentIndex === 1){
+                    if(opcua.mStart2 === true){
+                        return "Stop"
+                    }
+                    else{
+                        return "Start"
+                    }
+                }
+                else if(machinename.currentIndex === 2){
+                    if(opcua.mStart3 === true){
+                        return "Stop"
+                    }
+                    else{
+                        return "Start"
+                    }
+                }
+                else if(machinename.currentIndex === 3){
+                    if(opcua.mStart4 === true){
+                        return "Stop"
+                    }
+                    else{
+                        return "Start"
+                    }
+                }
+                else{
+                    return "Start"
+                }
+            }
             x: multipleWidth*510
             y: multipleHeight*27
             background: Rectangle{
@@ -376,6 +834,137 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 14
+            }
+            onClicked: {
+                if(text === "Start"){
+                    var tmp
+                    if(machinename.currentIndex === 0){
+                        tmp = opcua.getReady1()
+                    }
+                    else if(machinename.currentIndex === 1){
+                        tmp = opcua.getReady2()
+                    }
+                    else if(machinename.currentIndex === 2){
+                        tmp = opcua.getReady3()
+                    }
+                    else if(machinename.currentIndex === 3){
+                        tmp = opcua.getReady4()
+                    }
+                    if(tmp === true){
+                        Tcplient.dis_connect()
+                        if(dataprocessing.checked === true){
+                            Tcplient.connectTcp(currentIp,currentPort)
+                        }
+                        if(machinename.currentIndex === 0){
+                            if(opcua.cycleCounter1() === 0){
+                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                etime.text = ""
+                                if(manual.checked === true){
+                                    moder.text = manual.text
+                                }
+                                else if(auto.checked === true){
+                                    moder.text = auto.text
+                                }
+                                else if(merecycle.checked === true){
+                                    moder.text = merecycle.text
+                                }
+                                opcua.updateStart(machinename.currentIndex, 1)
+                                if(manual.checked === true){
+                                    timer.start()
+                                }
+                            }
+                            else{
+                                pop.visible = true
+                            }
+                        }
+                        else if(machinename.currentIndex === 1){
+                            if(opcua.cycleCounter2() === 0){
+                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                etime.text = ""
+                                if(manual.checked === true){
+                                    moder.text = manual.text
+                                }
+                                else if(auto.checked === true){
+                                    moder.text = auto.text
+                                }
+                                else if(merecycle.checked === true){
+                                    moder.text = merecycle.text
+                                }
+                                opcua.updateStart(machinename.currentIndex, 1)
+                                if(manual.checked === true){
+                                    timer.start()
+                                }
+                            }
+                            else{
+                                pop.visible = true
+                            }
+                        }
+                        else if(machinename.currentIndex === 1){
+                            if(opcua.cycleCounter3() === 0){
+                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                etime.text = ""
+                                if(manual.checked === true){
+                                    moder.text = manual.text
+                                }
+                                else if(auto.checked === true){
+                                    moder.text = auto.text
+                                }
+                                else if(merecycle.checked === true){
+                                    moder.text = merecycle.text
+                                }
+                                opcua.updateStart(machinename.currentIndex, 1)
+                                if(manual.checked === true){
+                                    timer.start()
+                                }
+                            }
+                            else{
+                                pop.visible = true
+                            }
+                        }
+                        else if(machinename.currentIndex === 1){
+                            if(opcua.cycleCounter4() === 0){
+                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                etime.text = ""
+                                if(manual.checked === true){
+                                    moder.text = manual.text
+                                }
+                                else if(auto.checked === true){
+                                    moder.text = auto.text
+                                }
+                                else if(merecycle.checked === true){
+                                    moder.text = merecycle.text
+                                }
+                                opcua.updateStart(machinename.currentIndex, 1)
+                                if(manual.checked === true){
+                                    timer.start()
+                                }
+                            }
+                            else{
+                                pop.visible = true
+                            }
+                        }
+
+
+                    }
+                }
+                else{
+                    opcua.updateStart(machinename.currentIndex, 0)
+                    opcua.updateReset(machinename.currentIndex, 1)
+                    etime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                    if(machinename.currentIndex === 0){
+                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter1(),currentMode,opcuaCache.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber1())
+                    }
+                    else if(machinename.currentIndex === 1){
+                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter2(),currentMode,opcuaCache.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber2())
+                    }
+                    else if(machinename.currentIndex === 2){
+                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter3(),currentMode,opcuaCache.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber3())
+                    }
+                    else if(machinename.currentIndex === 3){
+                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter4(),currentMode,opcuaCache.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber4())
+                    }
+                    Tcplient.dis_connect()
+                }
             }
         }
         Rectangle{
@@ -453,7 +1042,7 @@ Rectangle {
                 anchors.rightMargin: multipleWidth*13
                 width: multipleWidth* 141
                 height: multipleHeight* 23
-                text: qsTr("2023.9.22 13:03:59")
+                text: qsTr("")
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -464,7 +1053,7 @@ Rectangle {
                 anchors.topMargin: multipleWidth*12
                 width: multipleWidth* 141
                 height: multipleHeight* 23
-                text: qsTr("2023.9.22 13:03:59")
+                text: qsTr("")
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -474,7 +1063,20 @@ Rectangle {
                 anchors.top: etime.bottom
                 anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("12345")
+                text:{
+                    if(machinename.currentIndex === 0){
+                        return opcua.mCycleCounter1
+                    }
+                    else if(machinename.currentIndex === 1){
+                        return opcua.mCycleCounter2
+                    }
+                    else if(machinename.currentIndex === 2){
+                        return opcua.mCycleCounter3
+                    }
+                    else if(machinename.currentIndex === 3){
+                        return opcua.mCycleCounter4
+                    }
+                }
                 font.pixelSize: multipleWidth* 16
             }
             Text {
@@ -483,7 +1085,7 @@ Rectangle {
                 anchors.top: arun.bottom
                 anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("Auto")
+                text: qsTr("")
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -493,7 +1095,21 @@ Rectangle {
                 anchors.top: moder.bottom
                 anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("21")
+                text: {
+                    if(machinename.currentIndex === 0){
+                        return opcua.mPPM1
+                    }
+                    else if(machinename.currentIndex === 1){
+                        return opcua.mPPM2
+                    }
+                    else if(machinename.currentIndex === 2){
+                        return opcua.mPPM3
+                    }
+                    else if(machinename.currentIndex === 3){
+                        return opcua.mPPM4
+                    }
+                }
+
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -503,12 +1119,139 @@ Rectangle {
                 anchors.top: ppmnum.bottom
                 anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
-                text: qsTr("15111110")
+                text:{
+                    if(machinename.currentIndex === 0){
+                        return opcua.mAlarmNumber1
+                    }
+                    else if(machinename.currentIndex === 1){
+                        return opcua.mAlarmNumber2
+                    }
+                    else if(machinename.currentIndex === 2){
+                        return opcua.mAlarmNumber3
+                    }
+                    else if(machinename.currentIndex === 3){
+                        return opcua.mAlarmNumber4
+                    }
+                }
+
                 font.pixelSize: multipleWidth* 16
             }
-
         }
     }
+    Rectangle{
+        id: pop
+        width: multipleWidth* 620
+        height: multipleHeight* 360
+        radius: multipleWidth* 5
+        x: multipleWidth*60
+        y: multipleHeight*337
+        opacity: 0.5
+        color: "#BBBBBB"
+        visible: false
+    }
+    Rectangle {
+        id: dig
+        width:multipleWidth* 360
+        height:multipleHeight* 184
+        x:multipleWidth* 190
+        y:multipleHeight* 419
+        border.color: "#3D7AB3"
+        radius: multipleWidth*5
+        color: "#FFFFFF"
+        opacity: 1
+        visible: pop.visible === true ? true : false
+        enabled: visible === true ? true : false
+        Text {
+            text: qsTr("Continue with the last run task\n or start a new run task?")
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize:multipleWidth* 20
+            anchors.top: parent.top
+            anchors.topMargin:multipleWidth* 35
+        }
+
+        RoundButton{
+            id: come
+            width:multipleWidth* 154
+            height:multipleHeight* 32
+            radius:multipleWidth* 5
+            x:multipleWidth* 24
+            y:multipleHeight* 129
+            text: "Continue Run"
+            background: Rectangle{
+                color: come.pressed ?"#215476" :"#3D7AB3";
+                radius: multipleWidth* 5
+            }
+            contentItem: Text {
+                text: parent.text
+                color: "#FFFFFF"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.fill: parent
+                font.pixelSize: multipleWidth* 15
+            }
+            onClicked: {
+                if(manual.checked === true){
+                    moder.text = manual.text
+                }
+                else if(auto.checked === true){
+                    moder.text = auto.text
+                }
+                else if(merecycle.checked === true){
+                    moder.text = merecycle.text
+                }
+                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                etime.text = ""
+                opcua.updateStart(machinename.currentIndex, 1)
+                if(manual.checked === true){
+                    timer.start()
+                }
+                pop.visible = false
+            }
+        }
+        RoundButton{
+            id: news
+            width:multipleWidth* 154
+            height:multipleHeight* 32
+            radius:multipleWidth* 5
+            x:multipleWidth* 182
+            y:multipleHeight* 129
+            text: "Start New Task"
+            background: Rectangle{
+                color:  news.pressed ?"#215476" :"#3D7AB3";
+                radius: multipleWidth* 5
+            }
+            contentItem: Text {
+                text: parent.text
+                color: "#FFFFFF"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.fill: parent
+                font.pixelSize: multipleWidth* 15
+            }
+            onClicked: {
+                opcua.updateCycleCounter(machinename.currentIndex,0)
+                opcua.updateAlarmNumber(machinename.currentIndex,0)
+                if(manual.checked === true){
+                    moder.text = manual.text
+                }
+                else if(auto.checked === true){
+                    moder.text = auto.text
+                }
+                else if(merecycle.checked === true){
+                    moder.text = merecycle.text
+                }
+                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                etime.text = ""
+                opcua.updateStart(machinename.currentIndex, 1)
+                if(manual.checked === true){
+                    timer.start()
+                }
+                pop.visible = false
+            }
+        }
+    }
+
+
     RoundButton{
         id:estop
         radius: multipleWidth* 5
@@ -579,8 +1322,7 @@ Rectangle {
         height: multipleHeight* 120
         x: multipleWidth*738
         y: multipleHeight*157
-        property var wid: plcTable.width
-        property var hei: plcTable.height
+
         horizontalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏水平滚动条
         verticalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
         frameVisible: false
@@ -640,6 +1382,18 @@ Rectangle {
             width: multipleWidth* 65
             resizable:false
         }
+        function upDate(){
+            plcModel.powermin = currentPower
+            plcModel.powermax = currentPower
+            plcModel.tunemin = currentTune
+            plcModel.tunemax = currentTune
+            plcModel.fremin = currentFre
+            plcModel.fremax = currentFre
+            plcModel.ampmin = currentAmp
+            plcModel.ampmax = currentAmp
+            plcModel.countmin = cycleCounter
+            plcModel.countmax = cycleCounter
+        }
         headerDelegate: Rectangle{
             id: header
             height: multipleHeight* 30
@@ -663,7 +1417,14 @@ Rectangle {
         // 设置每个单元格的字体样式
         itemDelegate: Text {
             id: item
-            text: styleData.value
+            text: {
+                if(styleData.value === 0){
+                    return ""
+                }
+                else{
+                    return styleData.value
+                }
+            }
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -672,35 +1433,72 @@ Rectangle {
         }
         model: ListModel {
             id: plcModel
-            ListElement {
-                name: "Power"
-                fmin: ""
-                fcurrent: ""
-                fmax: ""
-                mname:"Tune"
-                mmin: ""
-                mcurrent: ""
-                mmax: ""
+            property var power: currentPower
+            property var powermin
+            property var powermax
+            property var tune: currentTune
+            property var tunemin
+            property var tunemax
+            property var fre: currentFre
+            property var fremin
+            property var fremax
+            property var amp: currentAmp
+            property var ampmin
+            property var ampmax
+            property var count: cycleCounter
+            property var countmin
+            property var countmax
+            Component.onCompleted: {
+                plcModel.append({name: "Power",fmin: powermin,fcurrent: power,fmax: powermax,mname:"Tune",mmin: tunemin,mcurrent:tune,mmax: tunemax})
+                plcModel.append({name: "Freq-offset",fmin: fremin,fcurrent:fre,fmax: fremax,mname:"Amplitude",mmin: ampmin,mcurrent:amp,mmax: ampmax})
+                plcModel.append({name: "Counter",fmin: countmin,fcurrent:count,fmax: countmax,mname:"",mmin: "",mcurrent:"",mmax: ""})
             }
-            ListElement {
-                name: "Freq-offset"
-                fmin: ""
-                fcurrent: ""
-                fmax: ""
-                mname:"Amplitude"
-                mmin: ""
-                mcurrent: ""
-                mmax: ""
+            onPowerChanged: {
+                setProperty(0, "fcurrent", power)
+                if(power > powermax){
+                    powermax = power
+                    setProperty(0, "fmax", powermax)
+                }
+                if(power < powermin){
+                    powermin = power
+                    setProperty(0, "fmin", powermin)
+                }
             }
-            ListElement {
-                name: "Counter"
-                fmin: ""
-                fcurrent: ""
-                fmax: ""
-                mname:""
-                mmin: ""
-                mcurrent: ""
-                mmax: ""
+            onTuneChanged: {
+                setProperty(0, "mcurrent", tune)
+                if(tune > tunemax){
+                    setProperty(0, "mmax", tune)
+                }
+                if(tune < tunemin){
+                    setProperty(0, "mmin", tune)
+                }
+            }
+            onFreChanged: {
+                setProperty(1, "fcurrent", fre)
+                if(fre > fremax){
+                    setProperty(1, "fmax", fre)
+                }
+                if(fre < fremin){
+                    setProperty(1, "fmin", fre)
+                }
+            }
+            onAmpChanged: {
+                setProperty(1, "mcurrent", amp)
+                if(amp > ampmax){
+                    setProperty(1, "mmax", amp)
+                }
+                if(amp < ampmin){
+                    setProperty(1, "mmin", amp)
+                }
+            }
+            onCountChanged: {
+                setProperty(2, "fcurrent", count)
+                if(count > countmax){
+                    setProperty(0, "fmax", count)
+                }
+                if(count < countmin){
+                    setProperty(0, "fmin", count)
+                }
             }
         }
         focus: true
@@ -765,7 +1563,14 @@ Rectangle {
         // 设置每个单元格的字体样式
         itemDelegate: Text {
             id: item1
-            text: styleData.value
+            text: {
+                if(styleData.value === 0){
+                    return ""
+                }
+                else{
+                    return styleData.value
+                }
+            }
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -774,72 +1579,86 @@ Rectangle {
         }
         model: ListModel {
             id: machinedataModel
-            ListElement {
-                name1: "Amplitude Setting"
-                name2: ""
-                name3: "Engery Setting"
-                name4: ""
+            Component.onCompleted: {
+                machinedataModel.append({name1: "Amplitude Setting",name2: "",name3: "Engery Setting",name4: 1})
+                machinedataModel.append({name1: "Time Setting",name2: "",name3: "Trigger Pressure Setting",name4: ""})
+                machinedataModel.append({name1: "Weld Pressure Setting",name2: "",name3: "Weld Mode Setting",name4: ""})
+                machinedataModel.append({name1: "Actual Weld Time",name2: "",name3: "Actual Weld Engery",name4: ""})
+                machinedataModel.append({name1: "Actual Peak Power",name2: "",name3: "Actual Pre-Height",name4: ""})
+                machinedataModel.append({name1: "Actual Post-Height",name2: "",name3: "",name4: ""})
+                machinedataModel.append({name1: "Quality Time Upper",name2: "",name3: "Quality Time Lower",name4: ""})
+                machinedataModel.append({name1: "Quality Power Upper",name2: "",name3: "Quality Power Lower",name4: ""})
+                machinedataModel.append({name1: "Quality Per-Height Upper",name2: "",name3: "Quality Per-Height Lower",name4: ""})
+                machinedataModel.append({name1: "Quality Post-Height Upper",name2: "",name3: "Quality Post-Height Lower",name4: ""})
+                machinedataModel.append({name1: "Alarm",name2: "",name3: "Counter",name4: ""})
             }
-            ListElement {
-                name1: "Time Setting"
-                name2: ""
-                name3: "Trigger Pressure Setting"
-                name4: ""
-            }
-            ListElement {
-                name1: "Weld Pressure Setting"
-                name2: ""
-                name3: "Weld Mode Setting"
-                name4: ""
-            }
-            ListElement {
-                name1: "Actual Weld Time"
-                name2: ""
-                name3: "Actual Weld Engery"
-                name4: ""
-            }
-            ListElement {
-                name1: "Actual Peak PowerC"
-                name2: ""
-                name3: "Actual Pre-Height"
-                name4: ""
-            }
-            ListElement {
-                name1: "Actual Post-Height"
-                name2: ""
-                name3: ""
-                name4: ""
-            }
-            ListElement {
-                name1: "Quality Time Upper"
-                name2: ""
-                name3: "Quality Time Lower"
-                name4: ""
-            }
-            ListElement {
-                name1: "Quality Power Upper"
-                name2: ""
-                name3: "Quality Power Lower"
-                name4: ""
-            }
-            ListElement {
-                name1: "Quality Per-Height Upper"
-                name2: ""
-                name3: "Quality Per-Height Lower"
-                name4: ""
-            }
-            ListElement {
-                name1: "Quality Post-Height Upper"
-                name2: ""
-                name3: "Quality Post-Height Lower"
-                name4: ""
-            }
-            ListElement {
-                name1: "Alarm"
-                name2: ""
-                name3: "Counter"
-                name4: ""
-            }
+
+            //            ListElement {
+            //                name1: "Amplitude Setting"
+            //                name2: ""
+            //                name3: "Engery Setting"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Time Setting"
+            //                name2: ""
+            //                name3: "Trigger Pressure Setting"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Weld Pressure Setting"
+            //                name2: ""
+            //                name3: "Weld Mode Setting"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Actual Weld Time"
+            //                name2: ""
+            //                name3: "Actual Weld Engery"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Actual Peak Power"
+            //                name2: ""
+            //                name3: "Actual Pre-Height"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Actual Post-Height"
+            //                name2: ""
+            //                name3: ""
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Quality Time Upper"
+            //                name2: ""
+            //                name3: "Quality Time Lower"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Quality Power Upper"
+            //                name2: ""
+            //                name3: "Quality Power Lower"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Quality Per-Height Upper"
+            //                name2: ""
+            //                name3: "Quality Per-Height Lower"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Quality Post-Height Upper"
+            //                name2: ""
+            //                name3: "Quality Post-Height Lower"
+            //                name4: ""
+            //            }
+            //            ListElement {
+            //                name1: "Alarm"
+            //                name2: ""
+            //                name3: "Counter"
+            //                name4: ""
+            //            }
         }
         focus: true
     }
