@@ -131,17 +131,17 @@ Rectangle {
         myLoader.sourceComponent = id
     }
     Component{
-        id:production1;
-        Production1{
-            id:p1
+        id:configuration1
+        Configuration {
+            id: c1
             width: multipleWidth* 1440;
             height: multipleHeight* 802;
         }
     }
     Component{
-        id:configuration1
-        Configuration {
-            id: c1
+        id:production1;
+        Production1{
+            id:p1
             width: multipleWidth* 1440;
             height: multipleHeight* 802;
         }

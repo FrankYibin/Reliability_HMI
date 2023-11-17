@@ -11,20 +11,28 @@ Rectangle{
         function onConfig(list){
             if(list[0] === 1){
                 m1.updata(list[2],list[6],list[7])
+                opcua.updateMode(0,list[3])
+                opcua.updateBatchSize(0,list[8])
             }
             else if(list[0] === 2){
                 m2.updata(list[2],list[6],list[7])
+                opcua.updateMode(1,list[3])
+                opcua.updateBatchSize(1,list[8])
             }
             else if(list[0] === 3){
                 m3.updata(list[2],list[6],list[7])
+                opcua.updateMode(2,list[3])
+                opcua.updateBatchSize(2,list[8])
             }
             else if(list[0] === 4){
                 m4.updata(list[2],list[6],list[7])
+                opcua.updateMode(3,list[3])
+                opcua.updateBatchSize(3,list[8])
             }
         }
     }
     Connections{
-        target: Tcplient
+        target: TcpClient
         function onConnectStatus(status){
             if(index === 1){
                 m1.status = status
@@ -147,7 +155,7 @@ Rectangle{
         plcName:"Machine 1:"
         onSigConnectTest: {
             index = 1
-            Tcplient.connectTcp(ip,port)
+            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -159,7 +167,7 @@ Rectangle{
         plcName:"Machine 2:"
         onSigConnectTest: {
             index = 2
-            Tcplient.connectTcp(ip,port)
+            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -171,7 +179,7 @@ Rectangle{
         plcName:"Machine 3:"
         onSigConnectTest: {
             index = 3
-            Tcplient.connectTcp(ip,port)
+            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -183,7 +191,7 @@ Rectangle{
         plcName:"Machine 4:"
         onSigConnectTest: {
             index = 4
-            Tcplient.connectTcp(ip,port)
+            TcpClient.connectTcp(ip,port)
         }
     }
     RoundButton {

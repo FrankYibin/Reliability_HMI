@@ -27,14 +27,15 @@ class tcpClient(QObject):
         self.port = ""
     sigTcpData = Signal(list, arguments=['list'])
     connectStatus = Signal(int, arguments=['status'])
-    @Slot(str, str)
+
+    @Slot(str, int)
     def connectTcp(self, ip, port):
         host = ip
         port = port
         '''
         @web: TCP/IP 套接字 
         '''
-        self.conn = self.web_connect(host, port)
+        self.web_connect(host, port)
         '''
         Thread_dec(): decode function
         '''
@@ -45,25 +46,24 @@ class tcpClient(QObject):
         # self.thread_dec.start()
 
     def web_connect(self, ser_ip, ser_port):
-        self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建TCP/IP套接字
-        self.conn.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, True)
-        self.conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 60 * 1000, 30 * 1000))
-        # 开启保活机制，1min后没有反应则探测一次连接是否存在，30秒探测一次，失败则断开
-        # noinspection PyBroadException
-        try:
-            self.conn.connect((ser_ip, ser_port))
-        except:
-            print("连接异常")
-            self.connectStatus.emit(1)
-            return
-        else:
-            print("连接正常")
-            self.connectStatus.emit(0)
-            self.thread_dec = Thread_dec(self.conn)  # 实例化一个线程
-            # 将线程thread的信号finishSignal和UI主线程中的槽函数Change进行连接
-            self.thread_dec.Dec_signal.connect(self.upData)
-            # 启动线程，执行线程类中run函数
-            self.thread_dec.start()
+        conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # 创建TCP/IP套接字
+        conn.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, True)
+        conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 60 * 1000, 30 * 1000))  # 开启保活机制，1min后没有反应则探测一次连接是否存在，30秒探测一次，失败则断开
+        ser_ip = "192.168.0.100"
+        ser_port = 4000
+        conn.connect((ser_ip, ser_port))
+        # except:
+        #     print("连接异常")
+        #     self.connectStatus.emit(1)
+        #     return
+        # else:
+        print("连接正常")
+        self.connectStatus.emit(0)
+        self.thread_dec = Thread_dec(conn)  # 实例化一个线程
+        # 将线程thread的信号finishSignal和UI主线程中的槽函数Change进行连接
+        self.thread_dec.Dec_signal.connect(self.upData)
+        # 启动线程，执行线程类中run函数
+        self.thread_dec.start()
 
     @Slot()
     def dis_connect(self):
@@ -132,8 +132,8 @@ class Thread_dec(QThread):
     def run(self):
         while True:
             data = self.conn.recv(8192).hex()
-            print("data", data)
-            print(len(data))
+            # print("data", data)
+            # print(len(data))
             # start dec
             decoding_data_list = self.decoding(data)
             bag = []
@@ -150,6 +150,8 @@ class Thread_dec(QThread):
                 bag.append(decoding_data_list[i].minute)
                 bag.append(decoding_data_list[i].second)
                 bag.append(decoding_data_list[i].tail)
+                print(bag)
                 if bag[1] == 1:
+                    print(bag)
                     self.Dec_signal.emit(bag)
                 bag.clear()

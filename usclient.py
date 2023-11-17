@@ -1,11 +1,10 @@
-from opcua import Client, ua
-from datetime import datetime
-
-# Assign endpoint URL
-
 # Temperature_node.set_writable()
 # Temperature_node1.set_writable()
-from PySide2.QtCore import QObject, Qt, Signal, Slot, QUrl, QStringListModel, QCoreApplication, Property
+from PySide2.QtCore import QObject, Signal, Slot, Property
+from opcua import Client, ua
+
+
+# Assign endpoint URL
 
 
 class opcClient(QObject):
@@ -125,7 +124,20 @@ class opcClient(QObject):
             self.palarmNumber3 = 0
             self.palarmNumber2 = 0
             self.palarmNumber4 = 0
+            self.pbatchSize1 = 0
+            self.pbatchSize2 = 0
+            self.pbatchSize3 = 0
+            self.pbatchSize4 = 0
 
+            # while not self.myclient.is_connected():
+            #     try:
+            #         self.myclient.connect()
+            #         print("重新连接成功")
+            #     except Exception as e:
+            #         print("重新连接失败：%s" % str(e))
+            #         time.sleep(1)  # 等待1秒后重试
+            #     else:
+            #         self.subNodesId()
 
     def subNodesId(self):
         sub = self.subscribe.subscribe_data_change(self.M_Start)
@@ -207,7 +219,6 @@ class opcClient(QObject):
 
     sigOpcStatus = Signal(int, arguments=['status'])
 
-
     @Slot()
     def connectOPCUA(self):
         try:
@@ -225,98 +236,98 @@ class opcClient(QObject):
     start2_changed = Signal(bool)
     start3_changed = Signal(bool)
     start4_changed = Signal(bool)
-    
+
     reSet1_changed = Signal(bool)
     reSet2_changed = Signal(bool)
     reSet3_changed = Signal(bool)
     reSet4_changed = Signal(bool)
-    
+
     mode1_changed = Signal(int)
     mode2_changed = Signal(int)
     mode3_changed = Signal(int)
     mode4_changed = Signal(int)
-    
+
     dataReady1_changed = Signal(bool)
     dataReady2_changed = Signal(bool)
     dataReady3_changed = Signal(bool)
     dataReady4_changed = Signal(bool)
-    
+
     alarmLock1_changed = Signal(bool)
     alarmLock2_changed = Signal(bool)
     alarmLock3_changed = Signal(bool)
     alarmLock4_changed = Signal(bool)
-    
+
     estop1_changed = Signal(bool)
     estop2_changed = Signal(bool)
     estop3_changed = Signal(bool)
     estop4_changed = Signal(bool)
-    
+
     batchSize1_changed = Signal(int)
     batchSize2_changed = Signal(int)
     batchSize3_changed = Signal(int)
     batchSize4_changed = Signal(int)
-    
+
     cycleCounter1_changed = Signal(int)
     cycleCounter2_changed = Signal(int)
     cycleCounter3_changed = Signal(int)
     cycleCounter4_changed = Signal(int)
-    
+
     alarmNumber1_changed = Signal(int)
     alarmNumber2_changed = Signal(int)
     alarmNumber3_changed = Signal(int)
     alarmNumber4_changed = Signal(int)
-    
+
     ready1_changed = Signal(bool)
     ready2_changed = Signal(bool)
     ready3_changed = Signal(bool)
     ready4_changed = Signal(bool)
-    
+
     alarm1_changed = Signal(int)
     alarm2_changed = Signal(int)
     alarm3_changed = Signal(int)
     alarm4_changed = Signal(int)
-    
+
     sonics1_changed = Signal(bool)
     sonics2_changed = Signal(bool)
     sonics3_changed = Signal(bool)
     sonics4_changed = Signal(bool)
-    
+
     ppm1_changed = Signal(int)
     ppm2_changed = Signal(int)
     ppm3_changed = Signal(int)
     ppm4_changed = Signal(int)
-    
+
     currentTune1_changed = Signal(int)
     currentTune2_changed = Signal(int)
     currentTune3_changed = Signal(int)
     currentTune4_changed = Signal(int)
-    
+
     currentFre1_changed = Signal(int)
     currentFre2_changed = Signal(int)
     currentFre3_changed = Signal(int)
     currentFre4_changed = Signal(int)
-    
+
     currentAmp1_changed = Signal(int)
     currentAmp2_changed = Signal(int)
     currentAmp3_changed = Signal(int)
     currentAmp4_changed = Signal(int)
-    
+
     currentPower1_changed = Signal(int)
     currentPower2_changed = Signal(int)
     currentPower3_changed = Signal(int)
     currentPower4_changed = Signal(int)
-    
+
     # powerArray1_changed = Signal(bool)
     # powerArray2_changed = Signal(bool)
     # powerArray3_changed = Signal(bool)
     # powerArray4_changed = Signal(bool)
-    
+
     powerLength1_changed = Signal(int)
     powerLength2_changed = Signal(int)
     powerLength3_changed = Signal(int)
     powerLength4_changed = Signal(int)
 
-    @Slot(result = bool)
+    @Slot(result=bool)
     def getReady1(self):
         return self.M_Ready.get_value()
 
@@ -435,7 +446,7 @@ class opcClient(QObject):
             self.M_DataReady3.set_value(dv)
         elif index == 3:
             self.M_DataReady4.set_value(dv)
-            
+
     @Slot(int, int)
     def updateAlarmLock(self, index, num):
         if num == 1:
@@ -528,7 +539,7 @@ class opcClient(QObject):
             self.M_Sonics3.set_value(dv)
         elif index == 3:
             self.M_Sonics4.set_value(dv)
-            
+
     @Slot(int, int)
     def updatePPM(self, index, num):
         if index == 0:
@@ -539,7 +550,7 @@ class opcClient(QObject):
             self.M_PPM3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_PPM4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updateAlarm(self, index, num):
         if index == 0:
@@ -550,7 +561,7 @@ class opcClient(QObject):
             self.M_Alarm3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_Alarm4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updateCurrentTune(self, index, num):
         if index == 0:
@@ -561,7 +572,7 @@ class opcClient(QObject):
             self.M_CurrentTune3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_CurrentTune4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updateCurrentFre_offset(self, index, num):
         if index == 0:
@@ -572,7 +583,7 @@ class opcClient(QObject):
             self.M_CurrentFre_offset3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_CurrentFre_offset4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updateCurrentAmplitude(self, index, num):
         if index == 0:
@@ -583,7 +594,7 @@ class opcClient(QObject):
             self.M_CurrentAmplitude3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_CurrentAmplitude4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updateCurrentPower(self, index, num):
         if index == 0:
@@ -594,7 +605,7 @@ class opcClient(QObject):
             self.M_CurrentPower3.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
         elif index == 3:
             self.M_CurrentPower4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
-            
+
     @Slot(int, int)
     def updatePowerLength(self, index, num):
         if index == 0:
@@ -607,6 +618,7 @@ class opcClient(QObject):
             self.M_PowerLength4.set_value(ua.DataValue(ua.Variant(num, ua.VariantType.Int16)))
 
         # M_start
+
     @Slot(bool)
     def setStart1(self, val):
         self.pstart1 = val
@@ -979,39 +991,39 @@ class opcClient(QObject):
     # Alarm
     @Slot(int)
     def setAlarm1(self, val):
-        self.alarm1 = val
+        self.palarm1 = val
         self.alarm1_changed.emit(val)
 
     @Slot(result=int)
     def alarm1(self):
-        return self.alarm1
+        return self.palarm1
 
     @Slot(int)
     def setAlarm2(self, val):
-        self.alarm2 = val
+        self.palarm2 = val
         self.alarm2_changed.emit(val)
 
     @Slot(result=int)
     def alarm2(self):
-        return self.alarm2
+        return self.palarm2
 
     @Slot(int)
     def setAlarm3(self, val):
-        self.alarm3 = val
+        self.palarm3 = val
         self.alarm3_changed.emit(val)
 
     @Slot(result=int)
     def alarm3(self):
-        return self.alarm3
+        return self.palarm3
 
     @Slot(int)
     def setAlarm4(self, val):
-        self.alarm4 = val
+        self.palarm4 = val
         self.alarm4_changed.emit(val)
 
     @Slot(result=int)
     def alarm4(self):
-        return self.alarm4
+        return self.palarm4
 
     # Sonics
     @Slot(bool)
@@ -1277,92 +1289,92 @@ class opcClient(QObject):
     mStart2 = Property(bool, start2, setStart2, notify=start2_changed)
     mStart3 = Property(bool, start3, setStart3, notify=start3_changed)
     mStart4 = Property(bool, start4, setStart4, notify=start4_changed)
-    
+
     mReset1 = Property(bool, reSet1, setReset1, notify=reSet1_changed)
     mReset2 = Property(bool, reSet2, setReset2, notify=reSet2_changed)
     mReset3 = Property(bool, reSet3, setReset3, notify=reSet3_changed)
     mReset4 = Property(bool, reSet4, setReset4, notify=reSet4_changed)
-    
+
     mMode1 = Property(int, mode1, setMode1, notify=mode1_changed)
     mMode2 = Property(int, mode2, setMode2, notify=mode2_changed)
     mMode3 = Property(int, mode3, setMode3, notify=mode3_changed)
     mMode4 = Property(int, mode4, setMode4, notify=mode4_changed)
-    
+
     mDataReady1 = Property(bool, dataReady1, setDataready1, notify=dataReady1_changed)
     mDataReady2 = Property(bool, dataReady2, setDataready2, notify=dataReady2_changed)
     mDataReady3 = Property(bool, dataReady3, setDataready3, notify=dataReady3_changed)
     mDataReady4 = Property(bool, dataReady4, setDataready4, notify=dataReady4_changed)
-    
+
     mAlarmlock1 = Property(bool, alarmLock1, setAlarmlock1, notify=alarmLock1_changed)
     mAlarmlock2 = Property(bool, alarmLock2, setAlarmlock2, notify=alarmLock2_changed)
     mAlarmlock3 = Property(bool, alarmLock3, setAlarmlock3, notify=alarmLock3_changed)
     mAlarmlock4 = Property(bool, alarmLock4, setAlarmlock4, notify=alarmLock4_changed)
-    
+
     mEstop1 = Property(bool, estop1, setEstop1, notify=estop1_changed)
     mEstop2 = Property(bool, estop2, setEstop2, notify=estop2_changed)
     mEstop3 = Property(bool, estop3, setEstop3, notify=estop3_changed)
     mEstop4 = Property(bool, estop4, setEstop4, notify=estop4_changed)
-    
-    mBatchSize1 = Property(int, batchSize1, setBatchSize1, notify=batchSize1_changed)
-    mBatchSize2 = Property(int, batchSize2, setBatchSize2, notify=batchSize2_changed)
-    mBatchSize3 = Property(int, batchSize3, setBatchSize3, notify=batchSize3_changed)
-    mBatchSize4 = Property(int, batchSize4, setBatchSize4, notify=batchSize4_changed)
-    
+
     mCycleCounter1 = Property(int, cycleCounter1, setCycleCounter1, notify=cycleCounter1_changed)
     mCycleCounter2 = Property(int, cycleCounter2, setCycleCounter2, notify=cycleCounter2_changed)
     mCycleCounter3 = Property(int, cycleCounter3, setCycleCounter3, notify=cycleCounter3_changed)
     mCycleCounter4 = Property(int, cycleCounter4, setCycleCounter4, notify=cycleCounter4_changed)
-    
+
     mAlarmNumber1 = Property(int, alarmNumber1, setAlarmNumber1, notify=alarmNumber1_changed)
     mAlarmNumber2 = Property(int, alarmNumber2, setAlarmNumber2, notify=alarmNumber2_changed)
     mAlarmNumber3 = Property(int, alarmNumber3, setAlarmNumber3, notify=alarmNumber3_changed)
     mAlarmNumber4 = Property(int, alarmNumber4, setAlarmNumber4, notify=alarmNumber4_changed)
-    
+
     mReady1 = Property(bool, ready1, setReady1, notify=ready1_changed)
     mReady2 = Property(bool, ready2, setReady2, notify=ready2_changed)
     mReady3 = Property(bool, ready3, setReady3, notify=ready3_changed)
     mReady4 = Property(bool, ready4, setReady4, notify=ready4_changed)
-    
+
     mAlarm1 = Property(int, alarm1, setAlarm1, notify=alarm1_changed)
     mAlarm2 = Property(int, alarm2, setAlarm2, notify=alarm2_changed)
     mAlarm3 = Property(int, alarm3, setAlarm3, notify=alarm3_changed)
     mAlarm4 = Property(int, alarm4, setAlarm4, notify=alarm4_changed)
-    
+
+    mBatchSize1 = Property(int, batchSize1, setBatchSize1, notify=batchSize1_changed)
+    mBatchSize2 = Property(int, batchSize2, setBatchSize2, notify=batchSize2_changed)
+    mBatchSize3 = Property(int, batchSize3, setBatchSize3, notify=batchSize3_changed)
+    mBatchSize4 = Property(int, batchSize4, setBatchSize4, notify=batchSize4_changed)
+
     mSonics1 = Property(bool, sonics1, setSonics1, notify=sonics1_changed)
     mSonics2 = Property(bool, sonics2, setSonics2, notify=sonics2_changed)
     mSonics3 = Property(bool, sonics3, setSonics3, notify=sonics3_changed)
     mSonics4 = Property(bool, sonics4, setSonics4, notify=sonics4_changed)
-    
+
     mPPM1 = Property(int, ppm1, setPPM1, notify=ppm1_changed)
     mPPM2 = Property(int, ppm2, setPPM2, notify=ppm2_changed)
     mPPM3 = Property(int, ppm3, setPPM3, notify=ppm3_changed)
     mPPM4 = Property(int, ppm4, setPPM4, notify=ppm4_changed)
-    
+
     mCurrentTune1 = Property(int, currentTune1, setCurrentTune1, notify=currentTune1_changed)
     mCurrentTune2 = Property(int, currentTune2, setCurrentTune2, notify=currentTune2_changed)
     mCurrentTune3 = Property(int, currentTune3, setCurrentTune3, notify=currentTune3_changed)
     mCurrentTune4 = Property(int, currentTune4, setCurrentTune4, notify=currentTune4_changed)
-    
+
     mCurrentFre1 = Property(int, currentFre1, setCurrentFre1, notify=currentFre1_changed)
     mCurrentFre2 = Property(int, currentFre2, setCurrentFre2, notify=currentFre2_changed)
     mCurrentFre3 = Property(int, currentFre3, setCurrentFre3, notify=currentFre3_changed)
     mCurrentFre4 = Property(int, currentFre4, setCurrentFre4, notify=currentFre4_changed)
-    
+
     mCurrentAmp1 = Property(int, currentAmp1, setCurrentAmp1, notify=currentAmp1_changed)
     mCurrentAmp2 = Property(int, currentAmp2, setCurrentAmp2, notify=currentAmp2_changed)
     mCurrentAmp3 = Property(int, currentAmp3, setCurrentAmp3, notify=currentAmp3_changed)
     mCurrentAmp4 = Property(int, currentAmp4, setCurrentAmp4, notify=currentAmp4_changed)
-    
+
     mCurrentPower1 = Property(int, currentPower1, setCurrentPower1, notify=currentPower1_changed)
     mCurrentPower2 = Property(int, currentPower2, setCurrentPower2, notify=currentPower2_changed)
     mCurrentPower3 = Property(int, currentPower3, setCurrentPower3, notify=currentPower3_changed)
     mCurrentPower4 = Property(int, currentPower4, setCurrentPower4, notify=currentPower4_changed)
-    
+
     # mPowerArray1 = Property(bool, powerArray1, setPowerArray1, notify=powerArray1_changed)
     # mPowerArray2 = Property(bool, powerArray2, setPowerArray2, notify=powerArray2_changed)
     # mPowerArray3 = Property(bool, powerArray3, setPowerArray3, notify=powerArray3_changed)
     # mPowerArray4 = Property(bool, powerArray4, setPowerArray4, notify=powerArray4_changed)
-    
+
     mPowerLength1 = Property(int, powerLength1, setPowerLength1, notify=powerLength1_changed)
     mPowerLength2 = Property(int, powerLength2, setPowerLength2, notify=powerLength2_changed)
     mPowerLength3 = Property(int, powerLength3, setPowerLength3, notify=powerLength3_changed)
@@ -1371,6 +1383,7 @@ class opcClient(QObject):
     """
     called for every datachange notification from server
     """
+
     def datachange_notification(self, node, val, data):
         if node == self.M_Start:
             self.setStart1(val)
