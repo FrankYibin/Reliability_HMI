@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 1.4 as SwitchGroup
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-
 Rectangle {
     Component.onCompleted: {
         production.checked = true
@@ -24,6 +23,7 @@ Rectangle {
             text: qsTr("Reliability Testing System")
             color: "#3D7AB3"
             font.pixelSize: multipleWidth*26
+            font.family: fbold.name
         }
         RoundButton{
             id:logoutBtn
@@ -44,6 +44,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 14
+                font.family: fregular.name
             }
             onClicked: {
                 signalLogin(login)
@@ -65,7 +66,7 @@ Rectangle {
             width: multipleWidth* 144
             height: multipleHeight* 48
             anchors.left: parent.left
-            iconSrc:"qrc:/images/user.png"
+            iconSrc:"images/dashboard.png"
             iconText: "Dashboard"
             exclusiveGroup: buttonGroup //绑定到组
         }
@@ -74,7 +75,7 @@ Rectangle {
             width: multipleWidth* 154
             height: multipleHeight* 48
             anchors.left: dashboard.right
-            iconSrc:"qrc:/images/user.png"
+            iconSrc:"images/监控.png"
             iconText: "Production"
             exclusiveGroup: buttonGroup //绑定到组
         }
@@ -83,7 +84,7 @@ Rectangle {
             width: multipleWidth* 144
             height: multipleHeight* 48
             anchors.left: production.right
-            iconSrc:"qrc:/images/user.png"
+            iconSrc:"images/表格.png"
             iconText: "Data Log"
             exclusiveGroup: buttonGroup //绑定到组
         }
@@ -92,7 +93,7 @@ Rectangle {
             width: multipleWidth* 124
             height: multipleHeight* 48
             anchors.left: datalog.right
-            iconSrc:"qrc:/images/user.png"
+            iconSrc:"images/report (1).png"
             iconText: "Report"
             exclusiveGroup: buttonGroup //绑定到组
         }
@@ -101,7 +102,7 @@ Rectangle {
             width: multipleWidth* 164
             height: multipleHeight* 48
             anchors.left: report.right
-            iconSrc:"qrc:/images/user.png"
+            iconSrc:"images/设置.png"
             iconText: "Configuration"
             exclusiveGroup: buttonGroup //绑定到组
         }

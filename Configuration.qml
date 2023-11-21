@@ -31,21 +31,46 @@ Rectangle{
             }
         }
     }
+    //    Connections{
+    //        target: TcpClient
+    //        function onConnectStatus(status){
+    //            if(index === 1){
+    //                m1.status = status
+    //            }
+    //            else if(index === 2){
+    //                m2.status = status
+    //            }
+    //            else if(index === 3){
+    //                m3.status = status
+    //            }
+    //            else if(index === 4){
+    //                m4.status = status
+    //            }
+    //        }
+    //    }
     Connections{
-        target: TcpClient
-        function onConnectStatus(status){
-            if(index === 1){
-                m1.status = status
-            }
-            else if(index === 2){
-                m2.status = status
-            }
-            else if(index === 3){
-                m3.status = status
-            }
-            else if(index === 4){
-                m4.status = status
-            }
+        target: opcFacility1
+        function onSigStatus(status){
+            m1.status = status
+        }
+    }
+
+    Connections{
+        target: opcFacility2
+        function onSigStatus(status){
+            m2.status = status
+        }
+    }
+    Connections{
+        target: opcFacility3
+        function onSigStatus(status){
+            m3.status = status
+        }
+    }
+    Connections{
+        target: opcFacility4
+        function onSigStatus(status){
+            m4.status = status
         }
     }
     Connections{
@@ -69,6 +94,7 @@ Rectangle{
     Text {
         id: ip
         text: qsTr("IP Address")
+        font.family: fregular.name
         width: multipleWidth* 99
         height: multipleHeight* 28
         x:multipleWidth*60
@@ -87,6 +113,7 @@ Rectangle{
         id: plc
         text: qsTr("PLC:")
         color: "#101010"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 18
         x:multipleWidth*60
         y:multipleHeight*127
@@ -97,6 +124,7 @@ Rectangle{
         id: ipaddress
         text: qsTr("IP Address   192.168.0.10")
         color: "#101010"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 18
         width: multipleWidth* 195
         height: multipleHeight* 25
@@ -107,6 +135,7 @@ Rectangle{
         id: port
         text: qsTr("Port         4840")
         color: "#101010"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 18
         width: multipleWidth* 150
         height: multipleHeight* 25
@@ -132,6 +161,7 @@ Rectangle{
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
+            font.family: fregular.name
         }
         onClicked: {
             opcua.connectOPCUA()
@@ -155,7 +185,8 @@ Rectangle{
         plcName:"Machine 1:"
         onSigConnectTest: {
             index = 1
-            TcpClient.connectTcp(ip,port)
+            opcFacility1.connecctmach()
+            //            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -167,7 +198,8 @@ Rectangle{
         plcName:"Machine 2:"
         onSigConnectTest: {
             index = 2
-            TcpClient.connectTcp(ip,port)
+            opcFacility2.connecctmach()
+            //            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -179,7 +211,8 @@ Rectangle{
         plcName:"Machine 3:"
         onSigConnectTest: {
             index = 3
-            TcpClient.connectTcp(ip,port)
+            opcFacility3.connecctmach()
+            //            TcpClient.connectTcp(ip,port)
         }
     }
     CustomMachine{
@@ -191,7 +224,8 @@ Rectangle{
         plcName:"Machine 4:"
         onSigConnectTest: {
             index = 4
-            TcpClient.connectTcp(ip,port)
+            opcFacility4.connecctmach()
+            //            TcpClient.connectTcp(ip,port)
         }
     }
     RoundButton {
@@ -212,6 +246,7 @@ Rectangle{
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 20
+            font.family: fregular.name
         }
         onClicked: {
             if(isEmpty()){
@@ -231,6 +266,7 @@ Rectangle{
     Text {
         id: warn
         text: qsTr("Machine Name/ip/port is not empty")
+        font.family: fregular.name
         anchors.top: topbtn.bottom
         anchors.left: topbtn.left
         anchors.topMargin: 15

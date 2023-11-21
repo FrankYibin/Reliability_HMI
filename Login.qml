@@ -28,7 +28,7 @@ Rectangle {
         height: multipleHeight* 450
         anchors.leftMargin: multipleWidth* 80
         anchors.topMargin: multipleWidth* 225
-        source: "login.png"
+        source: "images/login.png"
     }
     Rectangle{
         id: login
@@ -57,7 +57,8 @@ Rectangle {
             anchors.leftMargin: multipleWidth* 28
             text: qsTr("Reliability Testing System")
             color: "#101010"
-            font.pixelSize: multipleWidth* 24;
+            font.family: fbold.name
+            font.pixelSize: multipleWidth* 24
         }
         Rectangle{
             id: user
@@ -77,7 +78,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: multipleWidth* 10
                 anchors.topMargin: multipleWidth* 10
-                source: "user.png"
+                source: "images/user.png"
             }
             TextInput {
                 id:useredit
@@ -111,7 +112,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: multipleWidth* 10
                 anchors.topMargin: multipleWidth* 10
-                source: "pass.png"
+                source: "images/pass.png"
             }
             TextInput {
                 id:passedit
@@ -148,6 +149,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 16
+                font.family: fbold.name
             }
             onClicked: {
                 authenticationFailed()
@@ -156,6 +158,7 @@ Rectangle {
         Text {
             id: failed
             text: qsTr("Incorrect username or password")
+            font.family: fregular.name
             anchors.top: btn.bottom
             anchors.left: btn.left
             anchors.topMargin: multipleWidth* 20

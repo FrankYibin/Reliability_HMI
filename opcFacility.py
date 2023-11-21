@@ -1,5 +1,8 @@
+import time
+
 from PySide2.QtCore import QObject, Signal, Slot, Property
 from opcua import Client, ua
+from PySide2.QtCore import QCoreApplication, QEventLoop, QTime
 
 
 class opcClient(QObject):
@@ -13,7 +16,7 @@ class opcClient(QObject):
         self.pweldTime = ''
         self.mpeakPower = ''
         self.mpreHeight = ''
-        self.postHeight = ''
+        self.ppostHeight = ''
         self.pmaxWeldTime = ''
         self.pminWeldTime = ''
         self.pmaxPower = ''
@@ -25,6 +28,43 @@ class opcClient(QObject):
         self.pcycleCounter = ''
         self.palarm = ''
         self.pweldEngery = ''
+        self.machId = ''
+    myclient = ''
+
+    sigStatus = Signal(int, arguments=['status'])
+
+    @Slot()
+    def connecctmach(self):
+        try:
+            self.myclient.connect()
+        except:
+            print("opc连接失败")
+            self.sigStatus.emit(1)
+        else:
+            self.sigStatus.emit(0)
+            self.M_AmpSetting = self.myclient.get_node('ns=1;i=117')
+            self.M_EnergySetting = self.myclient.get_node('ns=1;i=116')
+            self.M_TPressureSetting = self.myclient.get_node('ns=1;i=118')
+            self.M_WPressureSetting = self.myclient.get_node('ns=1;i=119')
+            self.M_WeldMode = self.myclient.get_node('ns=1;i=106')
+            self.M_WeldTime = self.myclient.get_node('ns=1;i=109')
+            self.M_PeakPower = self.myclient.get_node('ns=1;i=110')
+            self.M_PreHeight = self.myclient.get_node('ns=1;i=113')
+            self.M_PostHeight = self.myclient.get_node('ns=1;i=114')
+            self.M_MaxWeldTime = self.myclient.get_node('ns=1;i=120')
+            self.M_MinWeldTime = self.myclient.get_node('ns=1;i=121')
+            self.M_MaxPower = self.myclient.get_node('ns=1;i=122')
+            self.M_MinPower = self.myclient.get_node('ns=1;i=123')
+            self.M_MaxPreHeight = self.myclient.get_node('ns=1;i=124')
+            self.M_MinPreHeight = self.myclient.get_node('ns=1;i=125')
+            self.M_MaxPostHeight = self.myclient.get_node('ns=1;i=126')
+            self.M_MinPostHeight = self.myclient.get_node('ns=1;i=127')
+            self.M_CycleCounter = self.myclient.get_node('ns=1;i=102')
+            self.M_Alarm = self.myclient.get_node('ns=1;i=115')
+            self.M_WeldEngery = self.myclient.get_node('ns=1;i=107')
+            self.M_DateTime = self.myclient.get_node('ns=1;i=128')
+            self.subscribe = self.myclient.create_subscription(0, self)
+            self.subNodesId()
 
     @Slot(str, int)
     def connectOPCUA(self, ip, port):
@@ -37,31 +77,36 @@ class opcClient(QObject):
         except:
             print("opc连接失败")
         else:
-            self.M_AmpSetting = self.myclient.get_node('ns=1;i=118')
-            self.M_EnergySetting = self.myclient.get_node('ns=1;i=117')
-            self.M_TPressureSetting = self.myclient.get_node('ns=1;i=119')
-            self.M_WPressureSetting = self.myclient.get_node('ns=1;i=120')
-            self.M_WeldMode = self.myclient.get_node('ns=1;i=107')
-            self.M_WeldTime = self.myclient.get_node('ns=1;i=110')
-            self.M_PeakPower = self.myclient.get_node('ns=1;i=111')
-            self.M_PreHeight = self.myclient.get_node('ns=1;i=114')
-            self.M_PostHeight = self.myclient.get_node('ns=1;i=115')
-            self.M_MaxWeldTime = self.myclient.get_node('ns=1;i=121')
-            self.M_MinWeldTime = self.myclient.get_node('ns=1;i=122')
-            self.M_MaxPower = self.myclient.get_node('ns=1;i=123')
-            self.M_MinPower = self.myclient.get_node('ns=1;i=124')
-            self.M_MaxPreHeight = self.myclient.get_node('ns=1;i=125')
-            self.M_MinPreHeight = self.myclient.get_node('ns=1;i=126')
-            self.M_MaxPostHeight = self.myclient.get_node('ns=1;i=127')
-            self.M_MinPostHeight = self.myclient.get_node('ns=1;i=128')
+            self.M_AmpSetting = self.myclient.get_node('ns=1;i=117')
+            self.M_EnergySetting = self.myclient.get_node('ns=1;i=116')
+            self.M_TPressureSetting = self.myclient.get_node('ns=1;i=118')
+            self.M_WPressureSetting = self.myclient.get_node('ns=1;i=119')
+            self.M_WeldMode = self.myclient.get_node('ns=1;i=106')
+            self.M_WeldTime = self.myclient.get_node('ns=1;i=109')
+            self.M_PeakPower = self.myclient.get_node('ns=1;i=110')
+            self.M_PreHeight = self.myclient.get_node('ns=1;i=113')
+            self.M_PostHeight = self.myclient.get_node('ns=1;i=114')
+            self.M_MaxWeldTime = self.myclient.get_node('ns=1;i=120')
+            self.M_MinWeldTime = self.myclient.get_node('ns=1;i=121')
+            self.M_MaxPower = self.myclient.get_node('ns=1;i=122')
+            self.M_MinPower = self.myclient.get_node('ns=1;i=123')
+            self.M_MaxPreHeight = self.myclient.get_node('ns=1;i=124')
+            self.M_MinPreHeight = self.myclient.get_node('ns=1;i=125')
+            self.M_MaxPostHeight = self.myclient.get_node('ns=1;i=126')
+            self.M_MinPostHeight = self.myclient.get_node('ns=1;i=127')
             self.M_CycleCounter = self.myclient.get_node('ns=1;i=102')
-            self.M_Alarm = self.myclient.get_node('ns=1;i=116')
-            self.M_WeldEngery = self.myclient.get_node('ns=1;i=108')
+            self.M_Alarm = self.myclient.get_node('ns=1;i=115')
+            self.M_WeldEngery = self.myclient.get_node('ns=1;i=107')
+            self.M_DateTime = self.myclient.get_node('ns=1;i=128')
             self.subscribe = self.myclient.create_subscription(0, self)
             self.subNodesId()
 
+    @Slot()
     def disconnectOpc(self):
-        self.myclient.disconnect()
+        try:
+            self.myclient.disconnect()
+        except:
+            print("没有连接")
 
     def subNodesId(self):
         self.subscribe.subscribe_data_change(self.M_AmpSetting)
@@ -84,6 +129,7 @@ class opcClient(QObject):
         self.subscribe.subscribe_data_change(self.M_CycleCounter)
         self.subscribe.subscribe_data_change(self.M_Alarm)
         self.subscribe.subscribe_data_change(self.M_WeldEngery)
+        self.subscribe.subscribe_data_change(self.M_DateTime)
 
     ampsetting_changed = Signal(int)
     energysetting_changed = Signal(int)
@@ -105,6 +151,7 @@ class opcClient(QObject):
     cycleCounter_changed = Signal(int)
     alarm_changed = Signal(int)
     weldEngery_changed = Signal(int)
+    weldData = Signal(list)
 
     @Slot(int)
     def setAmpSetting(self, val):
@@ -180,12 +227,12 @@ class opcClient(QObject):
 
     @Slot(int)
     def setPostHeight(self, val):
-        self.postHeight = val
+        self.ppostHeight = val
         self.postHeight_changed.emit(val)
 
     @Slot(result=int)
     def postHeight(self):
-        return self.postHeight
+        return self.ppostHeight
 
     @Slot(int)
     def setMaxWeldTime(self, val):
@@ -308,7 +355,6 @@ class opcClient(QObject):
     mWeldEngery = Property(int, weldEngery, setWeldEngery, notify=weldEngery_changed)
 
     def datachange_notification(self, node, val, data):
-        print(node, node)
         if node == self.M_AmpSetting:
             self.setAmpSetting(val)
         elif node == self.M_EnergySetting:
@@ -349,3 +395,37 @@ class opcClient(QObject):
             self.setAlarm(val)
         elif node == self.M_WeldEngery:
             self.setWeldEngery(val)
+        elif node == self.M_DateTime:
+            self.Delay_MSec(1000, val)
+
+    @Slot(int, str)
+    def Delay_MSec(self, msec, time):
+        t = QTime.currentTime().addMSecs(msec)
+        while QTime.currentTime() < t:
+            QCoreApplication.processEvents(QEventLoop.AllEvents, 100)
+        weldList = []
+        weldList.append(self.machId)
+        weldList.append(1)
+        weldList.append(self.ampSetting())
+        weldList.append(self.energySetting())
+        weldList.append(0)
+        weldList.append(self.tPressureSetting())
+        weldList.append(self.wPressureSetting())
+        weldList.append(self.weldMode())
+        weldList.append(self.weldTime())
+        weldList.append(self.weldEngery())
+        weldList.append(self.peakPower())
+        weldList.append(self.preHeight())
+        weldList.append(self.postHeight())
+        weldList.append(self.maxWeldTime())
+        weldList.append(self.minWeldTime())
+        weldList.append(self.maxPower())
+        weldList.append(self.minPower())
+        weldList.append(self.maxPreHeight())
+        weldList.append(self.minPreHeight())
+        weldList.append(self.maxPostHeight())
+        weldList.append(self.minPostHeight())
+        weldList.append(self.alarm())
+        weldList.append(self.cycleCounter())
+        weldList.append(time)
+        self.weldData.emit(weldList)

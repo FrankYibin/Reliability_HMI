@@ -15,6 +15,7 @@ Rectangle {
     property bool batchSizeChange: false
     property bool modeStatus: true
     property bool e_StopStatus: false
+    property var startTimeData: ""
     property int currentPower: {
         if(machinename.currentIndex === 0){
             return opcua.mCurrentPower1
@@ -554,14 +555,23 @@ Rectangle {
         else if(merecycle.checked === true){
             moder.text = merecycle.text
         }
+        startTimeData = new Date
         stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+        initTime = stime.text
         etime.text = ""
         opcua.updateStart(machinename.currentIndex, 1)
         if(manual.checked === true){
             timer.start()
         }
     }
-
+    onCurrentMstartChanged: {
+        if(currentMstart === true){
+            savebtn.enabled = false
+        }
+        else{
+            savebtn.enabled = true
+        }
+    }
 
     onReSetBtnChanged: {
         if(reSetBtn === true  &&  alarm === 0){
@@ -571,6 +581,28 @@ Rectangle {
     onAlarmChanged: {
         if(alarm === 0){
             opcua.updateReset(machinename.currentIndex, 0)
+        }
+        else{
+            var type = 1
+            var desc = "Machine Alarm"
+            if(alarm === 1){
+                type = 1
+                desc = "Machine Alarm"
+            }
+            else if(alarm === 2){
+                type = 2
+                desc = "Batch Size Met Alarm"
+            }
+            var btime = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+            AlarmLog.insertLog(productionIndex,arun.text,type,desc,btime)
+        }
+    }
+    onCurrentEstopChanged: {
+        if(currentEstop === false){
+            e_StopStatus = true
+        }
+        else{
+            e_StopStatus = false
         }
     }
 
@@ -612,6 +644,7 @@ Rectangle {
             else{
                 alarmlock.checked = false
             }
+            dataprocessing.checked = false
             if(list[6] === 1){
                 dataprocessing.checked = true
             }
@@ -668,7 +701,7 @@ Rectangle {
         //        running: true//开启
         onTriggered:{
             opcua.updateStart(machinename.currentIndex,0)
-            etime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+            timer2.start()
         }
     }
     Timer{
@@ -679,6 +712,27 @@ Rectangle {
             opcua.updateReset(machinename.currentIndex,0)
         }
     }
+    Timer{
+        id: timer2
+        interval: 500//100ms
+        //        running: true//开启
+        onTriggered:{
+            var time = new Date()
+            etime.text = time.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+            if(machinename.currentIndex === 0){
+                runInfo.insertRunInfoData(productionIndex,startTimeData.getTime(),time.getTime(),opcua.cycleCounter1(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber1())
+            }
+            else if(machinename.currentIndex === 1){
+                runInfo.insertRunInfoData(productionIndex,startTimeData.getTime(),time.getTime(),opcua.cycleCounter2(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber2())
+            }
+            else if(machinename.currentIndex === 2){
+                runInfo.insertRunInfoData(productionIndex,startTimeData.getTime(),time.getTime(),opcua.cycleCounter3(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber3())
+            }
+            else if(machinename.currentIndex === 3){
+                runInfo.insertRunInfoData(productionIndex,startTimeData.getTime(),time.getTime(),opcua.cycleCounter4(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber4())
+            }
+        }
+    }
     Text {
         id: machineselected
         x: multipleWidth*60
@@ -686,6 +740,7 @@ Rectangle {
         width: multipleWidth* 164
         height: multipleHeight* 28
         text: qsTr("Machine Selected")
+        font.family: fregular.name
         color: "#000000"
         font.pixelSize: multipleWidth* 20
     }
@@ -697,6 +752,7 @@ Rectangle {
         y: multipleHeight*35
         enabled: !currentMstart
         font.pixelSize: multipleWidth*20
+        font.family: fregular.name
         model: ListModel {
             id: model
             ListElement { text: "1#" }
@@ -712,7 +768,7 @@ Rectangle {
             y: multipleHeight* machinename.topPadding + (machinename.availableHeight - height) / 2
             width: multipleWidth* 16
             height: multipleHeight* 16
-            source: "qrc:/images/user.png"
+//            source: "qrc:/images/user.png"
         }
         onActivated: {
             productionIndex = currentIndex + 1
@@ -732,9 +788,30 @@ Rectangle {
             }
             savebtn.checked = false
             plcTable.upDate()
+            if(currentMstart === true){
+                stime.text = initTime
+            }
         }
         Component.onCompleted: {
             currentIndex = productionIndex - 1
+            if(currentMstart === true){
+                stime.text = initTime
+            }
+            if(currentMode === 1){
+                moder.text = auto.text
+            }
+            else if(currentMode === 0){
+                moder.text = manual.text
+            }
+            else if(currentMode === 2){
+                moder.text = merecycle.text
+            }
+            if(ConfigurationQml.currentDataprocessing(productionIndex) === 0){
+                dataprocessing.checked = false
+            }
+            else{
+                dataprocessing.checked = true
+            }
         }
     }
     Rectangle{
@@ -753,6 +830,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             text: "Manual"
+            font.family: fregular.name
             spacing: 10
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
@@ -792,6 +870,7 @@ Rectangle {
             anchors.left: manual.right
             anchors.leftMargin: 35
             text: "Auto"
+            font.family: fregular.name
             spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
@@ -830,6 +909,7 @@ Rectangle {
             anchors.left: auto.right
             anchors.leftMargin: 70
             text: "Merecycle"
+            font.family: fregular.name
             spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
@@ -872,6 +952,7 @@ Rectangle {
         width: multipleWidth* 185
         height: multipleHeight* 33
         text: " Alarm Lock"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 20
         enabled: {
             if(auto.checked === true && currentMstart === false){
@@ -895,6 +976,7 @@ Rectangle {
     CheckBox{
         id:dataprocessing
         text: " Data Processing"
+        font.family: fregular.name
         x: multipleWidth*270
         y: multipleHeight*185
         width: multipleWidth* 210
@@ -916,29 +998,37 @@ Rectangle {
         onCheckedChanged: {
             if(checked === true){
                 if(machinename.currentIndex === 0){
+                    ConfigurationQml.updateDataProcessing(1,1)
                     opcFacility1.connectOPCUA(ConfigurationQml.currentIp(1), ConfigurationQml.currentPort(1))
                 }
                 else if(machinename.currentIndex === 1){
+                    ConfigurationQml.updateDataProcessing(2,1)
                     opcFacility2.connectOPCUA(ConfigurationQml.currentIp(2), ConfigurationQml.currentPort(2))
                 }
                 else if(machinename.currentIndex === 2){
+                    ConfigurationQml.updateDataProcessing(3,1)
                     opcFacility3.connectOPCUA(ConfigurationQml.currentIp(3), ConfigurationQml.currentPort(3))
                 }
                 else if(machinename.currentIndex === 3){
+                    ConfigurationQml.updateDataProcessing(4,1)
                     opcFacility4.connectOPCUA(ConfigurationQml.currentIp(4), ConfigurationQml.currentPort(4))
                 }
             }
             else{
                 if(machinename.currentIndex === 0){
+                    ConfigurationQml.updateDataProcessing(1,0)
                     opcFacility1.disconnectOpc()
                 }
                 else if(machinename.currentIndex === 1){
+                    ConfigurationQml.updateDataProcessing(2,0)
                     opcFacility2.disconnectOpc()
                 }
                 else if(machinename.currentIndex === 2){
+                    ConfigurationQml.updateDataProcessing(3,0)
                     opcFacility3.disconnectOpc()
                 }
                 else if(machinename.currentIndex === 3){
+                    ConfigurationQml.updateDataProcessing(4,0)
                     opcFacility4.disconnectOpc()
                 }
             }
@@ -950,6 +1040,7 @@ Rectangle {
         x: multipleWidth*60
         y: multipleHeight*247
         text: qsTr("Batch Size:")
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 20
     }
     Rectangle{
@@ -968,11 +1059,12 @@ Rectangle {
             anchors.fill: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pointSize: multipleWidth*20
+            font.pixelSize: multipleWidth*20
             focus: true
             clip: true
             autoScroll:true
             text: currentBatchSize
+            font.family: fregular.name
             validator: RegExpValidator{
                 regExp:/^[0-9]\d{0,5}/
             }
@@ -1027,6 +1119,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
+            font.family: fregular.name
         }
         enabled: false
         onClicked: {
@@ -1065,6 +1158,7 @@ Rectangle {
             width: multipleWidth* 157
             height: multipleHeight* 28
             text: qsTr("3# MW-XA-3 [EP]")
+            font.family: fregular.name
             color: "#3D7AB3"
             font.pixelSize: multipleWidth* 20
             Component.onCompleted: {
@@ -1124,6 +1218,7 @@ Rectangle {
             x: multipleWidth*52
             y: multipleHeight*139
             text: qsTr("Ready")
+            font.family: fregular.name
             font.pixelSize: multipleWidth* 18
         }
 
@@ -1178,6 +1273,7 @@ Rectangle {
             width: multipleWidth* 96
             height: multipleHeight* 25
             text: qsTr("Data Ready")
+            font.family: fregular.name
             font.pixelSize: multipleWidth* 18
         }
 
@@ -1231,6 +1327,7 @@ Rectangle {
             width: multipleWidth* 54
             height: multipleHeight* 25
             text: qsTr("Sonics")
+            font.family: fregular.name
             font.pixelSize: multipleWidth* 18
         }
 
@@ -1250,6 +1347,7 @@ Rectangle {
             width: multipleWidth* 95
             height: multipleHeight* 25
             text: qsTr("Data Alarm")
+            font.family: fregular.name
             font.pixelSize: multipleWidth* 18
         }
 
@@ -1304,6 +1402,7 @@ Rectangle {
             width: multipleWidth* 51
             height: multipleHeight* 25
             text: qsTr("Alarm")
+            font.family: fregular.name
             font.pixelSize: multipleWidth* 18
         }
         RoundButton{
@@ -1324,6 +1423,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 14
+                font.family: fregular.name
             }
             onClicked: {
                 opcua.updateReset(machinename.currentIndex, 1)
@@ -1424,8 +1524,10 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 14
+                font.family: fregular.name
             }
             onClicked: {
+                var starttime = new Date()
                 if(text === "Start"){
                     var tmp
                     if(machinename.currentIndex === 0){
@@ -1441,13 +1543,11 @@ Rectangle {
                         tmp = opcua.getReady4()
                     }
                     if(tmp === true){
-//                        TcpClient.dis_connect()
-//                        if(dataprocessing.checked === true){
-//                            TcpClient.connectTcp(currentIp,currentPort)
-//                        }
                         if(machinename.currentIndex === 0){
                             if(opcua.cycleCounter1() === 0){
-                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                startTimeData = starttime
+                                stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                                initTime = stime.text
                                 etime.text = ""
                                 if(manual.checked === true){
                                     moder.text = manual.text
@@ -1474,7 +1574,9 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 1){
                             if(opcua.cycleCounter2() === 0){
-                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                startTimeData = starttime
+                                stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                                initTime = stime.text
                                 etime.text = ""
                                 if(manual.checked === true){
                                     moder.text = manual.text
@@ -1501,7 +1603,9 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 2){
                             if(opcua.cycleCounter3() === 0){
-                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                startTimeData = starttime
+                                stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                                initTime = stime.text
                                 etime.text = ""
                                 if(manual.checked === true){
                                     moder.text = manual.text
@@ -1528,7 +1632,9 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 3){
                             if(opcua.cycleCounter4() === 0){
-                                stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                                startTimeData = starttime
+                                stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                                initTime = stime.text
                                 etime.text = ""
                                 if(manual.checked === true){
                                     moder.text = manual.text
@@ -1559,20 +1665,8 @@ Rectangle {
                 else{
                     opcua.updateStart(machinename.currentIndex, 0)
                     opcua.updateReset(machinename.currentIndex, 1)
-                    etime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
-                    if(machinename.currentIndex === 0){
-                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter1(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber1())
-                    }
-                    else if(machinename.currentIndex === 1){
-                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter2(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber2())
-                    }
-                    else if(machinename.currentIndex === 2){
-                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter3(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber3())
-                    }
-                    else if(machinename.currentIndex === 3){
-                        runInfo.insertRunInfoData(productionIndex,stime.text,etime.text,opcua.cycleCounter4(),currentMode,ConfigurationQml.selectAlarmLock(productionIndex),ppmnum.text,opcua.alarmNumber4())
-                    }
-//                    TcpClient.dis_connect()
+                    timer2.start()
+                    //                    TcpClient.dis_connect()
                 }
             }
         }
@@ -1591,6 +1685,7 @@ Rectangle {
                 width: multipleWidth* 86
                 height: multipleHeight* 25
                 text: qsTr("Start Time")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 18
             }
 
@@ -1601,6 +1696,7 @@ Rectangle {
                 width: multipleWidth* 79
                 height: multipleHeight* 25
                 text: qsTr("End Time")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 18
             }
 
@@ -1611,6 +1707,7 @@ Rectangle {
                 width: multipleWidth* 102
                 height: multipleHeight* 25
                 text: qsTr("Already Run")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 18
             }
 
@@ -1621,6 +1718,7 @@ Rectangle {
                 width: multipleWidth* 49
                 height: multipleHeight* 25
                 text: qsTr("Mode")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 18
             }
 
@@ -1631,6 +1729,7 @@ Rectangle {
                 width: multipleWidth* 38
                 height: multipleHeight* 25
                 text: qsTr("PPM")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 18
             }
             Text {
@@ -1639,6 +1738,7 @@ Rectangle {
                 y: multipleHeight*185
                 width: multipleWidth* 125
                 height: multipleHeight* 25
+                font.family: fregular.name
                 text: qsTr("Alarm Number")
                 font.pixelSize: multipleWidth* 18
             }
@@ -1652,6 +1752,7 @@ Rectangle {
                 width: multipleWidth* 141
                 height: multipleHeight* 23
                 text: qsTr("")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -1663,6 +1764,7 @@ Rectangle {
                 width: multipleWidth* 141
                 height: multipleHeight* 23
                 text: qsTr("")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -1686,6 +1788,7 @@ Rectangle {
                         return opcua.mCycleCounter4
                     }
                 }
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
             Text {
@@ -1695,6 +1798,7 @@ Rectangle {
                 anchors.topMargin: multipleWidth*12
                 height: multipleHeight* 23
                 text: qsTr("")
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -1718,7 +1822,7 @@ Rectangle {
                         return opcua.mPPM4
                     }
                 }
-
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
 
@@ -1742,7 +1846,7 @@ Rectangle {
                         return opcua.mAlarmNumber4
                     }
                 }
-
+                font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
             }
         }
@@ -1777,6 +1881,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 18
+            font.family: fregular.name
         }
         visible:{
             if(pop.visible === true && currentEstop === false){
@@ -1806,6 +1911,7 @@ Rectangle {
             font.pixelSize:multipleWidth* 20
             anchors.top: parent.top
             anchors.topMargin:multipleWidth* 35
+            font.family: fregular.name
         }
 
         RoundButton{
@@ -1846,6 +1952,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 15
+                font.family: fregular.name
             }
             onClicked: {
                 if(manual.checked === true){
@@ -1885,6 +1992,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
                 font.pixelSize: multipleWidth* 15
+                font.family: fregular.name
             }
             visible: {
                 if(pop.visible === true){
@@ -1917,7 +2025,9 @@ Rectangle {
                 else if(merecycle.checked === true){
                     moder.text = merecycle.text
                 }
+                startTimeData = new Date()
                 stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                initTime = stime.text
                 etime.text = ""
                 opcua.updateStart(machinename.currentIndex, 1)
                 if(manual.checked === true){
@@ -1947,6 +2057,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 20
+            font.family: fregular.name
         }
         onPressed: {
             if(currentEstop === true){
@@ -1954,8 +2065,17 @@ Rectangle {
                 opcua.updateEstop(machinename.currentIndex,0)
                 opcua.updateStart(machinename.currentIndex, 0)
                 opcua.updateReset(machinename.currentIndex, 1)
-                etime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                if(stime.text === ""){
+                    var starttime = new Date()
+                    startTimeData = starttime
+                    stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                    initTime = stime.text
+                }
+                timer2.start()
                 pop.visible = true
+                var desc = "E-Stop Alarm"
+                var btime = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+                AlarmLog.insertLog(productionIndex,arun.text,5,desc,btime)
             }
             else{
                 e_StopStatus = false
@@ -1983,6 +2103,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
+            font.family: fregular.name
         }
     }
     Text {
@@ -1992,6 +2113,7 @@ Rectangle {
         x: multipleWidth*1018
         y: multipleHeight*114
         text: qsTr("PLC Data")
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 20
     }
     SwitchGroup.TableView {
@@ -2085,6 +2207,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.fill: parent
+                font.family: fregular.name
             }
         }
         rowDelegate: Rectangle{
@@ -2103,6 +2226,7 @@ Rectangle {
                     return styleData.value
                 }
             }
+            font.family: fregular.name
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -2196,6 +2320,7 @@ Rectangle {
         width: multipleWidth* 129
         height: multipleHeight* 28
         text: qsTr("Machine Data")
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 20
     }
 
@@ -2255,6 +2380,7 @@ Rectangle {
                     return styleData.value
                 }
             }
+            font.family: fregular.name
             color: "#000000"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -2363,6 +2489,7 @@ Rectangle {
     Text {
         id: batchSizeAlarm
         text: qsTr("Batch Size Met.")
+        font.family: fregular.name
         font.pixelSize:multipleWidth* 20
         color: "#BD3124"
         width:multipleWidth* 142

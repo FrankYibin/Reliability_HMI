@@ -25,8 +25,10 @@ Rectangle {
     Image {
         id: icon
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: multipleWidth*10
         anchors.verticalCenter: parent.verticalCenter
+        width: 30
+        height: 30
     }
     Text {
         id: iconLabel
@@ -37,6 +39,7 @@ Rectangle {
         anchors.left: icon.right
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
+        font.family: fregular.name
     }
     Rectangle{
         id:bottomline

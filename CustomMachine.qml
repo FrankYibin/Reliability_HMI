@@ -17,6 +17,7 @@ Rectangle {
         id: name
         text: plcName
         color: "#101010"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 18
         anchors.verticalCenter: parent.verticalCenter
         width: multipleWidth* 105
@@ -26,6 +27,7 @@ Rectangle {
         id: machname
         text: "Machine Name"
         color: "#101010"
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 18
         width: multipleWidth* 127
         height: multipleHeight* 25
@@ -50,11 +52,13 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "#101010"
+            font.family: fregular.name
         }
     }
     Text {
         id: iptext
         text: qsTr("IP Address")
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 16
         color: "#101010"
         width: multipleWidth* 89
@@ -65,6 +69,7 @@ Rectangle {
     Text {
         id: porttext
         text: qsTr("Port")
+        font.family: fregular.name
         font.pixelSize: multipleWidth* 16
         color: "#101010"
         width: multipleWidth* 36
@@ -92,6 +97,7 @@ Rectangle {
             clip: true
             autoScroll:true
             color: "#101010"
+            font.family: fregular.name
         }
     }
     Rectangle{
@@ -118,6 +124,7 @@ Rectangle {
             clip: true
             autoScroll:true
             color: "#101010"
+            font.family: fregular.name
         }
     }
     RoundButton {
@@ -137,6 +144,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
             font.pixelSize: multipleWidth* 14
+            font.family: fregular.name
         }
         onPressed: {
             sigConnectTest(ipdata.text,portdata.text)

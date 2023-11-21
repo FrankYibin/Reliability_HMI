@@ -8,5 +8,9 @@
         <file>CustomMachine.qml</file>
         <file>ReliabilityTestingSystem.qml</file>
         <file>AutoResize.qml</file>
+        <file>fontStyle.qml</file>
+        <file>fonts/OpenSans-Bold.ttf</file>
+        <file>fonts/OpenSans-Regular.ttf</file>
+        <file>fonts/OpenSansBold.ttf</file>
     </qresource>
 </RCC>

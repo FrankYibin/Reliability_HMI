@@ -1,5 +1,8 @@
 # Temperature_node.set_writable()
 # Temperature_node1.set_writable()
+import time
+
+import opcua
 from PySide2.QtCore import QObject, Signal, Slot, Property
 from opcua import Client, ua
 
@@ -129,15 +132,21 @@ class opcClient(QObject):
             self.pbatchSize3 = 0
             self.pbatchSize4 = 0
 
-            # while not self.myclient.is_connected():
-            #     try:
-            #         self.myclient.connect()
-            #         print("重新连接成功")
-            #     except Exception as e:
-            #         print("重新连接失败：%s" % str(e))
-            #         time.sleep(1)  # 等待1秒后重试
-            #     else:
-            #         self.subNodesId()
+    @Slot()
+    def Stop(self):
+        try:
+            self.myclient.disconnect()
+        except:
+            print("失败")
+
+    # def reconnect(self):
+    #     while True:
+    #         try:
+    #             print('00000000000000000000')
+    #             self.connectOPCUA()
+    #             time.sleep(4)
+    #         except opcua.ua.StatusCodes.BadConnectionClosed:
+    #             print("连接断开")
 
     def subNodesId(self):
         sub = self.subscribe.subscribe_data_change(self.M_Start)
@@ -226,7 +235,6 @@ class opcClient(QObject):
         except:
             self.sigOpcStatus.emit(1)
             print("opc连接失败")
-            return
         else:
             self.subscribe = self.myclient.create_subscription(0, self)
             self.subNodesId()
