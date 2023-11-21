@@ -768,7 +768,7 @@ Rectangle {
             y: multipleHeight* machinename.topPadding + (machinename.availableHeight - height) / 2
             width: multipleWidth* 16
             height: multipleHeight* 16
-//            source: "qrc:/images/user.png"
+            //            source: "qrc:/images/user.png"
         }
         onActivated: {
             productionIndex = currentIndex + 1
@@ -995,43 +995,49 @@ Rectangle {
                 opcua.updateDataReady(machinename.currentIndex,1)
             }
         }
+        property bool tmp: false
         onCheckedChanged: {
-            if(checked === true){
-                if(machinename.currentIndex === 0){
-                    ConfigurationQml.updateDataProcessing(1,1)
-                    opcFacility1.connectOPCUA(ConfigurationQml.currentIp(1), ConfigurationQml.currentPort(1))
+            if(tmp === true){
+                if(checked === true){
+                    if(machinename.currentIndex === 0){
+                        ConfigurationQml.updateDataProcessing(1,1)
+                        opcFacility1.connectOPCUA(ConfigurationQml.currentIp(1), ConfigurationQml.currentPort(1))
+                    }
+                    else if(machinename.currentIndex === 1){
+                        ConfigurationQml.updateDataProcessing(2,1)
+                        opcFacility2.connectOPCUA(ConfigurationQml.currentIp(2), ConfigurationQml.currentPort(2))
+                    }
+                    else if(machinename.currentIndex === 2){
+                        ConfigurationQml.updateDataProcessing(3,1)
+                        opcFacility3.connectOPCUA(ConfigurationQml.currentIp(3), ConfigurationQml.currentPort(3))
+                    }
+                    else if(machinename.currentIndex === 3){
+                        ConfigurationQml.updateDataProcessing(4,1)
+                        opcFacility4.connectOPCUA(ConfigurationQml.currentIp(4), ConfigurationQml.currentPort(4))
+                    }
                 }
-                else if(machinename.currentIndex === 1){
-                    ConfigurationQml.updateDataProcessing(2,1)
-                    opcFacility2.connectOPCUA(ConfigurationQml.currentIp(2), ConfigurationQml.currentPort(2))
-                }
-                else if(machinename.currentIndex === 2){
-                    ConfigurationQml.updateDataProcessing(3,1)
-                    opcFacility3.connectOPCUA(ConfigurationQml.currentIp(3), ConfigurationQml.currentPort(3))
-                }
-                else if(machinename.currentIndex === 3){
-                    ConfigurationQml.updateDataProcessing(4,1)
-                    opcFacility4.connectOPCUA(ConfigurationQml.currentIp(4), ConfigurationQml.currentPort(4))
+                else{
+                    if(machinename.currentIndex === 0){
+                        ConfigurationQml.updateDataProcessing(1,0)
+                        opcFacility1.disconnectOpc()
+                    }
+                    else if(machinename.currentIndex === 1){
+                        ConfigurationQml.updateDataProcessing(2,0)
+                        opcFacility2.disconnectOpc()
+                    }
+                    else if(machinename.currentIndex === 2){
+                        ConfigurationQml.updateDataProcessing(3,0)
+                        opcFacility3.disconnectOpc()
+                    }
+                    else if(machinename.currentIndex === 3){
+                        ConfigurationQml.updateDataProcessing(4,0)
+                        opcFacility4.disconnectOpc()
+                    }
                 }
             }
-            else{
-                if(machinename.currentIndex === 0){
-                    ConfigurationQml.updateDataProcessing(1,0)
-                    opcFacility1.disconnectOpc()
-                }
-                else if(machinename.currentIndex === 1){
-                    ConfigurationQml.updateDataProcessing(2,0)
-                    opcFacility2.disconnectOpc()
-                }
-                else if(machinename.currentIndex === 2){
-                    ConfigurationQml.updateDataProcessing(3,0)
-                    opcFacility3.disconnectOpc()
-                }
-                else if(machinename.currentIndex === 3){
-                    ConfigurationQml.updateDataProcessing(4,0)
-                    opcFacility4.disconnectOpc()
-                }
-            }
+        }
+        Component.onCompleted: {
+            tmp = true
         }
     }
     Text {
