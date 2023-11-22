@@ -767,11 +767,14 @@ Rectangle {
             border.color: "#BBBBBB"
         }
         indicator: Image {
-            x: multipleWidth* (machinename.width - width - machinename.rightPadding + 10)
+            x: machinename.width - width - machinename.rightPadding
             y: multipleHeight* machinename.topPadding + (machinename.availableHeight - height) / 2
             width: multipleWidth* 16
             height: multipleHeight* 16
             source: "images/下拉.png"
+            Component.onCompleted: {
+                console.log(machinename.width,width,machinename.rightPadding,x,machinename.x)
+            }
         }
         onActivated: {
             productionIndex = currentIndex + 1

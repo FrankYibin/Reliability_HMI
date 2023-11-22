@@ -30,7 +30,7 @@ Window {
              multipleHeight = (Screen.desktopAvailableHeight / 900)
              multipleWidth = multipleWidth.toFixed(2) - 0.01
              multipleHeight = multipleHeight.toFixed(2) - 0.01
-            loader.sourceComponent = login
+            loader.sourceComponent = reliabilityTestingSystem
         }
         Connections{
             target: loader.item
