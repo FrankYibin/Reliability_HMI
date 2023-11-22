@@ -25,10 +25,10 @@ Window {
         anchors.fill: parent
         asynchronous:true
         Component.onCompleted: {
-             // multipleWidth = (Screen.desktopAvailableWidth / 1440)
-             // multipleHeight = (Screen.desktopAvailableHeight / 900)
-             // multipleWidth = multipleWidth.toFixed(2) - 0.01
-             // multipleHeight = multipleHeight.toFixed(2) - 0.01
+             multipleWidth = (Screen.desktopAvailableWidth / 1440)
+             multipleHeight = (Screen.desktopAvailableHeight / 900)
+             multipleWidth = multipleWidth.toFixed(2) - 0.01
+             multipleHeight = multipleHeight.toFixed(2) - 0.01
             loader.sourceComponent = reliabilityTestingSystem
         }
         Connections{
@@ -67,7 +67,7 @@ Window {
         standardButtons: StandardButton.Yes
         icon: StandardIcon.Warning
     }
-    //    @disable-check M16
+    //@disable-check M16
     onClosing: function(closeevent){
         //CloseEvent的accepted设置为false就能忽略该事件
         if(opcua.mStart1 === false && opcua.mStart2 === false && opcua.mStart3 === false && opcua.mStart4 === false){

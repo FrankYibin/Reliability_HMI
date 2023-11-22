@@ -23,7 +23,9 @@ class opcClient(QObject):
             self.myclient.connect()
         except:
             print("opc连接失败")
+            self.status = False
         else:
+            self.status = True
             self.M_Start = self.myclient.get_node('ns=3;s="OPCUA"."1#M_Start"')
             self.M_Reset = self.myclient.get_node('ns=3;s="OPCUA"."1#M_Reset"')
             self.M_Mode = self.myclient.get_node('ns=3;s="OPCUA"."1#M_Mode"')
@@ -136,6 +138,7 @@ class opcClient(QObject):
     def Stop(self):
         try:
             self.myclient.disconnect()
+            self.status = False
         except:
             print("失败")
 
@@ -228,17 +231,25 @@ class opcClient(QObject):
 
     sigOpcStatus = Signal(int, arguments=['status'])
 
+
+    @Slot(result=bool)
+    def currentEquipmentStatus(self):
+        return self.status
+
     @Slot()
     def connectOPCUA(self):
         try:
+            # self.myclient.disconnect()
             self.myclient.connect()
         except:
-            self.sigOpcStatus.emit(1)
+            # self.sigOpcStatus.emit(1)
             print("opc连接失败")
+            self.status = False
         else:
+            self.status = True
             self.subscribe = self.myclient.create_subscription(0, self)
             self.subNodesId()
-            self.sigOpcStatus.emit(0)
+            # self.sigOpcStatus.emit(0)
 
     start1_changed = Signal(bool)
     start2_changed = Signal(bool)

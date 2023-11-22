@@ -9,6 +9,8 @@ import tcpclient
 import usclient
 import opcFacility
 import time
+import setproctitle
+
 database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
 database.setDatabaseName('SQLite.db')
 database.open()
@@ -48,7 +50,8 @@ if __name__ == '__main__':
     engine.rootContext().setContextProperty("opcFacility2", opcfacility2)
     engine.rootContext().setContextProperty("opcFacility3", opcfacility3)
     engine.rootContext().setContextProperty("opcFacility4", opcfacility4)
-
+    proc_title = "new_proc_title"
+    setproctitle.setproctitle(proc_title)
     import os
     path = os.path.dirname(__file__) + os.sep + 'main.qml'
     engine.load(path)

@@ -48,37 +48,37 @@ Rectangle{
     //            }
     //        }
     //    }
-    Connections{
-        target: opcFacility1
-        function onSigStatus(status){
-            m1.status = status
-        }
-    }
+//    Connections{
+//        target: opcFacility1
+//        function onSigStatus(status){
+//            m1.status = status
+//        }
+//    }
 
-    Connections{
-        target: opcFacility2
-        function onSigStatus(status){
-            m2.status = status
-        }
-    }
-    Connections{
-        target: opcFacility3
-        function onSigStatus(status){
-            m3.status = status
-        }
-    }
-    Connections{
-        target: opcFacility4
-        function onSigStatus(status){
-            m4.status = status
-        }
-    }
-    Connections{
-        target: opcua
-        function onSigOpcStatus(status){
-            plcStatus = status
-        }
-    }
+//    Connections{
+//        target: opcFacility2
+//        function onSigStatus(status){
+//            m2.status = status
+//        }
+//    }
+//    Connections{
+//        target: opcFacility3
+//        function onSigStatus(status){
+//            m3.status = status
+//        }
+//    }
+//    Connections{
+//        target: opcFacility4
+//        function onSigStatus(status){
+//            m4.status = status
+//        }
+//    }
+//    Connections{
+//        target: opcua
+//        function onSigOpcStatus(status){
+//            plcStatus = status
+//        }
+//    }
 
     function isEmpty(){
         if(m1.nameedit.length === 0 || m1.ip.length === 0 || m1.port.length === 0 ||
@@ -164,7 +164,12 @@ Rectangle{
             font.family: fregular.name
         }
         onClicked: {
-            opcua.connectOPCUA()
+            if(opcua.currentEquipmentStatus() === true){
+                plcStatus = 0
+            }
+            else{
+                plcStatus = 1
+            }
         }
     }
     Rectangle{
@@ -185,8 +190,12 @@ Rectangle{
         plcName:"Machine 1:"
         onSigConnectTest: {
             index = 1
-            opcFacility1.connecctmach()
-            //            TcpClient.connectTcp(ip,port)
+            if(opcFacility1.currentEquipmentStatus() === true){
+                status = 0
+            }
+            else{
+                status = 1
+            }
         }
     }
     CustomMachine{
@@ -198,8 +207,12 @@ Rectangle{
         plcName:"Machine 2:"
         onSigConnectTest: {
             index = 2
-            opcFacility2.connecctmach()
-            //            TcpClient.connectTcp(ip,port)
+            if(opcFacility2.currentEquipmentStatus() === true){
+                status = 0
+            }
+            else{
+                status = 1
+            }
         }
     }
     CustomMachine{
@@ -211,8 +224,12 @@ Rectangle{
         plcName:"Machine 3:"
         onSigConnectTest: {
             index = 3
-            opcFacility3.connecctmach()
-            //            TcpClient.connectTcp(ip,port)
+            if(opcFacility3.currentEquipmentStatus() === true){
+                status = 0
+            }
+            else{
+                status = 1
+            }
         }
     }
     CustomMachine{
@@ -224,8 +241,12 @@ Rectangle{
         plcName:"Machine 4:"
         onSigConnectTest: {
             index = 4
-            opcFacility4.connecctmach()
-            //            TcpClient.connectTcp(ip,port)
+            if(opcFacility4.currentEquipmentStatus() === true){
+                status = 0
+            }
+            else{
+                status = 1
+            }
         }
     }
     RoundButton {

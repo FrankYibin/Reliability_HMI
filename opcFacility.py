@@ -29,42 +29,51 @@ class opcClient(QObject):
         self.palarm = ''
         self.pweldEngery = ''
         self.machId = ''
+        self.status = False
     myclient = ''
+
 
     sigStatus = Signal(int, arguments=['status'])
 
-    @Slot()
-    def connecctmach(self):
-        try:
-            self.myclient.connect()
-        except:
-            print("opc连接失败")
-            self.sigStatus.emit(1)
-        else:
-            self.sigStatus.emit(0)
-            self.M_AmpSetting = self.myclient.get_node('ns=1;i=117')
-            self.M_EnergySetting = self.myclient.get_node('ns=1;i=116')
-            self.M_TPressureSetting = self.myclient.get_node('ns=1;i=118')
-            self.M_WPressureSetting = self.myclient.get_node('ns=1;i=119')
-            self.M_WeldMode = self.myclient.get_node('ns=1;i=106')
-            self.M_WeldTime = self.myclient.get_node('ns=1;i=109')
-            self.M_PeakPower = self.myclient.get_node('ns=1;i=110')
-            self.M_PreHeight = self.myclient.get_node('ns=1;i=113')
-            self.M_PostHeight = self.myclient.get_node('ns=1;i=114')
-            self.M_MaxWeldTime = self.myclient.get_node('ns=1;i=120')
-            self.M_MinWeldTime = self.myclient.get_node('ns=1;i=121')
-            self.M_MaxPower = self.myclient.get_node('ns=1;i=122')
-            self.M_MinPower = self.myclient.get_node('ns=1;i=123')
-            self.M_MaxPreHeight = self.myclient.get_node('ns=1;i=124')
-            self.M_MinPreHeight = self.myclient.get_node('ns=1;i=125')
-            self.M_MaxPostHeight = self.myclient.get_node('ns=1;i=126')
-            self.M_MinPostHeight = self.myclient.get_node('ns=1;i=127')
-            self.M_CycleCounter = self.myclient.get_node('ns=1;i=102')
-            self.M_Alarm = self.myclient.get_node('ns=1;i=115')
-            self.M_WeldEngery = self.myclient.get_node('ns=1;i=107')
-            self.M_DateTime = self.myclient.get_node('ns=1;i=128')
-            self.subscribe = self.myclient.create_subscription(0, self)
-            self.subNodesId()
+    @Slot(result=bool)
+    def currentEquipmentStatus(self):
+        return self.status
+
+    # @Slot()
+    # def connecctmach(self):
+    #     try:
+    #         self.myclient.disconnect()
+    #         self.myclient.connect()
+    #     except:
+    #         print("opc连接失败")
+    #         self.sigStatus.emit(1)
+    #         self.status = False
+    #     else:
+    #         self.status = True
+    #         self.sigStatus.emit(0)
+    #         self.M_AmpSetting = self.myclient.get_node('ns=1;i=117')
+    #         self.M_EnergySetting = self.myclient.get_node('ns=1;i=116')
+    #         self.M_TPressureSetting = self.myclient.get_node('ns=1;i=118')
+    #         self.M_WPressureSetting = self.myclient.get_node('ns=1;i=119')
+    #         self.M_WeldMode = self.myclient.get_node('ns=1;i=106')
+    #         self.M_WeldTime = self.myclient.get_node('ns=1;i=109')
+    #         self.M_PeakPower = self.myclient.get_node('ns=1;i=110')
+    #         self.M_PreHeight = self.myclient.get_node('ns=1;i=113')
+    #         self.M_PostHeight = self.myclient.get_node('ns=1;i=114')
+    #         self.M_MaxWeldTime = self.myclient.get_node('ns=1;i=120')
+    #         self.M_MinWeldTime = self.myclient.get_node('ns=1;i=121')
+    #         self.M_MaxPower = self.myclient.get_node('ns=1;i=122')
+    #         self.M_MinPower = self.myclient.get_node('ns=1;i=123')
+    #         self.M_MaxPreHeight = self.myclient.get_node('ns=1;i=124')
+    #         self.M_MinPreHeight = self.myclient.get_node('ns=1;i=125')
+    #         self.M_MaxPostHeight = self.myclient.get_node('ns=1;i=126')
+    #         self.M_MinPostHeight = self.myclient.get_node('ns=1;i=127')
+    #         self.M_CycleCounter = self.myclient.get_node('ns=1;i=102')
+    #         self.M_Alarm = self.myclient.get_node('ns=1;i=115')
+    #         self.M_WeldEngery = self.myclient.get_node('ns=1;i=107')
+    #         self.M_DateTime = self.myclient.get_node('ns=1;i=128')
+    #         self.subscribe = self.myclient.create_subscription(0, self)
+    #         self.subNodesId()
 
     @Slot(str, int)
     def connectOPCUA(self, ip, port):
@@ -74,9 +83,12 @@ class opcClient(QObject):
         self.myclient = Client(endpoint)
         try:
             self.myclient.connect()
-        except:
+            print("opc连接成功")
+        except :
             print("opc连接失败")
+            self.status = False
         else:
+            self.status = True
             self.M_AmpSetting = self.myclient.get_node('ns=1;i=117')
             self.M_EnergySetting = self.myclient.get_node('ns=1;i=116')
             self.M_TPressureSetting = self.myclient.get_node('ns=1;i=118')
@@ -105,6 +117,7 @@ class opcClient(QObject):
     def disconnectOpc(self):
         try:
             self.myclient.disconnect()
+            self.status = False
         except:
             print("没有连接")
 

@@ -600,6 +600,9 @@ Rectangle {
     onCurrentEstopChanged: {
         if(currentEstop === false){
             e_StopStatus = true
+            var desc = "E-Stop Alarm"
+            var btime = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
+            AlarmLog.insertLog(productionIndex,arun.text,5,desc,btime)
         }
         else{
             e_StopStatus = false
@@ -1071,15 +1074,19 @@ Rectangle {
             autoScroll:true
             text: currentBatchSize
             font.family: fregular.name
+            property bool textStatus: false
             validator: RegExpValidator{
                 regExp:/^[0-9]\d{0,5}/
             }
             Component.onCompleted: {
                 savebtn.enabled = false
+                textStatus = true
             }
             onTextChanged: {
-                if(batchSizeChange){
-                    batchSizeStatus()
+                if(textStatus === true){
+                    if(batchSizeChange){
+                        batchSizeStatus()
+                    }
                 }
             }
         }
@@ -2079,9 +2086,6 @@ Rectangle {
                 }
                 timer2.start()
                 pop.visible = true
-                var desc = "E-Stop Alarm"
-                var btime = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
-                AlarmLog.insertLog(productionIndex,arun.text,5,desc,btime)
             }
             else{
                 e_StopStatus = false
