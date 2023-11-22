@@ -1,6 +1,6 @@
 import sys
 from PySide2 import QtSql
-from PySide2.QtGui import QFontDatabase
+from PySide2.QtGui import QFontDatabase, QIcon
 from PySide2.QtQml import *
 from PySide2.QtWidgets import QApplication
 
@@ -9,7 +9,6 @@ import tcpclient
 import usclient
 import opcFacility
 import time
-import setproctitle
 
 database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
 database.setDatabaseName('SQLite.db')
@@ -23,6 +22,7 @@ if __name__ == '__main__':
     runInfo = dataProcess.RunningInfoQml()
     alarmLog = dataProcess.AlarmLogQml()
     weldResult = dataProcess.WeldResultQml()
+    app.setWindowIcon(QIcon("images/dashboard.png"))
     opcfacility1 = opcFacility.opcClient()
     opcfacility2 = opcFacility.opcClient()
     opcfacility3 = opcFacility.opcClient()
@@ -50,8 +50,6 @@ if __name__ == '__main__':
     engine.rootContext().setContextProperty("opcFacility2", opcfacility2)
     engine.rootContext().setContextProperty("opcFacility3", opcfacility3)
     engine.rootContext().setContextProperty("opcFacility4", opcfacility4)
-    proc_title = "new_proc_title"
-    setproctitle.setproctitle(proc_title)
     import os
     path = os.path.dirname(__file__) + os.sep + 'main.qml'
     engine.load(path)

@@ -767,11 +767,11 @@ Rectangle {
             border.color: "#BBBBBB"
         }
         indicator: Image {
-            x: multipleWidth* machinename.width - width - machinename.rightPadding
+            x: multipleWidth* (machinename.width - width - machinename.rightPadding + 10)
             y: multipleHeight* machinename.topPadding + (machinename.availableHeight - height) / 2
             width: multipleWidth* 16
             height: multipleHeight* 16
-            //            source: "qrc:/images/user.png"
+            source: "images/下拉.png"
         }
         onActivated: {
             productionIndex = currentIndex + 1
@@ -834,7 +834,7 @@ Rectangle {
             anchors.left: parent.left
             text: "Manual"
             font.family: fregular.name
-            spacing: 10
+//            spacing: 10
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 width: multipleWidth* 26
@@ -874,7 +874,7 @@ Rectangle {
             anchors.leftMargin: 35
             text: "Auto"
             font.family: fregular.name
-            spacing: 20
+//            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
@@ -913,7 +913,7 @@ Rectangle {
             anchors.leftMargin: 70
             text: "Merecycle"
             font.family: fregular.name
-            spacing: 20
+//            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
