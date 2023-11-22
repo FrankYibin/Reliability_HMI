@@ -9,7 +9,6 @@ Rectangle {
     property alias username: useredit
     property alias userpass: passedit
     signal signalLogin(var id)
-
     function authenticationFailed(){//认证失败
         if(useredit.text === "Branson" && passedit.text == "Branson123"){
             signalLogin(reliabilityTestingSystem)
@@ -92,6 +91,15 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 focus: true
                 clip: true
+                Keys.onReturnPressed: {
+                    authenticationFailed()
+                }
+                Keys.onTabPressed: {
+                    passedit.focus = true
+                }
+                Keys.onEnterPressed: {
+                    authenticationFailed()
+                }
             }
         }
         Rectangle{
@@ -127,6 +135,15 @@ Rectangle {
                 clip: true
                 echoMode: TextInput.Password
                 autoScroll:true
+                Keys.onReturnPressed: {
+                    authenticationFailed()
+                }
+                Keys.onEnterPressed: {
+                    authenticationFailed()
+                }
+                Keys.onTabPressed: {
+                    useredit.focus = true
+                }
             }
         }
         RoundButton {

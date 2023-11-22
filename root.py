@@ -1,8 +1,10 @@
+import os
 import sys
 from PySide2 import QtSql
 from PySide2.QtGui import QFontDatabase, QIcon
 from PySide2.QtQml import *
 from PySide2.QtWidgets import QApplication
+from PySide2.QtCore import QUrl
 
 import dataProcess
 import tcpclient
@@ -13,7 +15,12 @@ import time
 database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
 database.setDatabaseName('SQLite.db')
 database.open()
-
+#   pyinstaller -w -n[name] --add-data "main.qml:." --onefile root.py  打包后把资源文件和qml文件考入dist文件夹即可
+application_path = (
+    os.path.dirname(sys.executable)
+    if getattr(sys, "frozen", False)
+    else os.path.dirname(os.path.abspath(__file__))
+)
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     engine = QQmlApplicationEngine()
@@ -51,8 +58,8 @@ if __name__ == '__main__':
     engine.rootContext().setContextProperty("opcFacility3", opcfacility3)
     engine.rootContext().setContextProperty("opcFacility4", opcfacility4)
     import os
-    path = os.path.dirname(__file__) + os.sep + 'main.qml'
-    engine.load(path)
+    file = os.path.join(application_path, "main.qml")
+    engine.load(QUrl.fromLocalFile(file))
     if not engine.rootObjects():
         sys.exit(-1)
     sys.exit(app.exec_())

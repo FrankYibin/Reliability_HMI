@@ -5,10 +5,8 @@ import QtQuick.Controls 2.9
 import QtQuick.Dialogs 1.3
 Window {
     id: hmain
-    minimumWidth: 1440 * multipleWidth
-    minimumHeight: 900 * multipleHeight
-    maximumWidth: 1440 * multipleWidth
-    maximumHeight: 900 * multipleHeight
+    width: 1440 * multipleWidth
+    height: 900 * multipleHeight
     visible: true
     flags: Qt.Dialog
     title: "Reliability Testing System"
@@ -28,10 +26,10 @@ Window {
         anchors.fill: parent
         asynchronous:true
         Component.onCompleted: {
-             // multipleWidth = (Screen.desktopAvailableWidth / 1440)
-             // multipleHeight = (Screen.desktopAvailableHeight / 900)
-             // multipleWidth = multipleWidth.toFixed(2) - 0.01
-             // multipleHeight = multipleHeight.toFixed(2) - 0.01
+             multipleWidth = (Screen.desktopAvailableWidth / 1440)
+             multipleHeight = (Screen.desktopAvailableHeight / 900)
+             multipleWidth = multipleWidth.toFixed(2) - 0.01
+             multipleHeight = multipleHeight.toFixed(2) - 0.01
             loader.sourceComponent = login
         }
         Connections{
