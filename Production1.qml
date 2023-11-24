@@ -2679,7 +2679,7 @@ Rectangle {
         rowDelegate: Rectangle{
             id:rowRectangle1
 //            color:styleData.row % 2 == 0 ? "#F2F2F2" : "#FFFFFF"
-            color:"#F2F2F2"
+            color:"#FFFFFF"
             height: multipleHeight* 30
         }
         // 设置每个单元格的字体样式
