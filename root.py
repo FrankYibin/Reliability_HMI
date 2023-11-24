@@ -48,7 +48,7 @@ if __name__ == '__main__':
     runInfo = dataProcess.RunningInfoQml()
     alarmLog = dataProcess.AlarmLogQml()
     weldResult = dataProcess.WeldResultQml()
-    app.setWindowIcon(QIcon("images/log.png"))
+    app.setWindowIcon(QIcon("images/log.ico"))
     opcfacility1 = opcFacility.opcClient()
     opcfacility2 = opcFacility.opcClient()
     opcfacility3 = opcFacility.opcClient()
