@@ -81,6 +81,7 @@ class opcClient(QObject):
         port = port
         endpoint = "opc.tcp://{}:{}".format(url, port)
         self.myclient = Client(endpoint)
+        print(endpoint)
         try:
             self.myclient.connect()
             print("opc连接成功")

@@ -994,13 +994,10 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: manual.right
             anchors.leftMargin: multipleWidth*35
-            text: "Auto"
+            text: "Auto  "
             font.family: fregular.name
 //            spacing: 20
             font.pixelSize: multipleWidth*20
-            background: Rectangle{
-                border.color: "red"
-            }
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
                 implicitHeight: multipleHeight* 26
@@ -2339,7 +2336,7 @@ Rectangle {
         height: multipleHeight* 120
         x: multipleWidth*738
         y: multipleHeight*157
-
+        enabled: false
         horizontalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏水平滚动条
         verticalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
         frameVisible: false
@@ -2526,6 +2523,7 @@ Rectangle {
         horizontalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏水平滚动条
         verticalScrollBarPolicy: multipleHeight* Qt.ScrollBarAlwaysOff//隐藏竖直滚动条
         frameVisible: false
+        enabled: false
         SwitchGroup.TableViewColumn {
             id:a1
             role: "name1"
