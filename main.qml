@@ -8,12 +8,16 @@ Window {
     width: 1440 * multipleWidth
     height: 900 * multipleHeight
     visible: true
-    flags: Qt.Dialog
+//    flags: Qt.Dialog
     title: "Reliability Testing System"
     property int productionIndex: 1
     property double multipleHeight: 1
     property double multipleWidth: 1
     property string initTime: ""
+    property var plc1: new Array
+    property var plc2: new Array
+    property var plc3: new Array
+    property var plc4: new Array
     property FontLoader fregular: FontLoader {
         source: "fonts/OpenSans-Regular.ttf"
     }
@@ -30,7 +34,7 @@ Window {
              multipleHeight = (Screen.desktopAvailableHeight / 900)
              multipleWidth = multipleWidth.toFixed(2) - 0.01
              multipleHeight = multipleHeight.toFixed(2) - 0.01
-            loader.sourceComponent = reliabilityTestingSystem
+            loader.sourceComponent = login
         }
         Connections{
             target: loader.item
@@ -72,12 +76,13 @@ Window {
     onClosing: function(closeevent){
         //CloseEvent的accepted设置为false就能忽略该事件
         if(opcua.mStart1 === false && opcua.mStart2 === false && opcua.mStart3 === false && opcua.mStart4 === false){
-            opcua.Stop()
-            opcFacility1.disconnectOpc()
-            opcFacility2.disconnectOpc()
-            opcFacility3.disconnectOpc()
-            opcFacility4.disconnectOpc()
-            Qt.quit()
+//            opcua.Stop()
+//            opcFacility1.disconnectOpc()
+//            opcFacility2.disconnectOpc()
+//            opcFacility3.disconnectOpc()
+//            opcFacility4.disconnectOpc()
+//            Qt.quit()
+            kill.suicide()
         }
         else{
             messageDialog.visible = true

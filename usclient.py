@@ -1,7 +1,6 @@
 # Temperature_node.set_writable()
 # Temperature_node1.set_writable()
 import time
-
 import opcua
 from PySide2.QtCore import QObject, Signal, Slot, Property
 from opcua import Client, ua
@@ -133,6 +132,39 @@ class opcClient(QObject):
             self.pbatchSize2 = 0
             self.pbatchSize3 = 0
             self.pbatchSize4 = 0
+            self.pmaxCurrentTune1 = ''
+            self.pmaxCurrentTune2 = ''
+            self.pmaxCurrentTune3 = ''
+            self.pmaxCurrentTune4 = ''
+            self.pminCurrentTune1 = ''
+            self.pminCurrentTune2 = ''
+            self.pminCurrentTune3 = ''
+            self.pminCurrentTune4 = ''
+            self.pmaxCurrentAmp1 = ''
+            self.pmaxCurrentAmp2 = ''
+            self.pmaxCurrentAmp3 = ''
+            self.pmaxCurrentAmp4 = ''
+            self.pminCurrentAmp1 = ''
+            self.pminCurrentAmp2 = ''
+            self.pminCurrentAmp3 = ''
+            self.pminCurrentAmp4 = ''
+            self.pmaxCurrentFre1 = ''
+            self.pmaxCurrentFre2 = ''
+            self.pmaxCurrentFre3 = ''
+            self.pmaxCurrentFre4 = ''
+            self.pminCurrentFre1 = ''
+            self.pminCurrentFre2 = ''
+            self.pminCurrentFre3 = ''
+            self.pminCurrentFre4 = ''
+            self.pmaxCurrentPower1 = ''
+            self.pmaxCurrentPower2 = ''
+            self.pmaxCurrentPower3 = ''
+            self.pmaxCurrentPower4 = ''
+            self.pminCurrentPower1 = ''
+            self.pminCurrentPower2 = ''
+            self.pminCurrentPower3 = ''
+            self.pminCurrentPower4 = ''
+
 
     @Slot()
     def Stop(self):
@@ -320,21 +352,62 @@ class opcClient(QObject):
     currentTune2_changed = Signal(int)
     currentTune3_changed = Signal(int)
     currentTune4_changed = Signal(int)
+    
+    minCurrentTune1_changed = Signal(int)
+    minCurrentTune2_changed = Signal(int)
+    minCurrentTune3_changed = Signal(int)
+    minCurrentTune4_changed = Signal(int)
+
+    maxCurrentTune1_changed = Signal(int)
+    maxCurrentTune2_changed = Signal(int)
+    maxCurrentTune3_changed = Signal(int)
+    maxCurrentTune4_changed = Signal(int)
 
     currentFre1_changed = Signal(int)
     currentFre2_changed = Signal(int)
     currentFre3_changed = Signal(int)
     currentFre4_changed = Signal(int)
 
+    minCurrentFre1_changed = Signal(int)
+    minCurrentFre2_changed = Signal(int)
+    minCurrentFre3_changed = Signal(int)
+    minCurrentFre4_changed = Signal(int)
+
+    maxCurrentFre1_changed = Signal(int)
+    maxCurrentFre2_changed = Signal(int)
+    maxCurrentFre3_changed = Signal(int)
+    maxCurrentFre4_changed = Signal(int)
+
     currentAmp1_changed = Signal(int)
     currentAmp2_changed = Signal(int)
     currentAmp3_changed = Signal(int)
     currentAmp4_changed = Signal(int)
 
+    minCurrentAmp1_changed = Signal(int)
+    minCurrentAmp2_changed = Signal(int)
+    minCurrentAmp3_changed = Signal(int)
+    minCurrentAmp4_changed = Signal(int)
+
+    maxCurrentAmp1_changed = Signal(int)
+    maxCurrentAmp2_changed = Signal(int)
+    maxCurrentAmp3_changed = Signal(int)
+    maxCurrentAmp4_changed = Signal(int)
+
     currentPower1_changed = Signal(int)
     currentPower2_changed = Signal(int)
     currentPower3_changed = Signal(int)
     currentPower4_changed = Signal(int)
+
+    minCurrentPower1_changed = Signal(int)
+    minCurrentPower2_changed = Signal(int)
+    minCurrentPower3_changed = Signal(int)
+    minCurrentPower4_changed = Signal(int)
+
+    maxCurrentPower1_changed = Signal(int)
+    maxCurrentPower2_changed = Signal(int)
+    maxCurrentPower3_changed = Signal(int)
+    maxCurrentPower4_changed = Signal(int)
+
 
     # powerArray1_changed = Signal(bool)
     # powerArray2_changed = Signal(bool)
@@ -1154,6 +1227,120 @@ class opcClient(QObject):
     @Slot(result=int)
     def currentTune4(self):
         return self.pcurrentTune4
+        
+    # maxCurrentTune
+    @Slot(int)
+    def setmaxCurrentTune1(self, val):
+        if self.pmaxCurrentTune1 == '':
+            self.pmaxCurrentTune1 = val
+        elif self.pmaxCurrentTune1 < val:
+            self.pmaxCurrentTune1 = val
+        elif self.pmaxCurrentTune1 > val:
+            return
+        self.maxCurrentTune1_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentTune1(self):
+        return self.pmaxCurrentTune1
+
+    @Slot(int)
+    def setmaxCurrentTune2(self, val):
+        if self.pmaxCurrentTune2 == '':
+            self.pmaxCurrentTune2 = val
+        elif self.pmaxCurrentTune2 < val:
+            self.pmaxCurrentTune2 = val
+        elif self.pmaxCurrentTune2 > val:
+            return
+        self.maxCurrentTune2_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentTune2(self):
+        return self.pmaxCurrentTune2
+
+    @Slot(int)
+    def setmaxCurrentTune3(self, val):
+        if self.pmaxCurrentTune3 == '':
+            self.pmaxCurrentTune3 = val
+        elif self.pmaxCurrentTune3 < val:
+            self.pmaxCurrentTune3 = val
+        elif self.pmaxCurrentTune3 > val:
+            return
+        self.maxCurrentTune3_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentTune3(self):
+        return self.pmaxCurrentTune3
+
+    @Slot(int)
+    def setmaxCurrentTune4(self, val):
+        if self.pmaxCurrentTune4 == '':
+            self.pmaxCurrentTune4 = val
+        elif self.pmaxCurrentTune4 < val:
+            self.pmaxCurrentTune4 = val
+        elif self.pmaxCurrentTune4 > val:
+            return
+        self.maxCurrentTune4_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentTune4(self):
+        return self.pmaxCurrentTune4
+        
+    # minCurrentTune
+    @Slot(int)
+    def setminCurrentTune1(self, val):
+        if self.pminCurrentTune1 == '':
+            self.pminCurrentTune1 = val
+        elif self.pminCurrentTune1 < val:
+            return
+        elif self.pminCurrentTune1 > val:
+            self.pminCurrentTune1 = val
+        self.minCurrentTune1_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentTune1(self):
+        return self.pminCurrentTune1
+
+    @Slot(int)
+    def setminCurrentTune2(self, val):
+        if self.pminCurrentTune2 == '':
+            self.pminCurrentTune2 = val
+        elif self.pminCurrentTune2 < val:
+            return
+        elif self.pminCurrentTune2 > val:
+            self.pminCurrentTune2 = val
+        self.minCurrentTune2_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentTune2(self):
+        return self.pminCurrentTune2
+
+    @Slot(int)
+    def setminCurrentTune3(self, val):
+        if self.pminCurrentTune3 == '':
+            self.pminCurrentTune3 = val
+        elif self.pminCurrentTune3 < val:
+            return
+        elif self.pminCurrentTune3 > val:
+            self.pminCurrentTune3 = val
+        self.minCurrentTune3_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentTune3(self):
+        return self.pminCurrentTune3
+
+    @Slot(int)
+    def setminCurrentTune4(self, val):
+        if self.pminCurrentTune4 == '':
+            self.pminCurrentTune4 = val
+        elif self.pminCurrentTune4 < val:
+            return
+        elif self.pminCurrentTune4 > val:
+            self.pminCurrentTune4 = val
+        self.minCurrentTune4_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentTune4(self):
+        return self.pminCurrentTune4
 
     # CurrentFre
     @Slot(int)
@@ -1191,6 +1378,120 @@ class opcClient(QObject):
     @Slot(result=int)
     def currentFre4(self):
         return self.pcurrentFre4
+        
+    # maxCurrentFre
+    @Slot(int)
+    def setmaxCurrentFre1(self, val):
+        if self.pmaxCurrentFre1 == '':
+            self.pmaxCurrentFre1 = val
+        elif self.pmaxCurrentFre1 < val:
+            self.pmaxCurrentFre1 = val
+        elif self.pmaxCurrentFre1 > val:
+            return
+        self.maxCurrentFre1_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentFre1(self):
+        return self.pmaxCurrentFre1
+
+    @Slot(int)
+    def setmaxCurrentFre2(self, val):
+        if self.pmaxCurrentFre2 == '':
+            self.pmaxCurrentFre2 = val
+        elif self.pmaxCurrentFre2 < val:
+            self.pmaxCurrentFre2 = val
+        elif self.pmaxCurrentFre2 > val:
+            return
+        self.maxCurrentFre2_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentFre2(self):
+        return self.pmaxCurrentFre2
+
+    @Slot(int)
+    def setmaxCurrentFre3(self, val):
+        if self.pmaxCurrentFre3 == '':
+            self.pmaxCurrentFre3 = val
+        elif self.pmaxCurrentFre3 < val:
+            self.pmaxCurrentFre3 = val
+        elif self.pmaxCurrentFre3 > val:
+            return
+        self.maxCurrentFre3_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentFre3(self):
+        return self.pmaxCurrentFre3
+
+    @Slot(int)
+    def setmaxCurrentFre4(self, val):
+        if self.pmaxCurrentFre4 == '':
+            self.pmaxCurrentFre4 = val
+        elif self.pmaxCurrentFre4 < val:
+            self.pmaxCurrentFre4 = val
+        elif self.pmaxCurrentFre4 > val:
+            return
+        self.maxCurrentFre4_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentFre4(self):
+        return self.pmaxCurrentFre4    
+    
+    # minminCurrentFre
+    @Slot(int)
+    def setminCurrentFre1(self, val):
+        if self.pminCurrentFre1 == '':
+            self.pminCurrentFre1 = val
+        elif self.pminCurrentFre1 < val:
+            return
+        elif self.pminCurrentFre1 > val:
+            self.pminCurrentFre1 = val
+        self.minCurrentFre1_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentFre1(self):
+        return self.pminCurrentFre1
+
+    @Slot(int)
+    def setminCurrentFre2(self, val):
+        if self.pminCurrentFre2 == '':
+            self.pminCurrentFre2 = val
+        elif self.pminCurrentFre2 < val:
+            return
+        elif self.pminCurrentFre2 > val:
+            self.pminCurrentFre2 = val
+        self.minCurrentFre2_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentFre2(self):
+        return self.pminCurrentFre2
+
+    @Slot(int)
+    def setminCurrentFre3(self, val):
+        if self.pminCurrentFre3 == '':
+            self.pminCurrentFre3 = val
+        elif self.pminCurrentFre3 < val:
+            return
+        elif self.pminCurrentFre3 > val:
+            self.pminCurrentFre3 = val
+        self.minCurrentFre3_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentFre3(self):
+        return self.pminCurrentFre3
+
+    @Slot(int)
+    def setminCurrentFre4(self, val):
+        if self.pminCurrentFre4 == '':
+            self.pminCurrentFre4 = val
+        elif self.pminCurrentFre4 < val:
+            return
+        elif self.pminCurrentFre4 > val:
+            self.pminCurrentFre4 = val
+        self.minCurrentFre4_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentFre4(self):
+        return self.pminCurrentFre4
 
     # CurrentAmp
     @Slot(int)
@@ -1229,6 +1530,122 @@ class opcClient(QObject):
     def currentAmp4(self):
         return self.pcurrentAmp4
 
+    # minCurrentAmp
+    @Slot(int)
+    def setminCurrentAmp1(self, val):
+        if self.pminCurrentAmp1 == '':
+            self.pminCurrentAmp1 = val
+        elif self.pminCurrentAmp1 < val:
+            return
+        elif self.pminCurrentAmp1 > val:
+            self.pminCurrentAmp1 = val
+        self.minCurrentAmp1_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentAmp1(self):
+        return self.pminCurrentAmp1
+
+    @Slot(int)
+    def setminCurrentAmp2(self, val):
+        if self.pminCurrentAmp2 == '':
+            self.pminCurrentAmp2 = val
+        elif self.pminCurrentAmp2 < val:
+            return
+        elif self.pminCurrentAmp2 > val:
+            self.pminCurrentAmp2 = val
+        self.minCurrentAmp2_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentAmp2(self):
+        return self.pminCurrentAmp2
+
+    @Slot(int)
+    def setminCurrentAmp3(self, val):
+        if self.pminCurrentAmp3 == '':
+            self.pminCurrentAmp3 = val
+        elif self.pminCurrentAmp3 < val:
+            return
+        elif self.pminCurrentAmp3 > val:
+            self.pminCurrentAmp3 = val
+        self.minCurrentAmp3_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentAmp3(self):
+        return self.pminCurrentAmp3
+
+    @Slot(int)
+    def setminCurrentAmp4(self, val):
+        if self.pminCurrentAmp4 == '':
+            self.pminCurrentAmp4 = val
+        elif self.pminCurrentAmp4 < val:
+            return
+        elif self.pminCurrentAmp4 > val:
+            self.pminCurrentAmp4 = val
+        self.minCurrentAmp4_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentAmp4(self):
+        return self.pminCurrentAmp4
+        
+        
+        
+    # maxCurrentAmp
+    @Slot(int)
+    def setmaxCurrentAmp1(self, val):
+        if self.pmaxCurrentAmp1 == '':
+            self.pmaxCurrentAmp1 = val
+        elif self.pmaxCurrentAmp1 < val:
+            self.pmaxCurrentAmp1 = val
+        elif self.pmaxCurrentAmp1 > val:
+            return
+        self.maxCurrentAmp1_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentAmp1(self):
+        return self.pmaxCurrentAmp1
+
+    @Slot(int)
+    def setmaxCurrentAmp2(self, val):
+        if self.pmaxCurrentAmp2 == '':
+            self.pmaxCurrentAmp2 = val
+        elif self.pmaxCurrentAmp2 < val:
+            self.pmaxCurrentAmp2 = val
+        elif self.pmaxCurrentAmp2 > val:
+            return
+        self.maxCurrentAmp2_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentAmp2(self):
+        return self.pmaxCurrentAmp2
+
+    @Slot(int)
+    def setmaxCurrentAmp3(self, val):
+        if self.pmaxCurrentAmp3 == '':
+            self.pmaxCurrentAmp3 = val
+        elif self.pmaxCurrentAmp3 < val:
+            self.pmaxCurrentAmp3 = val
+        elif self.pmaxCurrentAmp3 > val:
+            return
+        self.maxCurrentAmp3_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentAmp3(self):
+        return self.pmaxCurrentAmp3
+
+    @Slot(int)
+    def setmaxCurrentAmp4(self, val):
+        if self.pmaxCurrentAmp4 == '':
+            self.pmaxCurrentAmp4 = val
+        elif self.pmaxCurrentAmp4 < val:
+            self.pmaxCurrentAmp4 = val
+        elif self.pmaxCurrentAmp4 > val:
+            return
+        self.maxCurrentAmp4_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentAmp4(self):
+        return self.pmaxCurrentAmp4
+
     # CurrentPower
     @Slot(int)
     def setCurrentPower1(self, val):
@@ -1265,6 +1682,123 @@ class opcClient(QObject):
     @Slot(result=int)
     def currentPower4(self):
         return self.pcurrentPower4
+
+    # minCurrentPower
+    @Slot(int)
+    def setminCurrentPower1(self, val):
+        if self.pminCurrentPower1 == '':
+            self.pminCurrentPower1 = val
+        elif self.pminCurrentPower1 < val:
+            return
+        elif self.pminCurrentPower1 > val:
+            self.pminCurrentPower1 = val
+        self.minCurrentPower1_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentPower1(self):
+        return self.pminCurrentPower1
+
+    @Slot(int)
+    def setminCurrentPower2(self, val):
+        if self.pminCurrentPower2 == '':
+            self.pminCurrentPower2 = val
+        elif self.pminCurrentPower2 < val:
+            return
+        elif self.pminCurrentPower2 > val:
+            self.pminCurrentPower2 = val
+        self.minCurrentPower2_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentPower2(self):
+        return self.pminCurrentPower2
+
+    @Slot(int)
+    def setminCurrentPower3(self, val):
+        if self.pminCurrentPower3 == '':
+            self.pminCurrentPower3 = val
+        elif self.pminCurrentPower3 < val:
+            return
+        elif self.pminCurrentPower3 > val:
+            self.pminCurrentPower3 = val
+        self.minCurrentPower3_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentPower3(self):
+        return self.pminCurrentPower3
+
+    @Slot(int)
+    def setminCurrentPower4(self, val):
+        if self.pminCurrentPower4 == '':
+            self.pminCurrentPower4 = val
+        elif self.pminCurrentPower4 < val:
+            return
+        elif self.pminCurrentPower4 > val:
+            self.pminCurrentPower4 = val
+        self.minCurrentPower4_changed.emit(val)
+
+    @Slot(result=int)
+    def minCurrentPower4(self):
+        return self.pminCurrentPower4
+
+    # maxCurrentPower
+    @Slot(int)
+    def setmaxCurrentPower1(self, val):
+        if self.pmaxCurrentPower1 == '':
+            self.pmaxCurrentPower1 = val
+        elif self.pmaxCurrentPower1 < val:
+            self.pmaxCurrentPower1 = val
+        elif self.pmaxCurrentPower1 > val:
+            return
+        self.maxCurrentPower1_changed.emit(val)
+
+
+    @Slot(result=int)
+    def maxCurrentPower1(self):
+        return self.pmaxCurrentPower1
+
+    @Slot(int)
+    def setmaxCurrentPower2(self, val):
+        if self.pmaxCurrentPower2 == '':
+            self.pmaxCurrentPower2 = val
+        elif self.pmaxCurrentPower2 < val:
+            self.pmaxCurrentPower2 = val
+        elif self.pmaxCurrentPower2 > val:
+            return
+        self.maxCurrentPower2_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentPower2(self):
+        return self.pmaxCurrentPower2
+
+    @Slot(int)
+    def setmaxCurrentPower3(self, val):
+        if self.pmaxCurrentPower3 == '':
+            self.pmaxCurrentPower3 = val
+        elif self.pmaxCurrentPower3 < val:
+            self.pmaxCurrentPower3 = val
+        elif self.pmaxCurrentPower3 > val:
+            return
+        self.maxCurrentPower3_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentPower3(self):
+        return self.pmaxCurrentPower3
+
+    @Slot(int)
+    def setmaxCurrentPower4(self, val):
+        if self.pmaxCurrentPower4 == '':
+            self.pmaxCurrentPower4 = val
+        elif self.pmaxCurrentPower4 < val:
+            self.pmaxCurrentPower4 = val
+        elif self.pmaxCurrentPower4 > val:
+            return
+        self.maxCurrentPower4_changed.emit(val)
+
+    @Slot(result=int)
+    def maxCurrentPower4(self):
+        return self.pmaxCurrentPower4
+        
+        
 
     # PowerArry
     # PowerLength
@@ -1373,22 +1907,53 @@ class opcClient(QObject):
     mCurrentTune2 = Property(int, currentTune2, setCurrentTune2, notify=currentTune2_changed)
     mCurrentTune3 = Property(int, currentTune3, setCurrentTune3, notify=currentTune3_changed)
     mCurrentTune4 = Property(int, currentTune4, setCurrentTune4, notify=currentTune4_changed)
+    mminCurrentTune1 = Property(int, minCurrentTune1, setminCurrentTune1, notify=minCurrentTune1_changed)
+    mminCurrentTune2 = Property(int, minCurrentTune2, setminCurrentTune2, notify=minCurrentTune2_changed)
+    mminCurrentTune3 = Property(int, minCurrentTune3, setminCurrentTune3, notify=minCurrentTune3_changed)
+    mminCurrentTune4 = Property(int, minCurrentTune4, setminCurrentTune4, notify=minCurrentTune4_changed)
+    mmaxCurrentTune1 = Property(int, maxCurrentTune1, setmaxCurrentTune1, notify=maxCurrentTune1_changed)
+    mmaxCurrentTune2 = Property(int, maxCurrentTune2, setmaxCurrentTune2, notify=maxCurrentTune2_changed)
+    mmaxCurrentTune3 = Property(int, maxCurrentTune3, setmaxCurrentTune3, notify=maxCurrentTune3_changed)
+    mmaxCurrentTune4 = Property(int, maxCurrentTune4, setmaxCurrentTune4, notify=maxCurrentTune4_changed)
 
     mCurrentFre1 = Property(int, currentFre1, setCurrentFre1, notify=currentFre1_changed)
     mCurrentFre2 = Property(int, currentFre2, setCurrentFre2, notify=currentFre2_changed)
     mCurrentFre3 = Property(int, currentFre3, setCurrentFre3, notify=currentFre3_changed)
     mCurrentFre4 = Property(int, currentFre4, setCurrentFre4, notify=currentFre4_changed)
+    mminCurrentFre1 = Property(int, minCurrentFre1, setminCurrentFre1, notify=minCurrentFre1_changed)
+    mminCurrentFre2 = Property(int, minCurrentFre2, setminCurrentFre2, notify=minCurrentFre2_changed)
+    mminCurrentFre3 = Property(int, minCurrentFre3, setminCurrentFre3, notify=minCurrentFre3_changed)
+    mminCurrentFre4 = Property(int, minCurrentFre4, setminCurrentFre4, notify=minCurrentFre4_changed)
+    mmaxCurrentFre1 = Property(int, maxCurrentFre1, setmaxCurrentFre1, notify=maxCurrentFre1_changed)
+    mmaxCurrentFre2 = Property(int, maxCurrentFre2, setmaxCurrentFre2, notify=maxCurrentFre2_changed)
+    mmaxCurrentFre3 = Property(int, maxCurrentFre3, setmaxCurrentFre3, notify=maxCurrentFre3_changed)
+    mmaxCurrentFre4 = Property(int, maxCurrentFre4, setmaxCurrentFre4, notify=maxCurrentFre4_changed)
 
     mCurrentAmp1 = Property(int, currentAmp1, setCurrentAmp1, notify=currentAmp1_changed)
     mCurrentAmp2 = Property(int, currentAmp2, setCurrentAmp2, notify=currentAmp2_changed)
     mCurrentAmp3 = Property(int, currentAmp3, setCurrentAmp3, notify=currentAmp3_changed)
     mCurrentAmp4 = Property(int, currentAmp4, setCurrentAmp4, notify=currentAmp4_changed)
+    mminCurrentAmp1 = Property(int, minCurrentAmp1, setminCurrentAmp1, notify=minCurrentAmp1_changed)
+    mminCurrentAmp2 = Property(int, minCurrentAmp2, setminCurrentAmp2, notify=minCurrentAmp2_changed)
+    mminCurrentAmp3 = Property(int, minCurrentAmp3, setminCurrentAmp3, notify=minCurrentAmp3_changed)
+    mminCurrentAmp4 = Property(int, minCurrentAmp4, setminCurrentAmp4, notify=minCurrentAmp4_changed)
+    mmaxCurrentAmp1 = Property(int, maxCurrentAmp1, setmaxCurrentAmp1, notify=maxCurrentAmp1_changed)
+    mmaxCurrentAmp2 = Property(int, maxCurrentAmp2, setmaxCurrentAmp2, notify=maxCurrentAmp2_changed)
+    mmaxCurrentAmp3 = Property(int, maxCurrentAmp3, setmaxCurrentAmp3, notify=maxCurrentAmp3_changed)
+    mmaxCurrentAmp4 = Property(int, maxCurrentAmp4, setmaxCurrentAmp4, notify=maxCurrentAmp4_changed)
 
     mCurrentPower1 = Property(int, currentPower1, setCurrentPower1, notify=currentPower1_changed)
     mCurrentPower2 = Property(int, currentPower2, setCurrentPower2, notify=currentPower2_changed)
     mCurrentPower3 = Property(int, currentPower3, setCurrentPower3, notify=currentPower3_changed)
     mCurrentPower4 = Property(int, currentPower4, setCurrentPower4, notify=currentPower4_changed)
-
+    mminCurrentPower1 = Property(int, minCurrentPower1, setminCurrentPower1, notify=minCurrentPower1_changed)
+    mminCurrentPower2 = Property(int, minCurrentPower2, setminCurrentPower2, notify=minCurrentPower2_changed)
+    mminCurrentPower3 = Property(int, minCurrentPower3, setminCurrentPower3, notify=minCurrentPower3_changed)
+    mminCurrentPower4 = Property(int, minCurrentPower4, setminCurrentPower4, notify=minCurrentPower4_changed)
+    mmaxCurrentPower1 = Property(int, maxCurrentPower1, setmaxCurrentPower1, notify=maxCurrentPower1_changed)
+    mmaxCurrentPower2 = Property(int, maxCurrentPower2, setmaxCurrentPower2, notify=maxCurrentPower2_changed)
+    mmaxCurrentPower3 = Property(int, maxCurrentPower3, setmaxCurrentPower3, notify=maxCurrentPower3_changed)
+    mmaxCurrentPower4 = Property(int, maxCurrentPower4, setmaxCurrentPower4, notify=maxCurrentPower4_changed)
     # mPowerArray1 = Property(bool, powerArray1, setPowerArray1, notify=powerArray1_changed)
     # mPowerArray2 = Property(bool, powerArray2, setPowerArray2, notify=powerArray2_changed)
     # mPowerArray3 = Property(bool, powerArray3, setPowerArray3, notify=powerArray3_changed)
@@ -1398,6 +1963,41 @@ class opcClient(QObject):
     mPowerLength2 = Property(int, powerLength2, setPowerLength2, notify=powerLength2_changed)
     mPowerLength3 = Property(int, powerLength3, setPowerLength3, notify=powerLength3_changed)
     mPowerLength4 = Property(int, powerLength4, setPowerLength4, notify=powerLength4_changed)
+
+    @Slot()
+    def resetData(self):
+        self.pmaxCurrentTune1 = ''
+        self.pmaxCurrentTune2 = ''
+        self.pmaxCurrentTune3 = ''
+        self.pmaxCurrentTune4 = ''
+        self.pminCurrentTune1 = ''
+        self.pminCurrentTune2 = ''
+        self.pminCurrentTune3 = ''
+        self.pminCurrentTune4 = ''
+        self.pmaxCurrentAmp1 = ''
+        self.pmaxCurrentAmp2 = ''
+        self.pmaxCurrentAmp3 = ''
+        self.pmaxCurrentAmp4 = ''
+        self.pminCurrentAmp1 = ''
+        self.pminCurrentAmp2 = ''
+        self.pminCurrentAmp3 = ''
+        self.pminCurrentAmp4 = ''
+        self.pmaxCurrentFre1 = ''
+        self.pmaxCurrentFre2 = ''
+        self.pmaxCurrentFre3 = ''
+        self.pmaxCurrentFre4 = ''
+        self.pminCurrentFre1 = ''
+        self.pminCurrentFre2 = ''
+        self.pminCurrentFre3 = ''
+        self.pminCurrentFre4 = ''
+        self.pmaxCurrentPower1 = ''
+        self.pmaxCurrentPower2 = ''
+        self.pmaxCurrentPower3 = ''
+        self.pmaxCurrentPower4 = ''
+        self.pminCurrentPower1 = ''
+        self.pminCurrentPower2 = ''
+        self.pminCurrentPower3 = ''
+        self.pminCurrentPower4 = ''
 
     """
     called for every datachange notification from server
@@ -1432,12 +2032,20 @@ class opcClient(QObject):
             self.setPPM1(val)
         elif node == self.M_CurrentTune:
             self.setCurrentTune1(val)
+            self.setmaxCurrentTune1(val)
+            self.setminCurrentTune1(val)
         elif node == self.M_CurrentFre_offset:
             self.setCurrentFre1(val)
+            self.setmaxCurrentFre1(val)
+            self.setminCurrentFre1(val)
         elif node == self.M_CurrentAmplitude:
             self.setCurrentAmp1(val)
+            self.setmaxCurrentAmp1(val)
+            self.setminCurrentAmp1(val)
         elif node == self.M_CurrentPower:
             self.setCurrentPower1(val)
+            self.setmaxCurrentPower1(val)
+            self.setminCurrentPower1(val)
         elif node == self.M_PowerLength:
             self.setPowerLength1(val)
         elif node == self.M_Start2:
@@ -1468,12 +2076,20 @@ class opcClient(QObject):
             self.setPPM2(val)
         elif node == self.M_CurrentTune2:
             self.setCurrentTune2(val)
+            self.setmaxCurrentTune2(val)
+            self.setminCurrentTune2(val)
         elif node == self.M_CurrentFre_offset2:
             self.setCurrentFre2(val)
+            self.setmaxCurrentFre2(val)
+            self.setminCurrentFre2(val)
         elif node == self.M_CurrentAmplitude2:
             self.setCurrentAmp2(val)
+            self.setmaxCurrentAmp2(val)
+            self.setminCurrentAmp2(val)
         elif node == self.M_CurrentPower2:
             self.setCurrentPower2(val)
+            self.setmaxCurrentPower2(val)
+            self.setminCurrentPower2(val)
         elif node == self.M_PowerLength2:
             self.setPowerLength2(val)
         elif node == self.M_Start3:
@@ -1504,12 +2120,20 @@ class opcClient(QObject):
             self.setPPM3(val)
         elif node == self.M_CurrentTune3:
             self.setCurrentTune3(val)
+            self.setmaxCurrentTune3(val)
+            self.setminCurrentTune3(val)
         elif node == self.M_CurrentFre_offset3:
             self.setCurrentFre3(val)
+            self.setmaxCurrentFre3(val)
+            self.setminCurrentFre3(val)
         elif node == self.M_CurrentAmplitude3:
             self.setCurrentAmp3(val)
+            self.setmaxCurrentAmp3(val)
+            self.setminCurrentAmp3(val)
         elif node == self.M_CurrentPower3:
             self.setCurrentPower3(val)
+            self.setmaxCurrentPower3(val)
+            self.setminCurrentPower3(val)
         elif node == self.M_PowerLength3:
             self.setPowerLength3(val)
         elif node == self.M_Start4:
@@ -1540,11 +2164,19 @@ class opcClient(QObject):
             self.setPPM4(val)
         elif node == self.M_CurrentTune4:
             self.setCurrentTune4(val)
+            self.setmaxCurrentTune4(val)
+            self.setminCurrentTune4(val)
         elif node == self.M_CurrentFre_offset4:
             self.setCurrentFre4(val)
+            self.setmaxCurrentFre4(val)
+            self.setminCurrentFre4(val)
         elif node == self.M_CurrentAmplitude4:
             self.setCurrentAmp4(val)
+            self.setmaxCurrentAmp4(val)
+            self.setminCurrentAmp4(val)
         elif node == self.M_CurrentPower4:
             self.setCurrentPower4(val)
+            self.setmaxCurrentPower4(val)
+            self.setminCurrentPower4(val)
         elif node == self.M_PowerLength4:
             self.setPowerLength4(val)

@@ -3,14 +3,8 @@ import random
 
 from PySide2.QtWidgets import QApplication
 from PySide2.QtSql import QSqlQuery, QSqlRecord, QSqlQueryModel
-from PySide2.QtCore import Property, QObject, QUrl, Signal, Slot
-from PySide2.QtGui import QGuiApplication
-from PySide2.QtQml import qmlRegisterType
 from PySide2.QtCore import QObject, Qt, Signal, Slot, QUrl, QStringListModel, QCoreApplication
 import time
-import datetime
-from PySide2.QtNetwork import QTcpSocket, QHostAddress
-from opcua import Client, ua
 
 upConfig = 'update Configuration set "Machine Name"="{}","IP Address"="{}","Port"="{}" where "Index" = "{}";'
 
@@ -181,7 +175,12 @@ class RunningInfoQml(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.name = "RunningInfo"
+        self.init()
 
+    def init(self):
+        q = QSqlQuery()
+        sql_code = 'update sqlite_sequence set seq=0 where name="Running Info"'
+        q.exec_(sql_code)
     @Slot(int, str, str, int, int, int, int, int)
     def insertRunInfoData(self, id, stime, etime, plcount, mode, alarmlock, ppm, alarmnum):
         # CREATE TRIGGER delete_till_99999 INSERT ON “Running Info” WHEN( SELECT count(*) FROM “Running Info” ) > 999998
@@ -209,6 +208,12 @@ class AlarmLogQml(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.name = "AlarmLog"
+        self.init()
+
+    def init(self):
+        q = QSqlQuery()
+        sql_code = 'update sqlite_sequence set seq=0 where name="Alarm Log"'
+        q.exec_(sql_code)
 
     @Slot(int, int, int, str, str)
     def insertLog(self, pid, count, ptype, description, stamp):
@@ -234,6 +239,12 @@ class WeldResultQml(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.name = "WeldResult"
+        self.init()
+
+    def init(self):
+        q = QSqlQuery()
+        sql_code = 'update sqlite_sequence set seq=0 where name="Weld Result"'
+        q.exec_(sql_code)
 
     # Data2:Data Source
     @Slot(list)
@@ -267,7 +278,7 @@ class WeldResultQml(QObject):
                     ',"Quality Pre-Height Lower"'
                     ',"Quality PostHeight Upper"'
                     ',"Quality PostHeight Lower"'
-                    ',"Alarm ID"'
+                    ',"AlarmFlag"'
                     ',"Machine Counter"'
                     ',"Time Stamp") values("{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}","{}"'
                     ',"{}","{}","{}","{}","{}")')

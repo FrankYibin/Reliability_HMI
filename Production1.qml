@@ -12,7 +12,6 @@ Rectangle {
     property string currentIp: ""
     property string currentPort: ""
     property int currentMode: 1
-    property bool batchSizeChange: false
     property bool modeStatus: true
     property bool e_StopStatus: false
     property var startTimeData: ""
@@ -28,6 +27,34 @@ Rectangle {
         }
         else if(machinename.currentIndex === 3){
             return opcua.mCurrentPower4
+        }
+    }
+    property int mincurrentPower: {
+        if(machinename.currentIndex === 0){
+            return opcua.mminCurrentPower1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mminCurrentPower2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mminCurrentPower3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mminCurrentPower4
+        }
+    }
+    property int maxcurrentPower: {
+        if(machinename.currentIndex === 0){
+            return opcua.mmaxCurrentPower1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mmaxCurrentPower2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mmaxCurrentPower3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mmaxCurrentPower4
         }
     }
 
@@ -48,6 +75,35 @@ Rectangle {
             return ""
         }
     }
+    property int mincurrentTune: {
+        if(machinename.currentIndex === 0){
+            return opcua.mminCurrentTune1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mminCurrentPower2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mminCurrentPower3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mminCurrentTune4
+        }
+    }
+    property int maxcurrentTune: {
+        if(machinename.currentIndex === 0){
+            return opcua.mmaxCurrentTune1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mmaxCurrentTune2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mmaxCurrentPower3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mmaxCurrentTune4
+        }
+    }
+
     property int currentFre: {
         if(machinename.currentIndex === 0){
             return opcua.mCurrentFre1
@@ -62,6 +118,35 @@ Rectangle {
             return opcua.mCurrentFre4
         }
     }
+    property int mincurrentFre: {
+        if(machinename.currentIndex === 0){
+            return opcua.mminCurrentFre1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mminCurrentFre2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mminCurrentFre3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mminCurrentFre4
+        }
+    }
+    property int maxcurrentFre: {
+        if(machinename.currentIndex === 0){
+            return opcua.mmaxCurrentFre1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mmaxCurrentFre2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mmaxCurrentFre3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mmaxCurrentFre4
+        }
+    }
+
     property int currentAmp: {
         if(machinename.currentIndex === 0){
             return opcua.mCurrentAmp1
@@ -74,6 +159,34 @@ Rectangle {
         }
         else if(machinename.currentIndex === 3){
             return opcua.mCurrentAmp4
+        }
+    }
+    property int mincurrentAmp: {
+        if(machinename.currentIndex === 0){
+            return opcua.mminCurrentAmp1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mminCurrentAmp2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mminCurrentAmp3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mminCurrentAmp4
+        }
+    }
+    property int maxcurrentAmp: {
+        if(machinename.currentIndex === 0){
+            return opcua.mmaxCurrentAmp1
+        }
+        else if(machinename.currentIndex === 1){
+            return opcua.mmaxCurrentAmp2
+        }
+        else if(machinename.currentIndex === 2){
+            return opcua.mmaxCurrentAmp3
+        }
+        else if(machinename.currentIndex === 3){
+            return opcua.mmaxCurrentAmp4
         }
     }
     property int cycleCounter: {
@@ -544,6 +657,7 @@ Rectangle {
         }
     }
     function newStart(){
+        opcua.resetData()
         opcua.updateCycleCounter(machinename.currentIndex,0)
         opcua.updateAlarmNumber(machinename.currentIndex,0)
         if(manual.checked === true){
@@ -558,19 +672,19 @@ Rectangle {
         startTimeData = new Date
         stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
         initTime = stime.text
-        etime.text = ""
+        etime.text = "N/A"
         opcua.updateStart(machinename.currentIndex, 1)
         if(manual.checked === true){
             timer.start()
         }
     }
     onCurrentMstartChanged: {
-        if(currentMstart === true){
-            savebtn.enabled = false
-        }
-        else{
-            savebtn.enabled = true
-        }
+//        if(currentMstart === true){
+//            savebtn.enabled = false
+//        }
+//        else{
+//            savebtn.enabled = true
+//        }
     }
 
     onReSetBtnChanged: {
@@ -622,7 +736,6 @@ Rectangle {
         else if(productionIndex === 4){
             batchsizedata.text = opcua.mBatchSize4
         }
-        batchSizeChange = true
         ConfigurationQml.selectMachName(productionIndex)
     }
     Connections{
@@ -753,7 +866,12 @@ Rectangle {
         height: multipleHeight* 32
         x: multipleWidth*259
         y: multipleHeight*35
-        enabled: !currentMstart
+        enabled: {
+            if(pop.visible === true){
+                return false
+            }
+            return !currentMstart
+        }
         font.pixelSize: multipleWidth*20
         font.family: fregular.name
         model: ListModel {
@@ -772,9 +890,6 @@ Rectangle {
             width: multipleWidth* 16
             height: multipleHeight* 16
             source: "images/下拉.png"
-            Component.onCompleted: {
-                console.log(machinename.width,width,machinename.rightPadding,x,machinename.x)
-            }
         }
         onActivated: {
             productionIndex = currentIndex + 1
@@ -792,8 +907,7 @@ Rectangle {
             else if(productionIndex === 4){
                 batchsizedata.text = opcua.mBatchSize4
             }
-            savebtn.checked = false
-            plcTable.upDate()
+            savebtn.batchSizeChange = false
             if(currentMstart === true){
                 stime.text = initTime
             }
@@ -826,7 +940,12 @@ Rectangle {
         y: multipleHeight*122
         width: multipleWidth* 389
         height: multipleHeight* 33
-        enabled: !currentMstart
+        enabled: {
+            if(pop.visible === true){
+                return false
+            }
+            return !currentMstart
+        }
         Component.onCompleted: {
             ConfigurationQml.initProduction(productionIndex)
         }
@@ -874,11 +993,14 @@ Rectangle {
             id: auto
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: manual.right
-            anchors.leftMargin: 35
+            anchors.leftMargin: multipleWidth*35
             text: "Auto"
             font.family: fregular.name
 //            spacing: 20
             font.pixelSize: multipleWidth*20
+            background: Rectangle{
+                border.color: "red"
+            }
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
                 implicitHeight: multipleHeight* 26
@@ -913,7 +1035,7 @@ Rectangle {
             id: merecycle
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: auto.right
-            anchors.leftMargin: 70
+            anchors.leftMargin: multipleWidth*70
             text: "Merecycle"
             font.family: fregular.name
 //            spacing: 20
@@ -961,6 +1083,9 @@ Rectangle {
         font.family: fregular.name
         font.pixelSize: multipleWidth* 20
         enabled: {
+            if(pop.visible === true){
+                return false
+            }
             if(auto.checked === true && currentMstart === false){
                 return true
             }
@@ -989,6 +1114,9 @@ Rectangle {
         height: multipleHeight* 33
         font.pixelSize: multipleWidth* 20
         enabled: {
+            if(pop.visible === true){
+                return false
+            }
             if(merecycle.checked === false && currentMstart === false){
                 return true
             }
@@ -1063,7 +1191,12 @@ Rectangle {
         y: multipleHeight*245
         border.color: "#DCDCDC"
         radius: multipleWidth* 3
-        enabled: !currentMstart
+        enabled: {
+            if(pop.visible === true){
+                return false
+            }
+            return !currentMstart
+        }
         TextInput {
             id: batchsizedata
             width: multipleWidth* 80
@@ -1082,13 +1215,22 @@ Rectangle {
                 regExp:/^[0-9]\d{0,5}/
             }
             Component.onCompleted: {
-                savebtn.enabled = false
                 textStatus = true
             }
             onTextChanged: {
                 if(textStatus === true){
-                    if(batchSizeChange){
-                        batchSizeStatus()
+                    if(machinename.currentIndex === productionIndex-1){
+                        var tmp = batchSizeStatus()
+                        if(tmp === true){
+                            if(pop.visible === true){
+                                console.log(tmp)
+                                tmp = false
+                            }
+                            if(currentMstart === true){
+                                tmp = false
+                            }
+                        }
+                        savebtn.batchSizeChange = tmp
                     }
                 }
             }
@@ -1096,23 +1238,35 @@ Rectangle {
     }
     function batchSizeStatus(){
         if(machinename.currentIndex === 0){
-            if(batchsizedata.text !== opcua.batchSize1()){
-                savebtn.enabled = true
+            if(batchsizedata.text !== opcua.mBatchSize1){
+                return true
+            }
+            else{
+                return false
             }
         }
         else if(machinename.currentIndex === 1){
-            if(batchsizedata.text !== opcua.batchSize2()){
-                savebtn.enabled = true
+            if(batchsizedata.text !== opcua.mBatchSize2){
+                return true
+            }
+            else{
+                return false
             }
         }
         else if(machinename.currentIndex === 2){
-            if(batchsizedata.text !== opcua.batchSize3()){
-                savebtn.enabled = true
+            if(batchsizedata.text !== opcua.mBatchSize3){
+                return true
+            }
+            else{
+                return false
             }
         }
         else if(machinename.currentIndex === 3){
-            if(batchsizedata.text !== opcua.batchSize4()){
-                savebtn.enabled = true
+            if(batchsizedata.text !== opcua.mBatchSize4){
+                return true
+            }
+            else{
+                return false
             }
         }
     }
@@ -1137,9 +1291,10 @@ Rectangle {
             font.pixelSize: multipleWidth* 14
             font.family: fregular.name
         }
-        enabled: false
+        property bool batchSizeChange: false
+        enabled: batchSizeChange
         onClicked: {
-            enabled = false
+            batchSizeChange = false
             if(machinename.currentIndex === 0){
                 opcua.setBatchSize1(text)
             }
@@ -1480,6 +1635,40 @@ Rectangle {
                         }
                     }
                 }
+                else if(merecycle.checked === true){
+                    if(machinename.currentIndex === 0){
+                        if(opcua.mAlarm1 === 2){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    }
+                    else if(machinename.currentIndex === 1){
+                        if(opcua.mAlarm2 === 2){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    }
+                    else if(machinename.currentIndex === 2){
+                        if(opcua.mAlarm3 === 2){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    }
+                    else if(machinename.currentIndex === 3){
+                        if(opcua.mAlarm4 === 2){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    }
+                }
                 else{
                     false
                 }
@@ -1559,12 +1748,15 @@ Rectangle {
                         tmp = opcua.getReady4()
                     }
                     if(tmp === true){
+                        batchsizedata.text = currentBatchSize
+                        savebtn.batchSizeChange = false
                         if(machinename.currentIndex === 0){
                             if(opcua.cycleCounter1() === 0){
+                                opcua.resetData()
                                 startTimeData = starttime
                                 stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
                                 initTime = stime.text
-                                etime.text = ""
+                                etime.text = "N/A"
                                 if(manual.checked === true){
                                     moder.text = manual.text
                                 }
@@ -1590,10 +1782,11 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 1){
                             if(opcua.cycleCounter2() === 0){
+                                opcua.resetData()
                                 startTimeData = starttime
                                 stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
                                 initTime = stime.text
-                                etime.text = ""
+                                etime.text = "N/A"
                                 if(manual.checked === true){
                                     moder.text = manual.text
                                 }
@@ -1619,10 +1812,11 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 2){
                             if(opcua.cycleCounter3() === 0){
+                                opcua.resetData()
                                 startTimeData = starttime
                                 stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
                                 initTime = stime.text
-                                etime.text = ""
+                                etime.text = "N/A"
                                 if(manual.checked === true){
                                     moder.text = manual.text
                                 }
@@ -1648,10 +1842,11 @@ Rectangle {
                         }
                         else if(machinename.currentIndex === 3){
                             if(opcua.cycleCounter4() === 0){
+                                opcua.resetData()
                                 startTimeData = starttime
                                 stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
                                 initTime = stime.text
-                                etime.text = ""
+                                etime.text = "N/A"
                                 if(manual.checked === true){
                                     moder.text = manual.text
                                 }
@@ -1682,7 +1877,6 @@ Rectangle {
                     opcua.updateStart(machinename.currentIndex, 0)
                     opcua.updateReset(machinename.currentIndex, 1)
                     timer2.start()
-                    //                    TcpClient.dis_connect()
                 }
             }
         }
@@ -1767,9 +1961,10 @@ Rectangle {
                 anchors.rightMargin: multipleWidth*13
                 width: multipleWidth* 141
                 height: multipleHeight* 23
-                text: qsTr("")
+                text: qsTr("N/A")
                 font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
+                horizontalAlignment: Text.AlignRight
             }
 
             Text {
@@ -1779,9 +1974,10 @@ Rectangle {
                 anchors.topMargin: multipleWidth*12
                 width: multipleWidth* 141
                 height: multipleHeight* 23
-                text: qsTr("")
+                text: qsTr("N/A")
                 font.family: fregular.name
                 font.pixelSize: multipleWidth* 16
+                horizontalAlignment: Text.AlignRight
             }
 
             Text {
@@ -1877,6 +2073,11 @@ Rectangle {
         opacity: 0.5
         color: "#BBBBBB"
         visible: false
+        onVisibleChanged: {
+            if(visible === true){
+                savebtn.batchSizeChange = false
+            }
+        }
     }
 
     RoundButton{
@@ -2030,6 +2231,7 @@ Rectangle {
                 }
             }
             onClicked: {
+                opcua.resetData()
                 opcua.updateCycleCounter(machinename.currentIndex,0)
                 opcua.updateAlarmNumber(machinename.currentIndex,0)
                 if(manual.checked === true){
@@ -2044,7 +2246,7 @@ Rectangle {
                 startTimeData = new Date()
                 stime.text = Qt.formatDateTime(new Date(),"yyyy-MM-dd hh:mm:ss")
                 initTime = stime.text
-                etime.text = ""
+                etime.text = "N/A"
                 opcua.updateStart(machinename.currentIndex, 1)
                 if(manual.checked === true){
                     timer.start()
@@ -2079,15 +2281,17 @@ Rectangle {
             if(currentEstop === true){
                 e_StopStatus = true
                 opcua.updateEstop(machinename.currentIndex,0)
-                opcua.updateStart(machinename.currentIndex, 0)
-                opcua.updateReset(machinename.currentIndex, 1)
-                if(stime.text === ""){
-                    var starttime = new Date()
-                    startTimeData = starttime
-                    stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
-                    initTime = stime.text
+                if(currentMstart === true){
+                    opcua.updateStart(machinename.currentIndex, 0)
+                    opcua.updateReset(machinename.currentIndex, 1)
+                    if(stime.text === "N/A"){
+                        var starttime = new Date()
+                        startTimeData = starttime
+                        stime.text = starttime.toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm:ss")
+                        initTime = stime.text
+                    }
+                    timer2.start()
                 }
-                timer2.start()
                 pop.visible = true
             }
             else{
@@ -2195,23 +2399,10 @@ Rectangle {
             width: multipleWidth* 65
             resizable:false
         }
-        function upDate(){
-            plcModel.powermin = currentPower
-            plcModel.powermax = currentPower
-            plcModel.tunemin = currentTune
-            plcModel.tunemax = currentTune
-            plcModel.fremin = currentFre
-            plcModel.fremax = currentFre
-            plcModel.ampmin = currentAmp
-            plcModel.ampmax = currentAmp
-            plcModel.countmin = cycleCounter
-            plcModel.countmax = cycleCounter
-        }
         headerDelegate: Rectangle{
             id: header
             height: multipleHeight* 30
             color: "#F2F2F2"
-            property double wid: plcTable.width
             Text {
                 id: headerName
                 text: styleData.value
@@ -2232,7 +2423,11 @@ Rectangle {
         itemDelegate: Text {
             id: item
             text: {
-                if(styleData.value === 0){
+                if(styleData.row === 2 && (styleData.column === 1 || styleData.column === 3
+                                           || styleData.column === 4
+                                           || styleData.column === 5
+                                           || styleData.column === 6
+                                           || styleData.column === 7)){
                     return ""
                 }
                 else{
@@ -2249,20 +2444,21 @@ Rectangle {
         model: ListModel {
             id: plcModel
             property int power: currentPower
-            property int powermin: 0
-            property int powermax: 0
+            property int powermin: mincurrentPower
+            property int powermax: maxcurrentPower
             property int tune: currentTune
-            property int tunemin: 0
-            property int tunemax: 0
+            property int tunemin: mincurrentTune
+            property int tunemax: maxcurrentTune
             property int fre: currentFre
-            property int fremin: 0
-            property int fremax: 0
+            property int fremin: mincurrentFre
+            property int fremax: maxcurrentFre
             property int amp: currentAmp
-            property int ampmin: 0
-            property int ampmax: 0
+            property int ampmin: mincurrentAmp
+            property int ampmax: maxcurrentAmp
             property int count: cycleCounter
             property int countmin: 0
             property int countmax: 0
+            property bool modelStatus: false
             Component.onCompleted: {
                 plcModel.append({name: "Power", fmin: powermin,fcurrent: power,fmax: powermax,mname:"Tune",mmin: tunemin,mcurrent:tune,mmax: tunemax})
                 plcModel.append({name: "Freq-offset",fmin: fremin,fcurrent:fre,fmax: fremax,mname:"Amplitude",mmin: ampmin,mcurrent:amp,mmax: ampmax})
@@ -2270,58 +2466,42 @@ Rectangle {
             }
             onPowerChanged: {
                 setProperty(0, "fcurrent", power)
-                if(power > powermax || powermax === 0){
-                    powermax = power
-                }
-                if(power < powermin || powermin === 0){
-                    powermin = power
-                }
-                setProperty(0, "fmin", powermin)
+            }
+            onPowermaxChanged: {
                 setProperty(0, "fmax", powermax)
+            }
+            onPowerminChanged: {
+                setProperty(0, "fmin", powermin)
             }
             onTuneChanged: {
                 setProperty(0, "mcurrent", tune)
-                if(tune > tunemax  || tunemax === 0){
-                    tunemax = tune
-                }
-                if(tune < tunemin  || tunemin === 0){
-                    tunemin = tune
-                }
+            }
+            onTunemaxChanged: {
                 setProperty(0, "mmax", tune)
+            }
+            onTuneminChanged: {
                 setProperty(0, "mmin", tune)
             }
             onFreChanged: {
                 setProperty(1, "fcurrent", fre)
-                if(fre > fremax  || fremax === 0){
-                    fremax = fre
-                }
-                if(fre < fremin  || fremin === 0){
-                    fremin = fre
-                }
+            }
+            onFremaxChanged: {
                 setProperty(1, "fmax", fremax)
+            }
+            onFreminChanged: {
                 setProperty(1, "fmin", fremin)
             }
             onAmpChanged: {
                 setProperty(1, "mcurrent", amp)
-                if(amp > ampmax  || ampmax === 0){
-                    ampmax = amp
-                }
-                if(amp < ampmin  || ampmin === 0){
-                    ampmin = amp
-                }
+            }
+            onAmpmaxChanged: {
                 setProperty(1, "mmax", ampmax)
+            }
+            onAmpminChanged: {
                 setProperty(1, "mmin", ampmin)
             }
             onCountChanged: {
                 setProperty(2, "fcurrent", count)
-                //                if(count > countmax){
-                //                    countmax = count
-                //                }
-                //                if(count < countmin){
-                //                    countmin = count
-                //                }
-                //                setProperty(2, "fmax", countmax)
-                //                setProperty(2, "fmin", countmin)
             }
         }
         focus: true
@@ -2375,7 +2555,7 @@ Rectangle {
             resizable:false
         }
         headerDelegate: Rectangle{
-            height: multipleHeight*0
+            height: multipleHeight*1
         }
         rowDelegate: Rectangle{
             id:rowRectangle1
