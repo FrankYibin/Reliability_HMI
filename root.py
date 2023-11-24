@@ -14,8 +14,8 @@ import psutil
 database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
 database.setDatabaseName('SQLite.db')
 database.open()
-# pipenv shell //激活虚拟环境以便打包 目的：python打包会把安装的所有模块一起打进去 虚拟环境只安装pyside2和opcua
-# pyinstaller -w -n[name] -i log.png --add-data "main.qml:." --onefile root.py  打包后把资源文件和qml文件考入dist文件夹即可
+# pipenv shell //激活虚拟环境以便打包 目的：python打包会把安装的所有模块一起打进去 虚拟环境只安装pyside2、psutil和opcua
+# pyinstaller -w -n[name] -i log.png --add-data "main.qml:." --onefile root.py  打包后把资源文件和qml文件考入dist文件夹即可 打包后exe文件图标在dist目录不会显示  放在其他目录即可
 # exit()
 application_path = (
     os.path.dirname(sys.executable)

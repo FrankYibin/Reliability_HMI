@@ -77,30 +77,70 @@ Rectangle {
     }
     property int mincurrentTune: {
         if(machinename.currentIndex === 0){
-            return opcua.mminCurrentTune1
+            if(opcua.mminCurrentTune1 === 0){
+                return opcua.mCurrentTune1
+            }
+            else{
+                return opcua.mminCurrentTune1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mminCurrentPower2
+            if(opcua.mminCurrentTune2 === 0){
+                return opcua.mCurrentTune2
+            }
+            else{
+                return opcua.mminCurrentTune2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mminCurrentPower3
+            if(opcua.mminCurrentTune3 === 0){
+                return opcua.mCurrentTune3
+            }
+            else{
+                return opcua.mminCurrentTune3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mminCurrentTune4
+            if(opcua.mminCurrentTune4 === 0){
+                return opcua.mCurrentTune4
+            }
+            else{
+                return opcua.mminCurrentTune4
+            }
         }
     }
     property int maxcurrentTune: {
         if(machinename.currentIndex === 0){
-            return opcua.mmaxCurrentTune1
+            if(opcua.mmaxCurrentTune1 === 0){
+                return opcua.mCurrentTune1
+            }
+            else{
+                return opcua.mmaxCurrentTune1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mmaxCurrentTune2
+            if(opcua.mmaxCurrentTune2 === 0){
+                return opcua.mCurrentTune2
+            }
+            else{
+                return opcua.mmaxCurrentTune2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mmaxCurrentPower3
+            if(opcua.mmaxCurrentTune3 === 0){
+                return opcua.mCurrentTune3
+            }
+            else{
+                return opcua.mmaxCurrentTune3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mmaxCurrentTune4
+            if(opcua.mmaxCurrentTune4 === 0){
+                return opcua.mCurrentTune4
+            }
+            else{
+                return opcua.mmaxCurrentTune4
+            }
         }
     }
 
@@ -120,30 +160,70 @@ Rectangle {
     }
     property int mincurrentFre: {
         if(machinename.currentIndex === 0){
-            return opcua.mminCurrentFre1
+            if(opcua.mminCurrentFre1 === 0){
+                return opcua.mCurrentFre1
+            }
+            else{
+                return opcua.mminCurrentFre1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mminCurrentFre2
+            if(opcua.mminCurrentFre2 === 0){
+                return opcua.mCurrentFre2
+            }
+            else{
+                return opcua.mminCurrentFre2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mminCurrentFre3
+            if(opcua.mminCurrentFre3 === 0){
+                return opcua.mCurrentFre3
+            }
+            else{
+                return opcua.mminCurrentFre3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mminCurrentFre4
+            if(opcua.mminCurrentFre4 === 0){
+                return opcua.mCurrentFre4
+            }
+            else{
+                return opcua.mminCurrentFre4
+            }
         }
     }
     property int maxcurrentFre: {
         if(machinename.currentIndex === 0){
-            return opcua.mmaxCurrentFre1
+            if(opcua.mmaxCurrentFre1 === 0){
+                return opcua.mCurrentFre1
+            }
+            else{
+                return opcua.mmaxCurrentFre1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mmaxCurrentFre2
+            if(opcua.mmaxCurrentFre2 === 0){
+                return opcua.mCurrentFre2
+            }
+            else{
+                return opcua.mmaxCurrentFre2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mmaxCurrentFre3
+            if(opcua.mmaxCurrentFre3 === 0){
+                return opcua.mCurrentFre3
+            }
+            else{
+                return opcua.mmaxCurrentFre3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mmaxCurrentFre4
+            if(opcua.mmaxCurrentFre4 === 0){
+                return opcua.mCurrentFre4
+            }
+            else{
+                return opcua.mmaxCurrentFre4
+            }
         }
     }
 
@@ -163,30 +243,70 @@ Rectangle {
     }
     property int mincurrentAmp: {
         if(machinename.currentIndex === 0){
-            return opcua.mminCurrentAmp1
+            if(opcua.mminCurrentAmp1 === 0){
+                return opcua.mCurrentAmp1
+            }
+            else{
+                return opcua.mminCurrentAmp1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mminCurrentAmp2
+            if(opcua.mminCurrentAmp2 === 0){
+                return opcua.mCurrentAmp2
+            }
+            else{
+                return opcua.mminCurrentAmp2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mminCurrentAmp3
+            if(opcua.mminCurrentAmp3 === 0){
+                return opcua.mCurrentAmp3
+            }
+            else{
+                return opcua.mminCurrentAmp3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mminCurrentAmp4
+            if(opcua.mminCurrentAmp4 === 0){
+                return opcua.mCurrentAmp4
+            }
+            else{
+                return opcua.mminCurrentAmp4
+            }
         }
     }
     property int maxcurrentAmp: {
         if(machinename.currentIndex === 0){
-            return opcua.mmaxCurrentAmp1
+            if(opcua.mmaxCurrentAmp1 === 0){
+                return opcua.mCurrentAmp1
+            }
+            else{
+                return opcua.mmaxCurrentAmp1
+            }
         }
         else if(machinename.currentIndex === 1){
-            return opcua.mmaxCurrentAmp2
+            if(opcua.mmaxCurrentAmp2 === 0){
+                return opcua.mCurrentAmp2
+            }
+            else{
+                return opcua.mmaxCurrentAmp2
+            }
         }
         else if(machinename.currentIndex === 2){
-            return opcua.mmaxCurrentAmp3
+            if(opcua.mmaxCurrentAmp3 === 0){
+                return opcua.mCurrentAmp3
+            }
+            else{
+                return opcua.mmaxCurrentAmp3
+            }
         }
         else if(machinename.currentIndex === 3){
-            return opcua.mmaxCurrentAmp4
+            if(opcua.mmaxCurrentAmp4 === 0){
+                return opcua.mCurrentAmp4
+            }
+            else{
+                return opcua.mmaxCurrentAmp4
+            }
         }
     }
     property int cycleCounter: {
@@ -679,12 +799,12 @@ Rectangle {
         }
     }
     onCurrentMstartChanged: {
-//        if(currentMstart === true){
-//            savebtn.enabled = false
-//        }
-//        else{
-//            savebtn.enabled = true
-//        }
+        //        if(currentMstart === true){
+        //            savebtn.enabled = false
+        //        }
+        //        else{
+        //            savebtn.enabled = true
+        //        }
     }
 
     onReSetBtnChanged: {
@@ -956,7 +1076,7 @@ Rectangle {
             anchors.left: parent.left
             text: "Manual"
             font.family: fregular.name
-//            spacing: 10
+            //            spacing: 10
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 width: multipleWidth* 26
@@ -996,7 +1116,7 @@ Rectangle {
             anchors.leftMargin: multipleWidth*35
             text: "Auto  "
             font.family: fregular.name
-//            spacing: 20
+            //            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26
@@ -1035,7 +1155,7 @@ Rectangle {
             anchors.leftMargin: multipleWidth*70
             text: "Merecycle"
             font.family: fregular.name
-//            spacing: 20
+            //            spacing: 20
             font.pixelSize: multipleWidth*20
             indicator: Rectangle {
                 implicitWidth: multipleWidth* 26

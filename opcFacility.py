@@ -367,7 +367,7 @@ class opcClient(QObject):
     mCycleCounter = Property(int, cycleCounter, setCycleCounter, notify=cycleCounter_changed)
     mAlarm = Property(int, alarm, setAlarm, notify=alarm_changed)
     mWeldEngery = Property(int, weldEngery, setWeldEngery, notify=weldEngery_changed)
-
+    num = 0
     def datachange_notification(self, node, val, data):
         if node == self.M_AmpSetting:
             self.setAmpSetting(val)
@@ -410,7 +410,9 @@ class opcClient(QObject):
         elif node == self.M_WeldEngery:
             self.setWeldEngery(val)
         elif node == self.M_DateTime:
-            self.Delay_MSec(1000, val)
+            self.num += 1
+            print(self.num)
+            self.Delay_MSec(10, val)
 
     @Slot(int, str)
     def Delay_MSec(self, msec, time):
