@@ -410,8 +410,6 @@ class opcClient(QObject):
         elif node == self.M_WeldEngery:
             self.setWeldEngery(val)
         elif node == self.M_DateTime:
-            self.num += 1
-            print(self.num)
             self.Delay_MSec(10, val)
 
     @Slot(int, str)

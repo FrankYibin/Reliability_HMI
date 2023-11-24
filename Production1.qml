@@ -986,12 +986,12 @@ Rectangle {
         height: multipleHeight* 32
         x: multipleWidth*259
         y: multipleHeight*35
-        enabled: {
-            if(pop.visible === true){
-                return false
-            }
-            return !currentMstart
-        }
+//        enabled: {
+//            if(pop.visible === true){
+//                return false
+//            }
+//            return !currentMstart
+//        }
         font.pixelSize: multipleWidth*20
         font.family: fregular.name
         model: ListModel {
@@ -2533,7 +2533,8 @@ Rectangle {
         }
         rowDelegate: Rectangle{
             id:rowRectangle
-            color:styleData.row % 2 == 0 ? "#FFFFFF" : "#F2F2F2"
+//            color:styleData.row % 2 == 0 ? "#FFFFFF" : "#F2F2F2"
+            color:"#FFFFFF"
             height: multipleHeight* 30
         }
         // 设置每个单元格的字体样式
@@ -2677,7 +2678,8 @@ Rectangle {
         }
         rowDelegate: Rectangle{
             id:rowRectangle1
-            color:styleData.row % 2 == 0 ? "#F2F2F2" : "#FFFFFF"
+//            color:styleData.row % 2 == 0 ? "#F2F2F2" : "#FFFFFF"
+            color:"#F2F2F2"
             height: multipleHeight* 30
         }
         // 设置每个单元格的字体样式
