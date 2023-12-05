@@ -190,7 +190,7 @@ Rectangle{
         plcName:"Machine 1:"
         onSigConnectTest: {
             index = 1
-            if(opcFacility1.currentEquipmentStatus() === true){
+            if(opcFacility1.currentEquipmentStatus(ip,port) === 0){
                 status = 0
             }
             else{
@@ -207,7 +207,7 @@ Rectangle{
         plcName:"Machine 2:"
         onSigConnectTest: {
             index = 2
-            if(opcFacility2.currentEquipmentStatus() === true){
+            if(opcFacility2.currentEquipmentStatus(ip,port) === 0){
                 status = 0
             }
             else{
@@ -224,7 +224,7 @@ Rectangle{
         plcName:"Machine 3:"
         onSigConnectTest: {
             index = 3
-            if(opcFacility3.currentEquipmentStatus() === true){
+            if(opcFacility3.currentEquipmentStatus(ip,port) === 0){
                 status = 0
             }
             else{
@@ -241,7 +241,7 @@ Rectangle{
         plcName:"Machine 4:"
         onSigConnectTest: {
             index = 4
-            if(opcFacility4.currentEquipmentStatus() === true){
+            if(opcFacility4.currentEquipmentStatus(ip,port) === 0){
                 status = 0
             }
             else{

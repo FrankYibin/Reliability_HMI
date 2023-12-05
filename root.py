@@ -1,5 +1,5 @@
 import os
-import sys
+import ctypes, sys
 from PySide2 import QtSql
 from PySide2.QtGui import QFontDatabase, QIcon
 from PySide2.QtQml import *
@@ -38,6 +38,7 @@ class kill(QObject):
                 p = psutil.Process(pid)
                 cmd = 'taskkill /F /IM "{}"'.format(p.name())
                 os.system(cmd)
+
 
 
 if __name__ == '__main__':
@@ -86,3 +87,5 @@ if __name__ == '__main__':
     if not engine.rootObjects():
         sys.exit(-1)
     sys.exit(app.exec_())
+
+

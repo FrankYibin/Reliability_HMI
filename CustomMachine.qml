@@ -146,7 +146,7 @@ Rectangle {
             font.pixelSize: multipleWidth* 14
             font.family: fregular.name
         }
-        onPressed: {
+        onReleased: {
             sigConnectTest(ipdata.text,portdata.text)
         }
     }

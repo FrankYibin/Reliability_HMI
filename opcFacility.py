@@ -1,5 +1,5 @@
 import time
-
+import os
 from PySide2.QtCore import QObject, Signal, Slot, Property
 from opcua import Client, ua
 from PySide2.QtCore import QCoreApplication, QEventLoop, QTime
@@ -35,9 +35,11 @@ class opcClient(QObject):
 
     sigStatus = Signal(int, arguments=['status'])
 
-    @Slot(result=bool)
-    def currentEquipmentStatus(self):
-        return self.status
+    @Slot(str, int, result=int)
+    def currentEquipmentStatus(self, ip, port):
+        back_info = os.system("ping -n 2 -w 1 %s" % ip)
+        print(back_info)
+        return back_info
 
     # @Slot()
     # def connecctmach(self):
