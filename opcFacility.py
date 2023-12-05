@@ -37,9 +37,15 @@ class opcClient(QObject):
 
     @Slot(str, int, result=int)
     def currentEquipmentStatus(self, ip, port):
-        back_info = os.system("ping -n 2 -w 1 %s" % ip)
-        print(back_info)
-        return back_info
+        from subprocess import call
+        result = call("ping -n 2 -w 1 %s" % ip,shell=True)
+        return result
+
+
+
+        # back_info = os.system("ping -n 2 -w 1 %s" % ip)
+        # print(back_info)
+        # return back_info
 
     # @Slot()
     # def connecctmach(self):
