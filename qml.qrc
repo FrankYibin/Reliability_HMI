@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Login.qml</file>
+        <file>Production1.qml</file>
+        <file>CustomBtn.qml</file>
+        <file>Configuration.qml</file>
+        <file>CustomMachine.qml</file>
+        <file>ReliabilityTestingSystem.qml</file>
+        <file>AutoResize.qml</file>
+        <file>fonts/OpenSans-Bold.ttf</file>
+        <file>fonts/OpenSans-Regular.ttf</file>
+        <file>fonts/OpenSansBold.ttf</file>
+    </qresource>
+</RCC>
